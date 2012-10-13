@@ -1,0 +1,19 @@
+otopi -- Localization
+=====================
+
+CREATE TRANSLATION
+------------------
+
+$ make
+$ cd po
+$ msginit -l @LOCALE@
+$ echo $LOCALE@ >> LINGUAS
+$ Modify: "Content-Type: text/plain; charset=UTF-8\n"
+<update @LOCALE@.po>
+
+CREATE LOCALIZATION FILES
+-------------------------
+
+$ make update-po
+or
+$ make dist

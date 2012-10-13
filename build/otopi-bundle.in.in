@@ -1,0 +1,122 @@
+#!/bin/sh
+# otopi -- plugable installer
+# Copyright (C) 2012 Red Hat, Inc.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#
+
+otopiplugindir='@otopiplugindir_POST@'
+otopilibdir='@otopilibdir_POST@'
+localedir='@localedir_POST@'
+sbindir='@sbindir_POST@'
+HAVE_LN_SR='@HAVE_LN_SR@'
+GETTEXT_DOMAINS='@GETTEXT_DOMAINS@'
+
+die() {
+	local m="$1"
+	echo "FATAL: ${m}" >&2
+	exit 1
+}
+
+if [ "${HAVE_LN_SR}" = 1 ]; then
+	ln_srf() {
+		src="$1"
+		dst="$2"
+		[ -L "${dst}" ] && rm -rf "${dst}"
+		ln -sr "${src}" "${dst}"
+	}
+else
+	ln_srf() {
+		src="$1"
+		dst="$2"
+
+		#
+		# emulate the ln -r (relative) missing at some distros
+		#
+		# first try and use perl and if fails revert to absolute
+		#
+		[ -r "${dst}" ] && rm -rf "${dst}"
+		relative="$(perl -MFile::Spec -e 'print File::Spec->abs2rel("'${src}'","'$(dirname "${dst}")'")' 2> /dev/null)"
+		if [ "$?" == 0 ]; then
+			ln -s "${relative}" "${dst}"
+		else
+			echo "WARNING: Cannot create relative path"
+			ln -s "$(echo "${src}" | sed "s#^${DESTDIR}##")" "${dst}"
+		fi
+	}
+fi
+
+main() {
+	mkdir -p "${TARGET}/pythonlib"
+	touch "${TARGET}/.bundled"
+	if [ -z "${OTOPI_SOURCES}" ]; then
+		ln_srf "${ROOT}${sbindir}/otopi" "${TARGET}/otopi" || die "Cannot create otopi"
+		ln_srf "${ROOT}${otopilibdir}" "${TARGET}/pythonlib/otopi" || die "Cannot create pythonlib/otopi"
+		mkdir -p "${TARGET}/otopi-plugins"
+		ln_srf "${ROOT}${otopiplugindir}/otopi" "${TARGET}/otopi-plugins/otopi" || die "Cannot create otopi-plugins/otopi"
+	else
+		ln_srf "${OTOPI_SOURCES}/src/bin/otopi" "${TARGET}/otopi" || die "Cannot create otopi"
+		ln_srf "${OTOPI_SOURCES}/src/otopi" "${TARGET}/pythonlib/otopi" || die "Cannot create pythonlib/otopi"
+		mkdir -p "${TARGET}/otopi-plugins"
+		ln_srf "${OTOPI_SOURCES}/src/plugins/otopi" "${TARGET}/otopi-plugins/otopi" || die "Cannot create otopi-plugins/otopi"
+	fi
+	if [ -d "${ROOT}${localedir}" ]; then
+		find "${ROOT}${localedir}" -name '*.mo' | while read mo; do
+			domain="$(basename "${mo}" | sed 's/\.mo//')"
+			install=0
+			for d in otopi ${GETTEXT_DOMAINS}; do
+				[ "${domain}" = "${d}" ] && install=1
+			done
+			if [ "${install}" = 1 ]; then
+				name="${TARGET}/locale/$(echo "${mo}" | sed "s#${ROOT}${localedir}##")"
+				mkdir -p "$(dirname "${name}")"
+				ln_srf "${mo}" "${name}" || die "Cannot create ${name}"
+			fi
+		done
+	fi
+
+	exit 0
+}
+
+while [ -n "$1" ]; do
+	k="$1"
+	v="${k#*=}"
+	shift
+	case "${k}" in
+		--gettext-domain=*)
+			GETTEXT_DOMAINS="${GETTEXT_DOMAINS} ${v}"
+		;;
+		--target=*)
+			TARGET="${v}"
+		;;
+		--root=*)
+			ROOT="${v}"
+		;;
+		--otopi-sources=*)
+			OTOPI_SOURCES="${v}"
+		;;
+		--help)
+			echo "usage: $0 --gettext-domain= --target= --root="
+			exit 1
+		;;
+		*)
+			die "Invalid parameter '${k}'"
+		;;
+	esac
+done
+
+[ -z "${TARGET}" ] && die "please specify --target"
+
+main

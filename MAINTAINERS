@@ -1,0 +1,8 @@
+M: Mail patches to: FullName <address@domain>
+L: Mailing list that is relevant to this area
+S: Status, one of the following:
+
+*ALL*
+M: Alon Bar-Lev <alonbl@redhat.com>
+L: arch@ovirt.org
+S: Supported

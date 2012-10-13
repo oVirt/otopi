@@ -1,0 +1,156 @@
+otopi -- Dialog
+===============
+
+ABOUT
+-----
+
+The dialog is the interface used to interact with manager.
+
+This document outlines the 'machine' dialog which is design to interact
+with software.
+
+The interface is designed to be semi-human dialog to enable human
+interaction.
+
+The interface can be selected using the following environment:
+
+ DIALOG/dialect=str:machine
+
+COMMAND LINE
+------------
+
+List:
+
+abort - Abort process
+env-get - Get environment variable
+env-query - Query environment variable
+env-query-multi - Get multi string environment variable
+env-set - Set environment variable
+env-show - Display environment
+exception-show - show exception information
+help - Display available commands
+install - Install software
+log - Retrieve log file
+noop - No operation
+quit - Quit
+
+Usage: env-get [options]
+
+Options:
+  -h, --help         This text
+  -k KEY, --key=KEY  Environment key
+
+Usage: env-query [options]
+
+Options:
+  -h, --help         This text
+  -k KEY, --key=KEY  Environment key
+
+Usage: env-query-multi [options]
+
+Options:
+  -h, --help         This text
+  -k KEY, --key=KEY  Environment key
+
+Usage: env-set [options]
+
+Options:
+  -h, --help            This text
+  -k KEY, --key=KEY     Environment key
+  -t TYPE, --type=TYPE  Variable type ('bool', 'int', 'str'), default 'str'
+  -v VALUE, --value=VALUE
+                        Variable value
+
+ITERATIVE DIALOG VARIABLES
+--------------------------
+
+CUSTOMIZATION_COMMAND
+    Query customization command.
+
+TERMINATION_COMMAND
+    Query termination command.
+
+TIME
+    Query current time.
+
+INTERACTIVE CONFIRMATIONS
+-------------------------
+
+GPG_KEY
+    Confirm trust of GPG key.
+
+MACHINE DIALECT
+---------------
+
+Note
+
+^#+ (.*)\n$
+    Group1 - message.
+
+Every line that begins with '#' is ignored by manager. Notes are
+used to interact with humans.
+
+Terminate
+
+^***TERMINATE\n$
+
+Termiante dialog.
+
+Log
+
+^***D:INFO (.*)\n$
+^***D:WARNING (.*)\n$
+^***D:ERROR (.*)\n$
+    Group1 - message.
+
+Query
+
+^***Q:STRING (.*)\n$
+    Group1: variable name.
+    Single line response.
+
+^***Q:MULTI-STRING (.*) (.*) (.*)\n$
+    Group1: variable name.
+    Group2: boundary.
+    Group3: abort boundary.
+    Multiple line response.
+    Boundary at own line marks end.
+
+^***Q:VALUE (.*)\n$
+    Group1: variable name.
+    Response:
+        ^VALUE (.*)=(.*):(.*)\n$
+        Group1: variable name.
+        Group2: variable type.
+        Group3: variable value.
+    Response:
+        ^ABORT (.*)\n$
+        Group1: variable name.
+
+Confirm
+
+^***CONFIRM (.*) (.*)$
+    Group1: id.
+    Group2: description.
+    Response:
+        ^CONFIRM (.*)=(yes|no)\n$
+        Group1: id
+        Group2: response
+    Response:
+        ^ABORT (.*)\n$
+        Group1: variable name.
+
+Display
+
+^***D:VALUE (.*)=(.*):(.*)\n$
+    Group1: variable name.
+    Group2: type.
+    Group3: value.
+
+^***D:MULTI-STRING (.*) (.*)\n$
+(^.*\n$)*
+^(.*)\n$
+    Group1: variable name.
+    Group2: boundary.
+    Group3: content.
+    Group4: boundary.

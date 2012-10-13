@@ -1,0 +1,184 @@
+#
+# otopi -- plugable installer
+# Copyright (C) 2012 Red Hat, Inc.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#
+
+%global		package_version @PACKAGE_VERSION@
+%global		package_maven_version @PACKAGE_MAVEN_VERSION@
+
+Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
+Name:		@PACKAGE_NAME@
+Version:	@PACKAGE_RPM_VERSION@
+Release:	@PACKAGE_RPM_RELEASE@%{?release_suffix}%{?dist}
+License:	LGPLv2+
+URL:		http://www.ovirt.org
+Source:		http://www.ovirt.org/releases/stable/src/%{name}-%{package_version}.tar.gz
+Group:		Development/Libraries
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:	noarch
+
+Requires:	python
+BuildRequires:	python2-devel
+BuildRequires:	pyflakes
+%if 0%{?rhel:%{rhel}} > 6
+BuildRequires:	python-pep8
+%endif
+%if 0%{?fedora:1}
+BuildRequires:	python-pep8
+%endif
+BuildRequires:	gettext-devel
+BuildRequires:	gettext-devel
+
+BuildRequires:	java-devel
+BuildRequires:	jpackage-utils
+
+%if 0%{?fedora:1}
+BuildRequires:	apache-commons-logging
+BuildRequires:	junit
+BuildRequires:	maven
+BuildRequires:	maven-compiler-plugin
+BuildRequires:	maven-enforcer-plugin
+BuildRequires:	maven-install-plugin
+BuildRequires:	maven-jar-plugin
+BuildRequires:	maven-javadoc-plugin
+BuildRequires:	maven-source-plugin
+BuildRequires:	maven-surefire-provider-junit4
+%else
+BuildRequires:	jakarta-commons-logging
+BuildRequires:	junit4
+%endif
+
+%description
+Standalone plugin based installation framework to be used to setup
+system components. The plugin nature provides simplicity to
+add new installation functionality without the complexity of the state
+and transaction management.
+
+%package java
+Summary:	%{name} java support
+Requires:	%{name} = %{version}-%{release}
+Requires:	java
+Requires:	jpackage-utils
+%if 0%{?fedora:1}
+Requires:	apache-commons-logging
+%else
+Requires:	jakarta-commons-logging
+%endif
+%description java
+java libraries.
+
+%if 0%{?fedora:1}
+%package javadoc
+Summary:	Javadocs for %{name}
+Group:		Documentation
+Requires:	jpackage-utils
+
+%description javadoc
+This package contains the API documentation for %{name}.
+%endif
+
+%package devel
+Summary:	%{name} development components
+Requires:	%{name}-java = %{version}-%{release}
+%description devel
+Development environment for %{name}.
+
+%prep
+%setup -q -n %{name}-%{package_version}
+
+%build
+%if 0%{?fedora:1}
+%global conf --disable-java-sdk-compile
+%else
+%global conf COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$(build-classpath junit4)
+%endif
+%configure \
+	--docdir="%{_docdir}/%{name}-%{version}" \
+	--enable-java-sdk \
+	%{?conf}
+make %{?_smp_mflags}
+
+%if 0%{?fedora:1}
+cd src/java
+mvn-rpmbuild install javadoc:aggregate
+cd ../..
+%endif
+
+%install
+rm -rf "%{buildroot}"
+make %{?_smp_mflags} install DESTDIR="%{buildroot}"
+
+%if 0%{?fedora:1}
+install -d -m 755 "%{buildroot}%{_javadir}/%{name}"
+install -d -m 755 "%{buildroot}%{_mavenpomdir}"
+install -pm 644 src/java/target/%{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}
+ln -s "%{name}-%{package_maven_version}.jar" "%{buildroot}%{_javadir}/%{name}/%{name}.jar"
+install -pm 644 "src/java/pom.xml" "%{buildroot}%{_mavenpomdir}/JPP.%{name}-%{name}.pom"
+%add_maven_depmap "JPP.%{name}-%{name}.pom" "%{name}/%{name}.jar"
+
+mkdir -p "%{buildroot}%{_javadocdir}/%{name}"
+cp -rp src/java/target/apidocs/*  "%{buildroot}%{_javadocdir}/%{name}"
+%else
+install -d "%{buildroot}%{_javadir}/%{name}"
+install target/%{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}
+ln -s %{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}/%{name}.jar
+%endif
+
+%post java
+%if 0%{?fedora:1}
+%update_maven_depmap
+%endif
+
+%postun java
+%if 0%{?fedora:1}
+%update_maven_depmap
+%endif
+
+%files
+%doc AUTHORS
+%doc COPYING
+%doc README
+%doc README.environment
+%doc README.API
+%doc README.dialog
+%{_sbindir}/%{name}
+%dir %{python_sitelib}/%{name}
+%{python_sitelib}/%{name}/*.py*
+%dir %{_datadir}/%{name}
+%{_datadir}/%{name}/plugins/%{name}/*/*.py*
+#%{_datadir}/locale/*/*/%{name}.mo
+
+%files java
+%{_javadir}/%{name}/%{name}*.jar
+%if 0%{?fedora:1}
+%{_mavenpomdir}/JPP.%{name}-%{name}.pom
+%{_mavendepmapfragdir}/%{name}
+%endif
+
+%if 0%{?fedora:1}
+%files javadoc
+%{_javadocdir}/%{name}
+%endif
+
+%files devel
+%{python_sitelib}/%{name}/codegen/*.py*
+%{_datadir}/%{name}/%{name}-bundle
+
+%changelog
+* Tue Oct 13 2012 Alon Bar-Lev <alonbl@redhat.com> - 0.0.0-0
+- Initial add.

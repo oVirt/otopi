@@ -1,0 +1,88 @@
+otopi -- Environment
+====================
+
+SYSTEM ENVIRONMENT
+------------------
+
+Operating system environment can be used in order to override
+installer environment.
+
+OTOPI_CONFIG
+    Configuration file.
+    Overrides CORE/configFileName.
+
+OTOPI_DEBUG
+    If not 0 enable debug features
+    Overrides BASE/debug.
+
+OTOPI_LOGDIR
+	Log directory.
+    Overrides CORE/logDir.
+
+OTOPI_LOGFILE
+	Set explicit log file name.
+    Overrides CORE/logFileName.
+
+OTOPI_NONROOT
+	If '1' allow non root execution using sudo.
+
+OTOPI_PYTHON [/usr/bin/python]
+	Python to use.
+
+INSTALLER ENVIRONMENT
+---------------------
+
+BASE/aborted(bool)
+    Aborted by user.
+    Will also have error.
+
+BASE/debug(int) [0]
+    Debug level.
+
+BASE/error(bool)
+    Error during sequence.
+
+BASE/pluginGroups(str)
+    Plugin groups to load. ':' separated.
+
+CORE/logDir(str) [${TMPDIR}]
+    Log file directory.
+
+CORE/logFileName(str)
+    Log file name.
+
+CORE/configFileName(str) [/etc/otopi.conf]
+    Configration file name.
+
+DIALOG/dialect(str) [human]
+    Dialect to use.
+
+DIALOG/customization(bool) [False]
+    Enable customization
+
+DIALOG/cliVersion
+    Command line interface version.
+
+SYSTEM/clockSet(bool) [False]
+    Synchronize clock.
+
+NETWORK/sshEnable(bool) [False]
+    Enable ssh key storage.
+
+NETWORK/sshKey(str)
+    SSH public key.
+
+NETWORK/sshUser(str)
+    SSH user or current.
+
+NETWORK/iptablesEnable(bool) [False]
+    Enable set of iptables.
+
+NETWORK/iptablesRules(multi-str)
+    iptables content.
+
+PACKAGER/yumpackagerEnabled(bool) [True]
+    Enable yum packager.
+
+PACKAGER/keepAliveInterval(int) [30]
+    Keep alive interval for status in seconds.
