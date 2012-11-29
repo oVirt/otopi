@@ -100,6 +100,10 @@ class Plugin(plugin.PluginBase):
         condition=lambda self: self._enabled,
     )
     def _closeup(self):
+        # We would like to avoid conflict
+        if self.services.exists('firewalld'):
+            self.services.startup('firewalld', False)
+            self.services.state('firewalld', False)
         self.services.startup('iptables', True)
         self.services.state('iptables', False)
         self.services.state('iptables', True)
