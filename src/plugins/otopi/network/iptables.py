@@ -92,6 +92,9 @@ class Plugin(plugin.PluginBase):
                 content=self.environment[
                     constants.NetEnv.IPTABLES_RULES
                 ],
+                modifiedList=self.environment[
+                    constants.CoreEnv.MODIFIED_FILES
+                ],
             )
         )
 
