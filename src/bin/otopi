@@ -71,5 +71,15 @@ fi
 OTOPI_PYTHON="${OTOPI_PYTHON:-$(find_util python)}"
 [ -z "${OTOPI_PYTHON}" ] && die "Python is required but missing"
 
+pythonver() {
+	local v="$1"
+	echo "$(($v/1000)).$(($v%1000))"
+}
+PYTHON_VERSION_MIN="2006"
+PYTHON_VERSION="$("${OTOPI_PYTHON}" -c "import sys; print(sys.version_info[0]*1000 + sys.version_info[1])")" || \
+	die "Cannot query python version"
+[ "${PYTHON_VERSION}" -ge "${PYTHON_VERSION_MIN}" ] || \
+	die "Python version $(pythonver ${PYTHON_VERSION}) is too old, expecting at least $(pythonver ${PYTHON_VERSION_MIN})"
+
 # TODO remove '.__main__' when python-2.6 gone
 exec "${OTOPI_PYTHON}" -m otopi.__main__ "${extraenv} $*"
