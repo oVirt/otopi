@@ -42,7 +42,6 @@ BuildRequires:	python-pep8
 BuildRequires:	python-pep8
 %endif
 BuildRequires:	gettext-devel
-BuildRequires:	gettext-devel
 
 BuildRequires:	java-devel
 BuildRequires:	jpackage-utils
