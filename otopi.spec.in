@@ -34,13 +34,6 @@ BuildArch:	noarch
 
 Requires:	python
 BuildRequires:	python2-devel
-BuildRequires:	pyflakes
-%if 0%{?rhel:%{rhel}} > 6
-BuildRequires:	python-pep8
-%endif
-%if 0%{?fedora:1}
-BuildRequires:	python-pep8
-%endif
 BuildRequires:	gettext-devel
 
 BuildRequires:	java-devel
@@ -108,6 +101,7 @@ Development environment for %{name}.
 %endif
 %configure \
 	--docdir="%{_docdir}/%{name}-%{version}" \
+	--disable-python-syntax-check \
 	--enable-java-sdk \
 	%{?conf}
 make %{?_smp_mflags}
