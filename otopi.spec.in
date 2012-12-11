@@ -20,6 +20,10 @@
 %global		package_version @PACKAGE_VERSION@
 %global		package_maven_version @PACKAGE_MAVEN_VERSION@
 
+%if 0%{?rhel:1}
+%global		maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
+%endif
+
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
 Name:		@PACKAGE_NAME@
 Version:	@PACKAGE_RPM_VERSION@
@@ -90,6 +94,13 @@ Requires:	%{name}-java = %{version}-%{release}
 %description devel
 Development environment for %{name}.
 
+%if 0%{?rhel:1}
+%package repolib
+Summary:	%{name} maven repo
+%description repolib
+%{name} maven repo
+%endif
+
 %prep
 %setup -q -n %{name}-%{package_version}
 
@@ -132,6 +143,12 @@ install target/%{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{na
 ln -s %{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}/%{name}.jar
 %endif
 
+%if 0%{?rhel:1}
+install -d "%{buildroot}%{maven2brewrepodir}"
+cp "%{buildroot}%{_javadir}/%{name}/%{name}.jar" "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.jar"
+cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.pom"
+%endif
+
 %post java
 %if 0%{?fedora:1}
 %update_maven_depmap
@@ -171,6 +188,11 @@ ln -s %{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}/%{nam
 %files devel
 %{python_sitelib}/%{name}/codegen/*.py*
 %{_datadir}/%{name}/%{name}-bundle
+
+%if 0%{?rhel:1}
+%files repolib
+%{maven2brewrepodir}/*
+%endif
 
 %changelog
 * Tue Oct 13 2012 Alon Bar-Lev <alonbl@redhat.com> - 0.0.0-0
