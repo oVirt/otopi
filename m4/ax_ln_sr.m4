@@ -31,7 +31,6 @@ AC_DEFUN([AX_LN_SR], [
 		AC_MSG_RESULT([no])
 		LN_SR="${ac_abs_confdir}/ln-sr"
 		HAVE_LN_SR="0"
-set | grep otopi
 		cat > "${ac_abs_confdir}/ln-sr" << __EOF__
 #!/bin/sh
 src="\[$]1"
