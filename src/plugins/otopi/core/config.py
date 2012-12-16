@@ -91,7 +91,7 @@ class Plugin(plugin.PluginBase):
             util.getKey(
                 dictionary=os.environ,
                 key=constants.SystemEnvironment.CONFIG,
-                default=constants.Const.DEFAULT_CONFIG_FILE,
+                default=constants.Defaults.CONFIG_FILE,
             )
         )
 

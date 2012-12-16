@@ -59,7 +59,7 @@ class Plugin(plugin.PluginBase, command.CommandBase):
     def _init(self):
         self.environment.setdefault(
             constants.SysEnv.COMMAND_PATH,
-            constants.Const.DEFAULT_COMMAND_SEARCH_PATH
+            constants.Defaults.COMMAND_SEARCH_PATH
         )
         self.context.registerCommand(command=self)
 

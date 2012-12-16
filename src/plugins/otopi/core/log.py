@@ -95,7 +95,7 @@ class Plugin(plugin.PluginBase):
         self.environment[constants.CoreEnv.LOG_FILTER] = self._MyLoggerFilter()
         self.environment.setdefault(
             constants.CoreEnv.LOG_FILE_NAME_PREFIX,
-            constants.Const.LOG_FILE_PREFIX
+            constants.Defaults.LOG_FILE_PREFIX
         )
 
         #

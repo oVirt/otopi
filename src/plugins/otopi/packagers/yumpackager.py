@@ -71,7 +71,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         try:
             self.environment.setdefault(
                 constants.PackEnv.KEEP_ALIVE_INTERVAL,
-                constants.Const.PACKAGER_KEEP_ALIVE_INTERVAL
+                constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
             )
 
             from . import miniyumlocal

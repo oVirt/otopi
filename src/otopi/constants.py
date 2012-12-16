@@ -25,6 +25,28 @@ from . import util
 
 
 @util.export
+class Defaults(object):
+    LOG_FILE_PREFIX = 'otopi'
+    CONFIG_FILE = '/etc/otopi.conf'
+    COMMAND_SEARCH_PATH = ":".join(
+        (
+            '/usr/local/sbin',
+            '/usr/local/bin',
+            '/usr/sbin',
+            '/usr/bin',
+            '/sbin',
+            '/bin',
+        )
+    )
+    PACKAGER_KEEP_ALIVE_INTERVAL = 30
+
+
+@util.export
+class Log(object):
+    LOGGER_BASE = 'otopi'
+
+
+@util.export
 @util.codegen
 class Types(object):
     NONE = 'none'
@@ -39,25 +61,11 @@ class Types(object):
 @util.codegen
 class Const(object):
     ENVIRONMENT_APPEND_PREFIX = 'APPEND:'
-    LOGGER_BASE = 'otopi'
-    LOG_FILE_PREFIX = 'otopi'
-    DEFAULT_CONFIG_FILE = '/etc/otopi.conf'
-    DEFAULT_COMMAND_SEARCH_PATH = ":".join(
-        (
-            '/usr/local/sbin',
-            '/usr/local/bin',
-            '/usr/sbin',
-            '/usr/bin',
-            '/sbin',
-            '/bin',
-        )
-    )
     CONFIG_SECTION_DEFAULT = 'environment:default'
     CONFIG_SECTION_INIT = 'environment:init'
     CONFIG_SECTION_OVERRIDES = 'environment:override'
     DIALOG_DIALECT_MACHINE = 'machine'
     DIALOG_DIALECT_HUMAN = 'human'
-    PACKAGER_KEEP_ALIVE_INTERVAL = 30
 
 
 @util.export

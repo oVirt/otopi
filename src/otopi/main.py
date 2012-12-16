@@ -79,7 +79,7 @@ class Otopi(object):
             def emit(self, record):
                 pass
 
-        logger = logging.getLogger(constants.Const.LOGGER_BASE)
+        logger = logging.getLogger(constants.Log.LOGGER_BASE)
         logger.propagate = False
         logger.setLevel(logging.DEBUG)
         logger.addHandler(NullHandler())

@@ -186,14 +186,14 @@ class DialogBaseImpl(DialogBase):
         self.__handler.setLevel(logging.INFO)
         if logFormatter is not None:
             self.__handler.setFormatter(logFormatter)
-        l = logging.getLogger(name=constants.Const.LOGGER_BASE)
+        l = logging.getLogger(name=constants.Log.LOGGER_BASE)
         l.addHandler(self.__handler)
 
     def __restoreStdHandles(self):
         self.__flush(sys.stdout)
         self.__flush(sys.stderr)
         if self.__handler is not None:
-            l = logging.getLogger(name=constants.Const.LOGGER_BASE)
+            l = logging.getLogger(name=constants.Log.LOGGER_BASE)
             l.removeHandler(self.__handler)
             self.__handler.close()
             self.__handler = None
