@@ -63,7 +63,8 @@ class Const(object):
     ENVIRONMENT_APPEND_PREFIX = 'APPEND:'
     CONFIG_SECTION_DEFAULT = 'environment:default'
     CONFIG_SECTION_INIT = 'environment:init'
-    CONFIG_SECTION_OVERRIDES = 'environment:override'
+    CONFIG_SECTION_OVERRIDE = 'environment:override'
+    CONFIG_SECTION_ENFORCE = 'environment:enforce'
     DIALOG_DIALECT_MACHINE = 'machine'
     DIALOG_DIALECT_HUMAN = 'human'
 

@@ -134,6 +134,16 @@ class Plugin(plugin.PluginBase):
     )
     def _customize(self):
         self._readEnvironment(
-            section=constants.Const.CONFIG_SECTION_OVERRIDES,
+            section=constants.Const.CONFIG_SECTION_OVERRIDE,
+            override=True,
+        )
+
+    @plugin.event(
+        stage=plugin.Stages.STAGE_CUSTOMIZATION,
+        priority=plugin.Stages.PRIORITY_LOW,
+    )
+    def _customize(self):
+        self._readEnvironment(
+            section=constants.Const.CONFIG_SECTION_ENFORCE,
             override=True,
         )
