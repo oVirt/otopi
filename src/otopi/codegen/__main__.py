@@ -70,10 +70,9 @@ def main():
                             if isinstance(value, int):
                                 f.write(
                                     (
-                                        '%4spublic static final '
+                                        '\tpublic static final '
                                         'int %s = %s;\n'
                                     ) % (
-                                        '',
                                         member,
                                         value
                                     )
@@ -81,10 +80,9 @@ def main():
                             else:
                                 f.write(
                                     (
-                                        '%4spublic static final '
+                                        '\tpublic static final '
                                         'String %s = "%s";\n'
                                     ) % (
-                                        '',
                                         member,
                                         value
                                     )
