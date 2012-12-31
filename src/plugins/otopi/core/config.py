@@ -132,7 +132,7 @@ class Plugin(plugin.PluginBase):
         stage=plugin.Stages.STAGE_CUSTOMIZATION,
         priority=plugin.Stages.PRIORITY_HIGH,
     )
-    def _customize(self):
+    def _customize1(self):
         self._readEnvironment(
             section=constants.Const.CONFIG_SECTION_OVERRIDE,
             override=True,
@@ -142,7 +142,7 @@ class Plugin(plugin.PluginBase):
         stage=plugin.Stages.STAGE_CUSTOMIZATION,
         priority=plugin.Stages.PRIORITY_LOW,
     )
-    def _customize(self):
+    def _customize2(self):
         self._readEnvironment(
             section=constants.Const.CONFIG_SECTION_ENFORCE,
             override=True,

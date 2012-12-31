@@ -72,7 +72,7 @@ class Plugin(plugin.PluginBase):
         stage=plugin.Stages.STAGE_VALIDATION,
         priority=plugin.Stages.PRIORITY_FIRST,
     )
-    def _setup(self):
+    def _validation(self):
         # as we want full dump and not delta
         # of something before validation
         self.context.dumpEnvironment()
