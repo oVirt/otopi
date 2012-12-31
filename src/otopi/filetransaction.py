@@ -248,3 +248,6 @@ class FileTransaction(transaction.TransactionElement):
         if self._prepared:
             type(self)._atomicMove(self._tmpname, self._name)
             self._modifiedList.append(self._name)
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

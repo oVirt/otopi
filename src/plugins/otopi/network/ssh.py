@@ -208,3 +208,6 @@ class Plugin(plugin.PluginBase):
             self.logger.warning(
                 _('Cannot set SELinux properties on SSH directory')
             )
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

@@ -147,3 +147,6 @@ class Plugin(plugin.PluginBase):
             section=constants.Const.CONFIG_SECTION_ENFORCE,
             override=True,
         )
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

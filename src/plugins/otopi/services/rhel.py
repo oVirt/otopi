@@ -111,3 +111,6 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
             name,
             'start' if state else 'stop'
         )
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

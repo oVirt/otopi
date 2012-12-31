@@ -72,3 +72,6 @@ def typeName(value):
     else:
         ret = constants.Types.OBJECT
     return ret
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

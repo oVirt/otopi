@@ -51,3 +51,6 @@ class Plugin(plugin.PluginBase):
         self.logger.debug('distribution %s', platform.linux_distribution())
         self.logger.debug("host '%s'", socket.gethostname())
         self.logger.debug('SYSTEM INFORMATION - END')
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

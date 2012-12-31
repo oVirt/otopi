@@ -264,3 +264,6 @@ class DialogBaseImpl(DialogBase):
         self.__output.write(str(text))
         if flush:
             self.__flush(self.__output)
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

@@ -943,3 +943,6 @@ if __name__ == '__main__':
     Example.main()
 
 __all__ = ['MiniYum', 'MiniYumSinkBase']
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

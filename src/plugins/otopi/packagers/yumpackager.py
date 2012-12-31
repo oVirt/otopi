@@ -206,3 +206,6 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
 
     def queryLocalCachePackages(self, patterns=None):
         return self._miniyum.queryLocalCachePackages(patterns=patterns)
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

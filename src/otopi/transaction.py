@@ -163,3 +163,6 @@ class Transaction(base.Base):
             self.commit()
         else:
             self.abort()
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

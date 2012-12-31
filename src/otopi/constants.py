@@ -157,3 +157,6 @@ class Queries(object):
 @util.codegen
 class Confirms(object):
     GPG_KEY = 'GPG_KEY'
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

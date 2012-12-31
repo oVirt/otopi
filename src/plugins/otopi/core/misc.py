@@ -76,3 +76,6 @@ class Plugin(plugin.PluginBase):
         # as we want full dump and not delta
         # of something before validation
         self.context.dumpEnvironment()
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

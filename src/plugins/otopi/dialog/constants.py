@@ -56,3 +56,6 @@ class DialogMachineConst(object):
     CONFIRM_RESPONSE_ABORT = 'ABORT'
 
     TERMINATE = 'TERMINATE'
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

@@ -34,3 +34,6 @@ def createPlugins(context):
     hostname.Plugin(context=context)
     ssh.Plugin(context=context)
     iptables.Plugin(context=context)
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

@@ -46,3 +46,6 @@ class Plugin(plugin.PluginBase):
             constants.DialogEnv.DIALECT,
             constants.Const.DIALOG_DIALECT_HUMAN,
         )
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

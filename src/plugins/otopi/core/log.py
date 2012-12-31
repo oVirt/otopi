@@ -224,3 +224,6 @@ class Plugin(plugin.PluginBase):
     )
     def _terminate(self):
         self._closeLogging()
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

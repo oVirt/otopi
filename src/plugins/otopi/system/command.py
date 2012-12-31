@@ -75,3 +75,6 @@ class Plugin(plugin.PluginBase, command.CommandBase):
     )
     def _misc(self):
         self._search()
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

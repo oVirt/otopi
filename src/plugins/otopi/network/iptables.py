@@ -110,3 +110,6 @@ class Plugin(plugin.PluginBase):
         self.services.startup('iptables', True)
         self.services.state('iptables', False)
         self.services.state('iptables', True)
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

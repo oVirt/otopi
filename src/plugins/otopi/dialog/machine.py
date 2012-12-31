@@ -346,3 +346,6 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 dialogcons.DialogMachineConst.TERMINATE,
             )
         )
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

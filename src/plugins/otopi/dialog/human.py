@@ -239,3 +239,6 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         value = self._readline()
         ret = value in ('yes', 'y', 'Y')
         return ret
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

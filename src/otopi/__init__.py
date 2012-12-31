@@ -40,3 +40,6 @@ _pythonModulesCompat()
 
 
 __all__ = []
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

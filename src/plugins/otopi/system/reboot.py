@@ -132,3 +132,6 @@ class Plugin(plugin.PluginBase):
             )
         )
         self.logger.debug("Reboot scheduled")
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

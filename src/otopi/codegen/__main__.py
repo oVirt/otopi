@@ -93,3 +93,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

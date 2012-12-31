@@ -83,3 +83,6 @@ def getMiniYum(parent):
         sink=_MyMiniYumSink(parent=parent),
         blockStdHandles=False,
     )
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

@@ -39,3 +39,6 @@ class Base(object):
     def __init__(self):
         """Contructor."""
         self._logger = logging.getLogger(self.__module__)
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

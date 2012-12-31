@@ -98,3 +98,6 @@ class Installer(object):
 if __name__ == '__main__':
     installer = Installer()
     sys.exit(0 if installer.main() else 1)
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

@@ -111,3 +111,6 @@ class Plugin(plugin.PluginBase):
             raise
         finally:
             self._mainTransaction = None
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

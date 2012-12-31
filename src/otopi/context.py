@@ -376,3 +376,6 @@ class Context(base.Base):
                     groups=needgroups
                 )
             )
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

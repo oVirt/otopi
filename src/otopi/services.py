@@ -56,3 +56,6 @@ class ServicesBase(object):
     def state(self, name, state):
         """Sets service state"""
         pass
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

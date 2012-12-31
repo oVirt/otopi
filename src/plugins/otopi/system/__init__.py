@@ -36,3 +36,6 @@ def createPlugins(context):
     command.Plugin(context=context)
     reboot.Plugin(context=context)
     clock.Plugin(context=context)
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

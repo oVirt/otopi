@@ -153,3 +153,6 @@ class Plugin(plugin.PluginBase):
                         _('Cannot set clock'),
                         exc_info=True
                     )
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

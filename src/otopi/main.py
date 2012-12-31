@@ -164,3 +164,6 @@ class Otopi(object):
             )
         self.context.buildSequence()
         self.context.runSequence()
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

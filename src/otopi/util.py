@@ -151,3 +151,6 @@ def loadModule(path, name):
     finally:
         if mod_fobj is not None:
             mod_fobj.close()
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

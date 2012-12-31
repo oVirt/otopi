@@ -399,3 +399,6 @@ class PluginBase(base.Base):
                 )
             )
         return (rc, stdout, stderr)
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

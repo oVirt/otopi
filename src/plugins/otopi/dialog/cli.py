@@ -458,3 +458,6 @@ class Plugin(plugin.PluginBase):
                     text=traceback.format_exception(*exceptionInfo)
                 )
         return True
+
+
+# vim: expandtab tabstop=4 shiftwidth=4

@@ -100,3 +100,6 @@ class CommandBase(object):
             for cmd in self.environment
             if cmd.startswith(constants.BaseEnv.COMMAND_PREFIX)
         ]
+
+
+# vim: expandtab tabstop=4 shiftwidth=4
