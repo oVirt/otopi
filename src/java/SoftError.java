@@ -23,11 +23,11 @@ package org.ovirt.otopi.dialog;
  * context.
  */
 public class SoftError extends RuntimeException {
-    public SoftError(String message) {
-        super(message);
-    }
-    public SoftError(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public SoftError(String message) {
+		super(message);
+	}
+	public SoftError(String message, Throwable cause) {
+		super(message, cause);
+	}
 }
 
