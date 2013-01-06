@@ -463,6 +463,20 @@ class MiniYum(object):
             with self._disableOutput:
                 self._yb = self._YumBase(self._sink)
 
+                #
+                # DO NOT use async which is the
+                # hardcoded default as we will not
+                # be able to monitor progress
+                #
+                from urlgrabber import grabber
+                if hasattr(grabber, 'parallel_wait'):
+                    for repo in self._yb.repos.listEnabled():
+                        repo._async = False
+
+                #
+                # Set progress bar hook, useless if
+                # async/parallel is enabled.
+                #
                 self._yb.repos.setProgressBar(
                     self._DownloadCallback(self._sink)
                 )
