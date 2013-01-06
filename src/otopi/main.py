@@ -131,21 +131,18 @@ class Otopi(object):
                 pass
 
         self._debug = int(
-            util.getKey(
-                dictionary=os.environ,
-                key=constants.SystemEnvironment.DEBUG,
-                default=0
+            os.environ.get(
+                constants.SystemEnvironment.DEBUG,
+                0
             )
         )
-        self._bundledir = util.getKey(
-            dictionary=os.environ,
-            key='OTOPI_BUNDLED',
-            default=''
+        self._bundledir = os.environ.get(
+            'OTOPI_BUNDLED',
+            ''
         )
-        self._insource = '0' != util.getKey(
-            dictionary=os.environ,
-            key='OTOPI_INSOURCETREE',
-            default='0'
+        self._insource = '0' != os.environ.get(
+            'OTOPI_INSOURCETREE',
+            '0'
         )
         self._setupLogger()
         self._setupGettext()

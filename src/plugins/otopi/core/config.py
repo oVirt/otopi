@@ -88,10 +88,9 @@ class Plugin(plugin.PluginBase):
     def _init(self):
         self.environment.setdefault(
             constants.CoreEnv.CONFIG_FILE_NAME,
-            util.getKey(
-                dictionary=os.environ,
-                key=constants.SystemEnvironment.CONFIG,
-                default=constants.Defaults.CONFIG_FILE,
+            os.environ.get(
+                constants.SystemEnvironment.CONFIG,
+                constants.Defaults.CONFIG_FILE,
             )
         )
 

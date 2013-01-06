@@ -102,24 +102,20 @@ class Plugin(plugin.PluginBase):
         # Allow system environment to override both
         # the log dir and the log file
         #
-        self.environment[constants.CoreEnv.LOG_DIR] = util.getKey(
-            dictionary=os.environ,
-            key=constants.SystemEnvironment.LOG_DIR,
-            default=util.getKey(
-                dictionary=self.environment,
-                key=constants.CoreEnv.LOG_DIR,
-                default=tempfile.gettempdir(),
+        self.environment[constants.CoreEnv.LOG_DIR] = os.environ.get(
+            constants.SystemEnvironment.LOG_DIR,
+            self.environment.get(
+                constants.CoreEnv.LOG_DIR,
+                tempfile.gettempdir(),
             ),
         )
         logFileName = self.environment[
             constants.CoreEnv.LOG_FILE_NAME
-        ] = util.getKey(
-            dictionary=os.environ,
-            key=constants.SystemEnvironment.LOG_FILE,
-            default=util.getKey(
-                dictionary=self.environment,
-                key=constants.CoreEnv.LOG_FILE_NAME,
-                default=os.path.join(
+        ] = os.environ.get(
+            constants.SystemEnvironment.LOG_FILE,
+            self.environment.get(
+                constants.CoreEnv.LOG_FILE_NAME,
+                os.path.join(
                     self.environment[constants.CoreEnv.LOG_DIR],
                     "%s-%s.log" % (
                         self.environment[

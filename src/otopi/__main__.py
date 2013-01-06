@@ -32,7 +32,6 @@ _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 from otopi import constants
 from otopi import main
 from otopi import common
-from otopi import util
 
 
 class Installer(object):
@@ -64,10 +63,9 @@ class Installer(object):
 
     def __init__(self):
         self._debug = int(
-            util.getKey(
-                dictionary=os.environ,
-                key=constants.SystemEnvironment.DEBUG,
-                default=0
+            os.environ.get(
+                constants.SystemEnvironment.DEBUG,
+                0
             )
         )
 

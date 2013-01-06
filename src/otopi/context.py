@@ -187,8 +187,7 @@ class Context(base.Base):
             constants.BaseEnv.PLUGIN_PATH: config.otopiplugindir,
             constants.BaseEnv.PLUGIN_GROUPS: 'otopi',
             constants.BaseEnv.DEBUG: int(
-                util.getKey(
-                    os.environ,
+                os.environ.get(
                     constants.SystemEnvironment.DEBUG,
                     '0'
                 )
@@ -337,7 +336,7 @@ class Context(base.Base):
         for key in sorted(self.environment.keys()):
             if (
                 old is None or
-                self.environment[key] != util.getKey(old, key, None)
+                self.environment[key] != old.get(key)
             ):
                 self.logger.debug(
                     "ENV %s=%s:'%s'",

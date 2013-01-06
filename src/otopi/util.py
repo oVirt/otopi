@@ -84,39 +84,6 @@ def methodsByAttribute(clz, attribute):
 
 
 @export
-def getKey(dictionary, key, default):
-    """Get key out of dictionary with default value.
-
-    Keyword arguments:
-    dictionary -- dictionary to process.
-    key -- key to query.
-    default -- value to return if key is missing.
-
-    Why Python does not have this?
-
-    """
-    if key in dictionary:
-        return dictionary[key]
-    else:
-        return default
-
-
-@export
-def getDefault(value, default):
-    """Get default out of variable.
-
-    Keyword arguments:
-    value -- value to evaluate.
-    default -- value to return if value is None.
-
-    """
-    if value is None:
-        return default
-    else:
-        return value
-
-
-@export
 def raiseExceptionInformation(info):
     """Python-2/Python-3 raise exception based on exception information."""
     if hasattr(info[1], 'with_traceback'):
