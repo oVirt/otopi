@@ -448,7 +448,14 @@ class MiniYum(object):
     def sink(self):
         return self._sink
 
-    def __init__(self, sink=None, blockStdHandles=True, extraLog=None):
+    def __init__(
+        self,
+        sink=None,
+        blockStdHandles=True,
+        extraLog=None,
+        disabledPlugins=None,
+        enabledPlugins=None,
+    ):
         """Constructor.
 
         Keyword arguments:
@@ -473,6 +480,10 @@ class MiniYum(object):
 
             with self._disableOutput:
                 self._yb = self._YumBase(self._sink)
+                if disabledPlugins is not None:
+                    self._yb.preconf.disabled_plugins = disabledPlugins
+                if enabledPlugins is not None:
+                    self._yb.preconf.enabled_plugins = enabledPlugins
 
                 #
                 # DO NOT use async which is the
