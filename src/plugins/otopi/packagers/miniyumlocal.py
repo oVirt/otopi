@@ -40,21 +40,26 @@ class _MyMiniYumSink(miniyum.MiniYumSinkBase):
         self._last = time.time()
 
     def __init__(self, parent):
+        super(_MyMiniYumSink, self).__init__()
         self._parent = parent
         self._touch()
 
     def verbose(self, msg):
+        super(_MyMiniYumSink, self).verbose(msg)
         self._parent.logger.debug('Yum %s' % msg)
 
     def info(self, msg):
+        super(_MyMiniYumSink, self).info(msg)
         self._parent.logger.info('Yum %s' % msg)
         self._touch()
 
     def error(self, msg):
+        super(_MyMiniYumSink, self).error(msg)
         self._parent.logger.error('Yum %s' % msg)
         self._touch()
 
     def keepAlive(self, msg):
+        super(_MyMiniYumSink, self).keepAlive(msg)
         if time.time() - self._last >= self._parent.environment[
             constants.PackEnv.KEEP_ALIVE_INTERVAL
         ]:
@@ -73,6 +78,7 @@ class _MyMiniYumSink(miniyum.MiniYumSinkBase):
         )
 
     def reexec(self):
+        super(_MyMiniYumSink, self).reexec()
         self._parent.context.notify(self._parent.context.NOTIFY_REEXEC)
 
 

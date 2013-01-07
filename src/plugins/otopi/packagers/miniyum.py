@@ -43,7 +43,10 @@ class MiniYumSinkBase(object):
 
     @property
     def failed(self):
-        return self._failed = False
+        return self._failed
+
+    def clearError(self):
+        self._failed = False
 
     def verbose(self, msg):
         """verbose log.
@@ -70,7 +73,7 @@ class MiniYumSinkBase(object):
         msg -- message to print
 
         """
-        pass
+        self._failed = True
 
     def keepAlive(self, msg):
         """keepAlive log.
@@ -440,6 +443,10 @@ class MiniYum(object):
                     raise
 
         return ret
+
+    @property
+    def sink(self):
+        return self._sink
 
     def __init__(self, sink=None, blockStdHandles=True, extraLog=None):
         """Constructor.
@@ -852,6 +859,8 @@ class MiniYum(object):
     def processTransaction(self):
         """Process built transaction."""
 
+        self._sink.clearError()
+
         try:
             with self._disableOutput:
                 self._sink.verbose('Processing transaction')
@@ -866,6 +875,11 @@ class MiniYum(object):
             self._sink.error(e)
             raise
 
+        if self._sink.failed:
+            raise RuntimeError(
+                _('One or more elements within Yum transaction failed')
+            )
+
 
 class Example(object):
     """Example of miniyum usage."""
@@ -877,6 +891,7 @@ class Example(object):
 
         def __init__(self):
             """dup the stdout as during yum operation so we redirect it."""
+            super(Example.MyMiniYumSink, self).__init__()
             self._stream = os.dup(sys.stdout.fileno())
             self._touch()
 
@@ -887,17 +902,21 @@ class Example(object):
             self._last = time.time()
 
         def verbose(self, msg):
+            super(Example.MyMiniYumSink, self).verbose(msg)
             os.write(self._stream, ('VERB: -->%s<--\n' % msg).encode('utf-8'))
 
         def info(self, msg):
+            super(Example.MyMiniYumSink, self).info(msg)
             self._touch()
             os.write(self._stream, ('OK:   -->%s<--\n' % msg).encode('utf-8'))
 
         def error(self, msg):
+            super(Example.MyMiniYumSink, self).error(msg)
             self._touch()
             os.write(self._stream, ('FAIL: -->%s<--\n' % msg).encode('utf-8'))
 
         def keepAlive(self, msg):
+            super(Example.MyMiniYumSink, self).keepAlive(msg)
             if time.time() - self._last >= \
                     self.KEEPALIVE_INTERVAL:
                 self.info(msg)
