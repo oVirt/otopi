@@ -870,7 +870,7 @@ class MiniYum(object):
 class Example(object):
     """Example of miniyum usage."""
 
-    class MyMiniYumSunk(MiniYumSinkBase):
+    class MyMiniYumSink(MiniYumSinkBase):
         """Events."""
 
         KEEPALIVE_INTERVAL = 60
@@ -914,7 +914,7 @@ class Example(object):
     @staticmethod
     def main():
         # BEGIN: PROCESS-INITIALIZATION
-        miniyumsink = Example.MyMiniYumSunk()
+        miniyumsink = Example.MyMiniYumSink()
         MiniYum.setup_log_hook(sink=miniyumsink)
         extraLog = open('/tmp/miniyum.log', 'a')
         miniyum = MiniYum(sink=miniyumsink, extraLog=extraLog)
