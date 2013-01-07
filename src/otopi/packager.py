@@ -172,7 +172,7 @@ class PackagerBase(object):
         """
         return []
 
-    def queryPackages(self, patterns=None):
+    def queryPackages(self, patterns=None, listAll=False):
         """Query packages.
 
         Keyword arguments:
@@ -190,18 +190,6 @@ class PackagerBase(object):
                     'arch':,
                 },
             ]
-
-        """
-        return []
-
-    def queryLocalCachePackages(self, patterns=None):
-        """Query packages of local cache.
-
-        Keyword arguments:
-        patterns -- patterns to query.
-
-        Returns:
-        Same as queryPackages()
 
         """
         return []

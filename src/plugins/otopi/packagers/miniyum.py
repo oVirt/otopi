@@ -820,13 +820,14 @@ class MiniYum(object):
             self._sink.error(e)
             raise
 
-    def queryPackages(self, pkgnarrow='all', patterns=None):
+    def queryPackages(self, pkgnarrow='all', patterns=None, showdups=None):
         try:
             with self._disableOutput:
                 ret = []
                 holder = self._yb.doPackageLists(
                     pkgnarrow=pkgnarrow,
-                    patterns=patterns
+                    patterns=patterns,
+                    showdups=showdups,
                 )
                 for op, l in (
                     ('available', holder.available),
@@ -850,18 +851,6 @@ class MiniYum(object):
                             ret.append(info)
 
                 return ret
-
-        except Exception as e:
-            self._sink.error(e)
-            raise
-
-    def queryLocalCachePackages(self, patterns=None):
-        try:
-            with self._disableOutput:
-                return [
-                    self._get_package_info(p)
-                    for p in self._yb.pkgSack.returnPackages(patterns=patterns)
-                ]
 
         except Exception as e:
             self._sink.error(e)

@@ -201,11 +201,11 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
     def queryGroups(self):
         return self._miniyum.queryGroups()
 
-    def queryPackages(self, patterns=None):
-        return self._miniyum.queryPackages(patterns=patterns)
-
-    def queryLocalCachePackages(self, patterns=None):
-        return self._miniyum.queryLocalCachePackages(patterns=patterns)
+    def queryPackages(self, patterns=None, listAll=False):
+        return self._miniyum.queryPackages(
+            patterns=patterns,
+            showdups=listAll
+        )
 
 
 # vim: expandtab tabstop=4 shiftwidth=4
