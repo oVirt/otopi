@@ -41,6 +41,10 @@ import yum.callbacks
 class MiniYumSinkBase(object):
     """Sink base."""
 
+    @property
+    def failed(self):
+        return self._failed = False
+
     def verbose(self, msg):
         """verbose log.
 
