@@ -45,6 +45,7 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
         self.command.detect('service')
         self.command.detect('chkconfig')
         self.command.detect('systemctl')
+        self.command.detect('initctl')
 
     @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,
@@ -72,6 +73,16 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
     # ServicesBase
     #
 
+    def _executeInitctlCommand(self, name, command, raiseOnError=True):
+        return self.execute(
+            (
+                self.command.get('initctl'),
+                command,
+                name,
+            ),
+            raiseOnError=raiseOnError
+        )
+
     def _executeServiceCommand(self, name, command, raiseOnError=True):
         return self.execute(
             (
@@ -82,35 +93,88 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
             raiseOnError=raiseOnError
         )
 
+    def _isUpstart(self, name):
+        exists = False
+        status = False
+
+        if self.command.get('initctl') is not None:
+            #
+            # status always returns rc 0 no mater
+            # what state it is
+            #
+            rc, stdout, stderr = self._executeInitctlCommand(
+                name,
+                'status',
+                raiseOnError=False,
+            )
+            if rc == 0 and len(stdout) == 1:
+                exists = True
+                if 'start/' in stdout[0]:
+                    status = True
+        return (exists, status)
+
     def exists(self, name):
+        ret = False
         self.logger.debug('check if service %s exists', name)
-        return os.path.exists(os.path.join('/etc/rc.d/init.d', name))
+        (upstart, status) = self._isUpstart(name)
+        if upstart:
+            ret = True
+        else:
+            ret = os.path.exists(
+                os.path.join('/etc/rc.d/init.d', name)
+            )
+        self.logger.debug('service %s exists %s upstart=%s', name, ret, upstart)
+        return ret
 
     def status(self, name):
         self.logger.debug('check service %s status', name)
-        (rc, stdout, stderr) = self._executeServiceCommand(
-            name,
-            'status',
-            raiseOnError=False
-        )
-        return rc == 0
+        (upstart, status) = self._isUpstart(name)
+        if not upstart:
+            (rc, stdout, stderr) = self._executeServiceCommand(
+                name,
+                'status',
+                raiseOnError=False
+            )
+            status = rc == 0
+        self.logger.debug('service %s status %s', name, status)
+        return status
 
     def startup(self, name, state):
         self.logger.debug('set service %s startup to %s', name, state)
-        return self.execute(
-            (
-                self.command.get('chkconfig'),
-                name,
-                'on' if state else 'off',
-            ),
-        )
+        (upstart, status) = self._isUpstart(name)
+        if upstart:
+            #
+            # upstart does not have the nature of
+            # startup configuration?
+            #
+            pass
+        else:
+            self.execute(
+                (
+                    self.command.get('chkconfig'),
+                    name,
+                    'on' if state else 'off',
+                ),
+            )
 
     def state(self, name, state):
         self.logger.debug('starting service %s', name)
-        self._executeServiceCommand(
-            name,
-            'start' if state else 'stop'
-        )
+        (upstart, status) = self._isUpstart(name)
+        if upstart:
+            #
+            # upstart fails when multiple
+            # start/stop commands.
+            #
+            if state != status:
+                self._executeInitctlCommand(
+                    name,
+                    'start' if state else 'stop'
+                )
+        else:
+            self._executeServiceCommand(
+                name,
+                'start' if state else 'stop'
+            )
 
 
 # vim: expandtab tabstop=4 shiftwidth=4
