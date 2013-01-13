@@ -72,10 +72,10 @@ clean-local:
 	rm -fr target
 
 maintainer-clean-local:
-	cat "$(srcdir)/m4/.gitignore" | while read f; do \
+	sed '/^$$/d' "$(srcdir)/m4/.gitignore" | while read f; do \
 		rm -f $(srcdir)/m4/$$f; \
 	done
-	cat "$(srcdir)/po/.gitignore" | while read f; do \
+	sed '/^$$/d' "$(srcdir)/po/.gitignore" | while read f; do \
 		rm -f $(srcdir)/po/$$f po/$$f; \
 	done
 
