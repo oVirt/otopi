@@ -18,7 +18,8 @@
 #
 
 MAINTAINERCLEANFILES = \
-	$(srcdir)/Makefile.in
+	$(srcdir)/Makefile.in \
+	$(NULL)
 
 SUBDIRS = \
 	core \
@@ -26,4 +27,5 @@ SUBDIRS = \
 	system \
 	network \
 	services \
-	packagers
+	packagers \
+	$(NULL)

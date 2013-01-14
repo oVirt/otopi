@@ -25,29 +25,35 @@ jarname=$(artifact)-$(PACKAGE_MAVEN_VERSION).jar
 targetjar=$(targetdir)/$(jarname)
 
 MAINTAINERCLEANFILES = \
-	$(srcdir)/Makefile.in
+	$(srcdir)/Makefile.in \
+	$(NULL)
 CLEANFILES = \
 	tmp.generated \
-	$(targetjar)
+	$(targetjar) \
+	$(NULL)
 
 EXTRA_DIST = \
-	.gitignore
+	.gitignore \
+	$(NULL)
 
 dist_noinst_DATA = \
 	MANIFEST.MF \
 	Event.java \
 	SoftError.java \
 	MachineDialogParser.java \
-	MachineDialogParserTest.java
+	MachineDialogParserTest.java \
+	$(NULL)
 
 if JAVA_SDK
 
 if JAVA_SDK_COMPILE
 all-local:	\
-		$(targetjar)
+		$(targetjar) \
+		$(NULL)
 else
 all-local:	\
-		sources
+		sources \
+		$(NULL)
 endif
 
 clean-local:
@@ -57,7 +63,8 @@ if WITH_MAVEN
 
 $(targetjar):	\
 		sources \
-		pom.xml
+		pom.xml \
+		$(NULL)
 	rm -f "$(targetjar)"
 	$(MKDIR_P) "$(targetdir)"
 	$(MVN) \
@@ -68,7 +75,8 @@ $(targetjar):	\
 else
 
 $(targetjar):	\
-		sources
+		sources \
+		$(NULL)
 	rm -f "$(targetjar)"
 	$(MKDIR_P) "$(targetdir)"
 	$(MKDIR_P) target
@@ -82,7 +90,8 @@ sources: \
 	src/main/java/org/ovirt/otopi/dialog/Event.java \
 	src/main/java/org/ovirt/otopi/dialog/SoftError.java \
 	src/main/java/org/ovirt/otopi/dialog/MachineDialogParser.java \
-	src/test/java/org/ovirt/otopi/dialog/MachineDialogParserTest.java
+	src/test/java/org/ovirt/otopi/dialog/MachineDialogParserTest.java \
+	$(NULL)
 
 # TODO: kill __main__ when python-2.6 gone
 tmp.generated:

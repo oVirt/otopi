@@ -18,10 +18,12 @@
 #
 
 MAINTAINERCLEANFILES = \
-	$(srcdir)/Makefile.in
+	$(srcdir)/Makefile.in \
+	$(NULL)
 
 SUBDIRS = \
 	bin \
 	otopi \
 	plugins \
-	java
+	java \
+	$(NULL)

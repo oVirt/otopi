@@ -18,11 +18,16 @@
 #
 
 MAINTAINERCLEANFILES = \
-	$(srcdir)/Makefile.in
-CLEANFILES = config.py
+	$(srcdir)/Makefile.in \
+	$(NULL)
+CLEANFILES = \
+	config.py \
+	$(NULL)
 
 EXTRA_DIST = \
-	.source
+	.source \
+	$(NULL)
 
 dist_sbin_SCRIPTS = \
-	otopi
+	otopi \
+	$(NULL)

@@ -21,13 +21,17 @@ include $(top_srcdir)/build/subst.inc
 include $(top_srcdir)/build/python.inc
 
 MAINTAINERCLEANFILES = \
-	$(srcdir)/Makefile.in
-CLEANFILES = config.py
+	$(srcdir)/Makefile.in \
+	$(NULL)
+CLEANFILES = \
+	config.py \
+	$(NULL)
 
 SUFFIXES = .in
 
 SUBDIRS = \
-	codegen
+	codegen \
+	$(NULL)
 
 dist_otopilib_PYTHON = \
 	__init__.py \
@@ -44,15 +48,21 @@ dist_otopilib_PYTHON = \
 	services.py \
 	packager.py \
 	command.py \
-	plugin.py
+	plugin.py \
+	$(NULL)
 otopilib_PYTHON = \
-	config.py
+	config.py \
+	$(NULL)
 
-config.py:	$(top_srcdir)/configure.ac
+config.py: \
+	$(top_srcdir)/configure.ac \
+	$(NULL)
 
 clean-local: \
-	python-clean
+	python-clean \
+	$(NULL)
 
 all-local: \
 	$(DISTFILES) \
-	python-syntax-check
+	python-syntax-check \
+	$(NULL)

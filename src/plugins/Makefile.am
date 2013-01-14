@@ -18,6 +18,9 @@
 #
 
 MAINTAINERCLEANFILES = \
-	$(srcdir)/Makefile.in
+	$(srcdir)/Makefile.in \
+	$(NULL)
 
-SUBDIRS = otopi
+SUBDIRS = \
+	otopi \
+	$(NULL)

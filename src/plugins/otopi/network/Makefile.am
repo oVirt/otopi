@@ -20,17 +20,21 @@
 include $(top_srcdir)/build/python.inc
 
 MAINTAINERCLEANFILES = \
-	$(srcdir)/Makefile.in
+	$(srcdir)/Makefile.in \
+	$(NULL)
 
 mydir=$(otopiplugindir)/otopi/network
 dist_my_PYTHON = \
 	__init__.py \
 	hostname.py \
 	ssh.py \
-	iptables.py
+	iptables.py \
+	$(NULL)
 
 clean-local: \
-	python-clean
+	python-clean \
+	$(NULL)
 
 all-local: \
-	python-syntax-check
+	python-syntax-check \
+	$(NULL)

@@ -20,7 +20,8 @@
 include $(top_srcdir)/build/python.inc
 
 MAINTAINERCLEANFILES = \
-	$(srcdir)/Makefile.in
+	$(srcdir)/Makefile.in \
+	$(NULL)
 
 mydir=$(otopiplugindir)/otopi/dialog
 dist_my_PYTHON = \
@@ -29,10 +30,13 @@ dist_my_PYTHON = \
 	constants.py \
 	machine.py \
 	human.py \
-	cli.py
+	cli.py \
+	$(NULL)
 
 clean-local: \
-	python-clean
+	python-clean \
+	$(NULL)
 
 all-local: \
-	python-syntax-check
+	python-syntax-check \
+	$(NULL)

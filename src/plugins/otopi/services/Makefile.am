@@ -20,17 +20,21 @@
 include $(top_srcdir)/build/python.inc
 
 MAINTAINERCLEANFILES = \
-	$(srcdir)/Makefile.in
+	$(srcdir)/Makefile.in \
+	$(NULL)
 
 mydir=$(otopiplugindir)/otopi/services
 dist_my_PYTHON = \
 	__init__.py \
 	systemd.py \
 	rhel.py \
-	openrc.py
+	openrc.py \
+	$(NULL)
 
 clean-local: \
-	python-clean
+	python-clean \
+	$(NULL)
 
 all-local: \
-	python-syntax-check
+	python-syntax-check \
+	$(NULL)

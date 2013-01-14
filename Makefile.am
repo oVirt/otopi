@@ -30,16 +30,21 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/config.rpath \
 	$(srcdir)/ABOUT-NLS \
 	$(srcdir)/aclocal.m4 \
-	$(srcdir)/ln-sr
-CLEANFILES = POTFILES.in.tmp
+	$(srcdir)/ln-sr \
+	$(NULL)
+CLEANFILES = \
+	POTFILES.in.tmp \
+	$(NULL)
 
 EXTRA_DIST = \
-	.gitignore
+	.gitignore \
+	$(NULL)
 
 SUBDIRS = \
 	build \
 	po \
-	src
+	src \
+	$(NULL)
 
 dist_noinst_DATA = \
 	README.environment \
@@ -47,10 +52,12 @@ dist_noinst_DATA = \
 	README.API \
 	README.localization \
 	MAINTAINERS \
-	otopi.spec
+	otopi.spec \
+	$(NULL)
 
 dist_noinst_SCRIPTS = \
-	autogen.sh
+	autogen.sh \
+	$(NULL)
 
 TMPREPOS = tmp.repos
 srpm:	dist
