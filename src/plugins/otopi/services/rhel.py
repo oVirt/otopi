@@ -123,7 +123,12 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
             ret = os.path.exists(
                 os.path.join('/etc/rc.d/init.d', name)
             )
-        self.logger.debug('service %s exists %s upstart=%s', name, ret, upstart)
+        self.logger.debug(
+            'service %s exists %s upstart=%s',
+            name,
+            ret,
+            upstart
+        )
         return ret
 
     def status(self, name):
