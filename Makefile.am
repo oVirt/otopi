@@ -38,6 +38,8 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	.gitignore \
+	m4/.gitignore \
+	po/.gitignore \
 	$(NULL)
 
 SUBDIRS = \
