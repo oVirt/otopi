@@ -42,6 +42,10 @@ BASE/debug(int) [0]
 BASE/error(bool)
     Error during sequence.
 
+BASE/executionDirectory(str)
+    Directory where instaler was executed.
+    Installer changes to '/' to avoid errors during program execution.
+
 BASE/pluginGroups(str)
     Plugin groups to load. ':' separated.
 

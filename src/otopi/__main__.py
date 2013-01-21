@@ -44,6 +44,8 @@ class Installer(object):
     def _setupEnvironment(self, environment):
         """Setup environment based on command-line parameters."""
 
+        environment[constants.BaseEnv.EXECUTION_DIRECTORY] = os.getcwd()
+
         for arg in sys.argv[1:]:
             for statement in shlex.split(arg):
                 entry = statement.split('=', 1)
@@ -73,7 +75,13 @@ class Installer(object):
         try:
             installer = main.Otopi()
             self._setupEnvironment(installer.environment)
+            os.chdir('/')
             installer.execute()
+            os.chdir(
+                installer.environment[
+                    constants.BaseEnv.EXECUTION_DIRECTORY
+                ]
+            )
             return True
         except main.PluginLoadException as e:
             print(

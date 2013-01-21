@@ -295,6 +295,9 @@ class PluginBase(base.Base):
         self._context = context
         context.registerPlugin(self)
 
+    def resolveFile(self, file):
+        return self.context.resolveFile(file)
+
     def executeRaw(
         self,
         args,

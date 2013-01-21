@@ -132,7 +132,7 @@ class Plugin(plugin.PluginBase):
         os.environ[constants.SystemEnvironment.LOG_FILE] = logFileName
 
         self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = open(
-            logFileName,
+            self.resolveFile(logFileName),
             mode='a',
             buffering=1
         )

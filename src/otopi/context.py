@@ -75,6 +75,8 @@ class Context(base.Base):
                 os.path.isdir(f)
             )
 
+        plugindir = self.resolveFile(plugindir)
+
         for group in _fulldir(plugindir):
             if _candidate(group):
                 groupname = os.path.basename(group)
@@ -317,6 +319,18 @@ class Context(base.Base):
                 util.raiseExceptionInformation(infos[0])
             else:
                 raise RuntimeError(_('Error during sequence'))
+
+    def resolveFile(self, file):
+        """Resolve file based on installer execution directory"""
+        if os.path.isabs(file):
+            return file
+        else:
+            return os.path.join(
+                self.environment[
+                    constants.BaseEnv.EXECUTION_DIRECTORY
+                ],
+                file
+            )
 
     def dumpSequence(self):
         """Dump sequence."""

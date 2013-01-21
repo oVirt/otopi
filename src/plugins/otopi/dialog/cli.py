@@ -424,7 +424,9 @@ class Plugin(plugin.PluginBase):
             self.logger.error(_("Syntax error"))
         else:
             with open(
-                self.environment[constants.CoreEnv.LOG_FILE_NAME],
+                self.resolveFile(
+                    self.environment[constants.CoreEnv.LOG_FILE_NAME]
+                ),
                 'r'
             ) as f:
                 log = [

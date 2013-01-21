@@ -88,6 +88,7 @@ class BaseEnv(object):
     PLUGIN_PATH = 'BASE/pluginPath'
     PLUGIN_GROUPS = 'BASE/pluginGroups'
     DEBUG = 'BASE/debug'
+    EXECUTION_DIRECTORY = 'BASE/executionDirectory'
     COMMAND_PREFIX = 'COMMAND/'
 
 

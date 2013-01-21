@@ -29,6 +29,10 @@ decoration in order to declare entry points (see example bellow).
 Plugins are loaded per python module, using the createPlugins()
 method.
 
+Please notice that installer change working directory to '/',
+every file that is being access that has the potential to be
+relative should be resolved using plugin.resolveFile() function.
+
 NOTICE: Boot exceptions (ImportError and such) are not printed, in
 order  to see then set OTOPI_DEBUG=1 environment before
 running the script.
