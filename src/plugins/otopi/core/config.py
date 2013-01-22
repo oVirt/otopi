@@ -88,14 +88,18 @@ class Plugin(plugin.PluginBase):
     def _init(self):
         self.environment.setdefault(
             constants.CoreEnv.CONFIG_FILE_NAME,
-            os.environ.get(
-                constants.SystemEnvironment.CONFIG,
-                constants.Defaults.CONFIG_FILE,
+            self.resolveFile(
+                os.environ.get(
+                    constants.SystemEnvironment.CONFIG,
+                    self.resolveFile(constants.Defaults.CONFIG_FILE),
+                )
             )
         )
 
         configs = []
-        configFile = self.environment[constants.CoreEnv.CONFIG_FILE_NAME]
+        configFile = self.resolveFile(
+            self.environment[constants.CoreEnv.CONFIG_FILE_NAME]
+        )
         configDir = '%s.d' % configFile
         if os.path.exists(configFile):
             configs.append(configFile)
