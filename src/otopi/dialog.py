@@ -254,7 +254,8 @@ class DialogBaseImpl(DialogBase):
                 raise IOError(_('End of file'))
 
         value = value.rstrip('\n')
-        self.__logString('RECEIVE', value)
+        if not hidden:
+            self.__logString('RECEIVE', value)
         return value
 
     def _flush(self):
