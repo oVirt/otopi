@@ -241,6 +241,7 @@ class DialogBaseImpl(DialogBase):
             try:
                 with open(os.devnull, 'w+') as null:
                     value = getpass.getpass(prompt='', stream=null)
+                    self.__output.write('\n')
                     getpass_error = False
             except:
                 self.logger.debug('getpass')
