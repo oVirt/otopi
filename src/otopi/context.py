@@ -185,6 +185,7 @@ class Context(base.Base):
             constants.BaseEnv.ERROR: False,
             constants.BaseEnv.ABORTED: False,
             constants.BaseEnv.EXCEPTION_INFO: [],
+            constants.BaseEnv.EXECUTION_DIRECTORY: '.',
             constants.BaseEnv.LOG: False,
             constants.BaseEnv.PLUGIN_PATH: config.otopiplugindir,
             constants.BaseEnv.PLUGIN_GROUPS: 'otopi',
