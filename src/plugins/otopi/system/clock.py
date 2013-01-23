@@ -62,6 +62,7 @@ class Plugin(plugin.PluginBase):
     )
     def _setup(self):
         self.command.detect('ntpq')
+        self.command.detect('chronyc')
         self.command.detect('date')
         self.command.detect('hwclock')
 
@@ -84,6 +85,15 @@ class Plugin(plugin.PluginBase):
                 stdout and
                 'clock_sync' in stdout[0]
             ):
+                self.logger.debug('clock is synchronized')
+                needClockSync = False
+        chronyc = self.command.get('chronyc', optional=True)
+        if chronyc is not None:
+            rc, stdout, stderr = self.execute(
+                (chronyc, 'waitsync', '1'),
+                raiseOnError=False,
+            )
+            if rc == 0:
                 self.logger.debug('clock is synchronized')
                 needClockSync = False
         if needClockSync:
