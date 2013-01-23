@@ -243,8 +243,11 @@ class DialogBaseImpl(DialogBase):
                     value = getpass.getpass(prompt='', stream=null)
                     self.__output.write('\n')
                     getpass_error = False
+            except RuntimeError as e:
+                # probably signal
+                raise e
             except:
-                self.logger.debug('getpass')
+                self.logger.debug('getpass', exc_info=True)
             finally:
                 os.dup2(old, 0)
 
