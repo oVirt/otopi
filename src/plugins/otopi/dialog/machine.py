@@ -132,9 +132,9 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         name,
         note=None,
         validValues=None,
-        mandatory=False,
         hidden=False,
         prompt=False,
+        default=False,
     ):
         if note is None:
             note = _("\nPlease specify value for '{name}' {values}: ").format(
@@ -150,9 +150,11 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         )
         self.dialog.note(text=note, prompt=prompt)
         value = self._readline()
+        if not value and default is not None:
+            value = default
         if (
-            validValues is not None and value not in validValues or
-            mandatory and not value
+            (validValues is not None and value not in validValues) or
+            (not value and value != default)
         ):
             raise RuntimeError(
                 _("Invalid value provided to '{name}'").format(

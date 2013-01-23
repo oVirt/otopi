@@ -61,9 +61,9 @@ class DialogBase(object):
         name,
         note=None,
         validValues=None,
-        mandatory=False,
         hidden=False,
         prompt=False,
+        default=None,
     ):
         """Query string from manager.
 
@@ -71,9 +71,9 @@ class DialogBase(object):
         name -- name of variable.
         note -- note to present.
         validValues -- tuple of valid values.
-        mandatory -- if value must be provided.
         hidden -- if tty echo will be disabled.
         prompt -- do not echo new line after note if possible.
+        default -- if not None use this if empty.
 
         """
         raise NotImplementedError(_('Dialog queryString not implemented'))

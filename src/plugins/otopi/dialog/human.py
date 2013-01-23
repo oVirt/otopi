@@ -144,22 +144,27 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         name,
         note=None,
         validValues=None,
-        mandatory=False,
         hidden=False,
         prompt=False,
+        default=None,
     ):
         accepted = False
         while not accepted:
             if note is None:
-                note = _("\nPlease specify '{name}' {values}: ").format(
+                note = _(
+                    "\nPlease specify '{name}' {values} [{default}]: "
+                ).format(
                     name=name,
                     values=validValues,
+                    default=default,
                 )
             self.dialog.note(text=note, prompt=prompt)
             value = self._readline(hidden=hidden)
+            if not value and default is not None:
+                value = default
             if validValues is not None and value not in validValues:
                 self.logger.error(_('Invalid value'))
-            elif mandatory and not value:
+            elif not value and value != default:
                 self.logger.error(_('Please specify value'))
             else:
                 accepted = True
