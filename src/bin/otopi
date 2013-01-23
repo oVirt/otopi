@@ -57,7 +57,7 @@ extraenv=""
 if [ -f "${scriptdir}/.source" ]; then
 	export OTOPI_INSOURCETREE=1
 	# make sure we are first
-	export PYTHONPATH="${scriptdir}/..:${PYTHONPATH}"
+	export PYTHONPATH="$(cd "${scriptdir}" && pwd)/..:${PYTHONPATH}"
 	extraenv="BASE/pluginPath=str:${scriptdir}/../plugins"
 fi
 
