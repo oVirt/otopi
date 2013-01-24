@@ -109,6 +109,7 @@ class FileTransaction(transaction.TransactionElement):
         downer=None,
         dgroup=None,
         enforcePermissions=False,
+        visibleButUnsafe=False,
         modifiedList=[],
     ):
         """Constructor.
@@ -130,6 +131,7 @@ class FileTransaction(transaction.TransactionElement):
         dgroup -- directory group (name) if directory is to be created.
         enforcePermissions -- if True permissions are enforced also
             if previous file was exists.
+        visibleButUnsafe -- if True during transaction new content is visible.
         modifiedList -- a list to add file name if was changed.
 
         """
@@ -150,6 +152,7 @@ class FileTransaction(transaction.TransactionElement):
         self._downer = -1
         self._dgroup = -1
         self._enforcePermissions = enforcePermissions
+        self._visibleButUnsafe = visibleButUnsafe
         self._modifiedList = modifiedList
         if owner is not None:
             self._owner, self._group = pwd.getpwnam(owner)[2:4]
@@ -160,6 +163,8 @@ class FileTransaction(transaction.TransactionElement):
         if dgroup is not None:
             self._dgroup = grp.getgrnam(dgroup)[2]
         self._tmpname = None
+        self._backup = None
+        self._originalFileWasMissing = not os.path.exists(self._name)
         self._prepared = False
 
     def __str__(self):
@@ -169,7 +174,9 @@ class FileTransaction(transaction.TransactionElement):
 
     def prepare(self):
         doit = True
-        if os.path.exists(self._name):
+        if self._originalFileWasMissing:
+            self.logger.debug("file '%s' missing" % self._name)
+        else:
             self.logger.debug("file '%s' exists" % self._name)
             with open(self._name, 'r') as f:
                 if f.read() == self._content:
@@ -177,32 +184,43 @@ class FileTransaction(transaction.TransactionElement):
                         "file '%s' already has content" % self._name
                     )
                     doit = False
-        else:
-            self.logger.debug("file '%s' missing" % self._name)
 
         if doit:
             mydir = os.path.dirname(self._name)
-            if os.path.exists(self._name):
+            if self._originalFileWasMissing:
+                if not os.path.exists(mydir):
+                    self._createDirRecursive(mydir)
+            else:
                 # check we can open file for write
                 with open(self._name, 'a'):
                     pass
 
-                # backup file
-                newname = "%s.%s" % (
-                    self._name,
-                    datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                )
-                self.logger.debug("backup '%s'->'%s'" % (self._name, newname))
-                shutil.copyfile(self._name, newname)
-
+                currentStat = os.stat(self._name)
                 if not self._enforcePermissions:
-                    # get current file stats
-                    currentStat = os.stat(self._name)
                     self._mode = currentStat.st_mode
                     self._owner = currentStat.st_uid
                     self._group = currentStat.st_gid
-            elif not os.path.exists(mydir):
-                self._createDirRecursive(mydir)
+
+                #
+                # backup the file
+                #
+                self._backup = "%s.%s" % (
+                    self._name,
+                    datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+                )
+                self.logger.debug(
+                    "backup '%s'->'%s'" % (
+                        self._name,
+                        self._backup
+                    )
+                )
+                shutil.copyfile(self._name, self._backup)
+                shutil.copystat(self._name, self._backup)
+                os.chown(
+                    self._backup,
+                    currentStat.st_uid,
+                    currentStat.st_gid
+                )
 
             fd = -1
             try:
@@ -228,6 +246,13 @@ class FileTransaction(transaction.TransactionElement):
 
                 os.write(fd, self._content)
                 os.fsync(fd)
+
+                if self._visibleButUnsafe:
+                    type(self)._atomicMove(
+                        source=self._tmpname,
+                        destination=self._name,
+                    )
+
                 self._prepared = True
             finally:
                 if fd != -1:
@@ -238,15 +263,36 @@ class FileTransaction(transaction.TransactionElement):
                     fd = -1
 
     def abort(self):
-        if self._tmpname is not None:
-            try:
-                os.unlink(self._tmpname)
-            except OSError:
-                pass
+        try:
+            if self._visibleButUnsafe:
+                if self._originalFileWasMissing:
+                    if os.path.exists(self._name):
+                        os.unlink(self._name)
+                elif (
+                    self._backup is not None and
+                    os.path.exists(self._backup)
+                ):
+                    type(self)._atomicMove(
+                        source=self._backup,
+                        destination=self._name,
+                    )
+            else:
+                if (
+                    self._tmpname is not None and
+                    os.path.exists(self._tmpname)
+                ):
+                    os.unlink(self._tmpname)
+        except OSError:
+            self.logger.debug('Exception during abort', exc_info=True)
+            pass
 
     def commit(self):
         if self._prepared:
-            type(self)._atomicMove(self._tmpname, self._name)
+            if not self._visibleButUnsafe:
+                type(self)._atomicMove(
+                    source=self._tmpname,
+                    destination=self._name,
+                )
             self._modifiedList.append(self._name)
 
 
