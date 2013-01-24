@@ -31,6 +31,8 @@ from . import util
 class Base(object):
     """Base class for all objects."""
 
+    _LOG_PREFIX = 'otopi.'
+
     @property
     def logger(self):
         """Logger."""
@@ -38,7 +40,12 @@ class Base(object):
 
     def __init__(self):
         """Contructor."""
-        self._logger = logging.getLogger(self.__module__)
+
+        prefix = ''
+        if not self.__module__.startswith(self._LOG_PREFIX):
+            prefix = self._LOG_PREFIX
+
+        self._logger = logging.getLogger(prefix + self.__module__)
 
 
 # vim: expandtab tabstop=4 shiftwidth=4
