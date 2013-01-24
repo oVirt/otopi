@@ -88,7 +88,10 @@ class FileTransaction(transaction.TransactionElement):
 
     @property
     def tmpname(self):
-        return self._tmpname
+        if self._originalDiffer:
+            return self._tmpname
+        else:
+            return self._name
 
     @classmethod
     def registerAtomicMove(clz, function):
@@ -166,6 +169,7 @@ class FileTransaction(transaction.TransactionElement):
         self._backup = None
         self._originalFileWasMissing = not os.path.exists(self._name)
         self._prepared = False
+        self._originalDiffer = True
 
     def __str__(self):
         return _("File transaction for '{file}'").format(
@@ -173,7 +177,6 @@ class FileTransaction(transaction.TransactionElement):
         )
 
     def prepare(self):
-        doit = True
         if self._originalFileWasMissing:
             self.logger.debug("file '%s' missing" % self._name)
         else:
@@ -183,9 +186,9 @@ class FileTransaction(transaction.TransactionElement):
                     self.logger.debug(
                         "file '%s' already has content" % self._name
                     )
-                    doit = False
+                    self._originalDiffer = False
 
-        if doit:
+        if self._originalDiffer:
             mydir = os.path.dirname(self._name)
             if self._originalFileWasMissing:
                 if not os.path.exists(mydir):
