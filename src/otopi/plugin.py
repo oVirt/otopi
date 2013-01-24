@@ -322,8 +322,10 @@ class PluginBase(base.Base):
         """
         try:
             self.logger.debug(
-                'execute: %s, env=%s',
+                "execute: %s, executable='%s', cwd='%s', env=%s",
                 args,
+                executable,
+                cwd,
                 env,
             )
             p = subprocess.Popen(
