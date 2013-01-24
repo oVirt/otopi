@@ -21,6 +21,7 @@
 """Plugin interface."""
 
 
+import os
 import subprocess
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
@@ -305,6 +306,7 @@ class PluginBase(base.Base):
         stdin=None,
         cwd=None,
         env=None,
+        envAppend=None,
     ):
         """Execute a process.
 
@@ -314,6 +316,7 @@ class PluginBase(base.Base):
         stdin -- binary blob.
         cwd -- working directory.
         env -- environment dictionary.
+        envAppend -- append environment.
 
         Returns:
         (rc, stdout, stderr)
@@ -321,6 +324,12 @@ class PluginBase(base.Base):
         stdour, stderr binary blobs.
         """
         try:
+            if envAppend is not None:
+                if env is None:
+                    env = os.environ
+                env = env.copy()
+                env.update(envAppend)
+
             self.logger.debug(
                 "execute: %s, executable='%s', cwd='%s', env=%s",
                 args,
