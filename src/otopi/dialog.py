@@ -61,6 +61,7 @@ class DialogBase(object):
         name,
         note=None,
         validValues=None,
+        caseSensitive=True,
         hidden=False,
         prompt=False,
         default=None,
@@ -71,6 +72,7 @@ class DialogBase(object):
         name -- name of variable.
         note -- note to present.
         validValues -- tuple of valid values.
+        caseSensitive -- consider validValues as such.
         hidden -- if tty echo will be disabled.
         prompt -- do not echo new line after note if possible.
         default -- if not None use this if empty.

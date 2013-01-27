@@ -144,10 +144,14 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         name,
         note=None,
         validValues=None,
+        caseSensitive=True,
         hidden=False,
         prompt=False,
         default=None,
     ):
+        if not caseSensitive and validValues is not None:
+            validValues = [v.lower() for v in validValues]
+
         accepted = False
         while not accepted:
             if note is None:
@@ -162,6 +166,8 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             value = self._readline(hidden=hidden)
             if not value and default is not None:
                 value = default
+            if not caseSensitive:
+                value = value.lower()
             if validValues is not None and value not in validValues:
                 self.logger.error(_('Invalid value'))
             elif not value and value != default:

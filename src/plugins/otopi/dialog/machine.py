@@ -132,10 +132,14 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         name,
         note=None,
         validValues=None,
+        caseSensitive=True,
         hidden=False,
         prompt=False,
         default=False,
     ):
+        if not caseSensitive and validValues is not None:
+            validValues = [v.lower() for v in validValues]
+
         if note is None:
             note = _("\nPlease specify value for '{name}' {values}: ").format(
                 name=name,
@@ -152,6 +156,8 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         value = self._readline()
         if not value and default is not None:
             value = default
+        if not caseSensitive:
+            value = value.lower()
         if (
             (validValues is not None and value not in validValues) or
             (not value and value != default)
