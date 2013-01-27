@@ -272,5 +272,36 @@ class DialogBaseImpl(DialogBase):
         if flush:
             self.__flush(self.__output)
 
+    def _queryStringNote(
+        self,
+        name,
+        note=None,
+        validValues=None,
+        default=None,
+    ):
+        def _subst(s):
+            ret = s
+            if validValues is not None:
+                ret = ret.replace('@VALUES@', ', '.join(validValues))
+            if default is not None:
+                ret = ret.replace('@DEFAULT@', default)
+            return ret
+
+        if note is None:
+            note = _("\nPlease specify '{name}'")
+            if validValues is not None:
+                note += ' (@VALUES@)'
+            if default is not None:
+                note += ' [@DEFAULT@]'
+
+        if isinstance(note, str):
+            note = [note]
+        note = [_subst(n) for n in note]
+
+        if len(note) == 1:
+            note = note[0]
+
+        return note
+
 
 # vim: expandtab tabstop=4 shiftwidth=4

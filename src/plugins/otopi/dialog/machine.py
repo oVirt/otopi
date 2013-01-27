@@ -137,14 +137,20 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         prompt=False,
         default=False,
     ):
+        if default is not None:
+            default = str(default)
+        if validValues is not None:
+            validValues = [str(v) for v in validValues]
+        note = self._queryStringNote(
+            name=name,
+            note=note,
+            validValues=validValues,
+            default=default,
+        )
+
         if not caseSensitive and validValues is not None:
             validValues = [v.lower() for v in validValues]
 
-        if note is None:
-            note = _("\nPlease specify value for '{name}' {values}: ").format(
-                name=name,
-                values=validValues,
-            )
         self._write(
             text='%s%s %s\n' % (
                 dialogcons.DialogMachineConst.REQUEST_PREFIX,

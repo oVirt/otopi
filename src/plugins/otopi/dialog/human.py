@@ -149,19 +149,22 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         prompt=False,
         default=None,
     ):
+        if default is not None:
+            default = str(default)
+        if validValues is not None:
+            validValues = [str(v) for v in validValues]
+        note = self._queryStringNote(
+            name=name,
+            note=note,
+            validValues=validValues,
+            default=default,
+        )
+
         if not caseSensitive and validValues is not None:
             validValues = [v.lower() for v in validValues]
 
         accepted = False
         while not accepted:
-            if note is None:
-                note = _(
-                    "\nPlease specify '{name}' {values} [{default}]: "
-                ).format(
-                    name=name,
-                    values=validValues,
-                    default=default,
-                )
             self.dialog.note(text=note, prompt=prompt)
             value = self._readline(hidden=hidden)
             if not value and default is not None:
