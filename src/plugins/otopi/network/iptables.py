@@ -64,7 +64,7 @@ class Plugin(plugin.PluginBase):
         ),
     )
     def _validate(self):
-        if not self._distribution in ('redhat', 'fedora'):
+        if not self._distribution in ('redhat', 'fedora', 'centos'):
             self.logger.warning(
                 _('Unsupported distribution for iptables plugin')
             )
