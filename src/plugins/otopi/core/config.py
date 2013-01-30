@@ -95,20 +95,29 @@ class Plugin(plugin.PluginBase):
                 )
             )
         )
+        self.environment.setdefault(
+            constants.CoreEnv.CONFIG_FILE_APPEND,
+            None
+        )
 
         configs = []
-        configFile = self.resolveFile(
-            self.environment[constants.CoreEnv.CONFIG_FILE_NAME]
-        )
-        configDir = '%s.d' % configFile
-        if os.path.exists(configFile):
-            configs.append(configFile)
-        if os.path.isdir(configDir):
-            configs += [
-                os.path.join(configDir, f)
-                for f in sorted(os.listdir(configDir))
-                if f.endswith('.conf')
-            ]
+        for f in (
+            self.environment[constants.CoreEnv.CONFIG_FILE_NAME],
+            self.environment[constants.CoreEnv.CONFIG_FILE_APPEND],
+        ):
+            if f:
+                for c in f.split(':'):
+                    configFile = self.resolveFile(c)
+                    configDir = '%s.d' % configFile
+                    if os.path.exists(configFile):
+                        configs.append(configFile)
+                    if os.path.isdir(configDir):
+                        configs += [
+                            os.path.join(configDir, f)
+                            for f in sorted(os.listdir(configDir))
+                            if f.endswith('.conf')
+                        ]
+
         self._configFiles = self._config.read(configs)
 
         self._readEnvironment(

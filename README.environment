@@ -56,7 +56,10 @@ CORE/logFileName(str)
     Log file name.
 
 CORE/configFileName(str) [/etc/otopi.conf]
-    Configration file name.
+    Configration file names. ':' separated.
+
+CORE/configFileAppend(str)
+    Extra configuration to load.
 
 DIALOG/dialect(str) [human]
     Dialect to use.

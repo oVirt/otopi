@@ -108,6 +108,7 @@ class CoreEnv(object):
     LOG_FILE_HANDLE = 'CORE/logFileHandle'
     LOG_REMOVE_AT_EXIT = 'CORE/logRemoveAtExit'
     CONFIG_FILE_NAME = 'CORE/configFileName'
+    CONFIG_FILE_APPEND = 'CORE/configFileAppend'
 
 
 @util.export
