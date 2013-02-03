@@ -214,14 +214,20 @@ class Stages(object):
 
 @util.export
 def event(
+    name=None,
     stage=None,
+    before=[],
+    after=[],
     priority=Stages.PRIORITY_DEFAULT,
     condition=None,
 ):
     """Decoration to specify sequence event method.
 
     Keyword arguments:
+    name -- name of stage.
     stage -- stage out of Stages.STAGE_*.
+    before -- place before plugin.
+    after -- place after plugin.
     priority -- priority out of Stages.PRIORITY_*.
     condition -- optional condition function.
 
@@ -229,7 +235,10 @@ def event(
     def decorator(f):
         f.decoration_event = {
             'method': f,
+            'name': name,
             'stage': stage,
+            'before': before,
+            'after': after,
             'priority': priority,
             'condition': (
                 condition if condition is not None

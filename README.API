@@ -20,8 +20,8 @@ command-line triggered by the DIALOG/customization environment
 variable.
 
 Plugins entries are loaded and sorted by Stages, and within each
-stage by priority. Then entries are called one by one by their
-order.
+stage by priority, order by before and after hints. Then entries
+are called one by one by their order.
 
 Plugin class inherit from PluginBase and uses @plugin.event
 decoration in order to declare entry points (see example bellow).

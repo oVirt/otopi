@@ -273,6 +273,43 @@ class Context(base.Base):
         #
         tmplist.sort(key=operator.itemgetter('priority'))
 
+        #
+        # Handle before and after
+        # KISS mode
+        #
+        def _doit(l, what, op, offset):
+            def _indexOfName(names):
+                try:
+                    return min(
+                        i for i, data in enumerate(l)
+                        if data['name'] in names
+                    )
+                except ValueError:
+                    return None
+
+            for limit in range(400):    # boundary
+                modified = False
+                for index, metadata in enumerate(l):
+                    candidateindex = _indexOfName(metadata[what])
+                    if (
+                        candidateindex is not None and
+                        op(candidateindex, index)
+                    ):
+                        l.insert(candidateindex+offset, metadata)
+                        if candidateindex < index:
+                            del l[index+1]
+                        else:
+                            del l[index]
+                        modified = True
+                        break
+                if not modified:
+                    break
+            if modified:
+                raise RuntimeError(_('Sequence build loop detected'))
+
+        _doit(tmplist, 'before', operator.lt, 0)
+        _doit(tmplist, 'after', operator.gt, 1)
+
         sequence = {}
         for m in tmplist:
             sequence.setdefault(m['stage'], []).append(m)
@@ -343,8 +380,9 @@ class Context(base.Base):
             self.logger.debug('STAGE %s', plugin.Stages.stage_id(stage))
             for methodinfo in methodinfos:
                 self.logger.debug(
-                    '    METHOD %s',
+                    '    METHOD %s (%s)',
                     self._methodName(methodinfo),
+                    methodinfo['name'],
                 )
         self.logger.debug('SEQUENCE DUMP - END')
 
