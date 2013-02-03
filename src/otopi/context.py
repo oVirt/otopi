@@ -24,6 +24,7 @@
 import sys
 import os
 import traceback
+import operator
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
@@ -254,27 +255,29 @@ class Context(base.Base):
         Should be called after plugins are loaded.
 
         """
-        tmpseq = {}
+        #
+        # bind functions to plugin
+        #
+        tmplist = []
         for p in self._plugins:
             for metadata in util.methodsByAttribute(
                 p.__class__, 'decoration_event'
             ):
-                # create key while we set
-                # tmpseq[stage][priority].append(methodinfo)
-                tmpseq.setdefault(
-                    metadata['stage'], {}
-                ).setdefault(
-                    metadata['priority'], []
-                ).append(
-                    {
-                        'method': metadata['method'].__get__(p),
-                        'condition': metadata['condition'].__get__(p),
-                    }
-                )
+                metadata = metadata.copy()
+                metadata['method'] = metadata['method'].__get__(p)
+                metadata['condition'] = metadata['condition'].__get__(p)
+                tmplist.append(metadata)
 
-        for stage, data in tmpseq.items():
-            for key in sorted(data.keys()):
-                self._sequence.setdefault(stage, []).extend(data[key])
+        #
+        # sort based on priority
+        #
+        tmplist.sort(key=operator.itemgetter('priority'))
+
+        sequence = {}
+        for m in tmplist:
+            sequence.setdefault(m['stage'], []).append(m)
+
+        self._sequence = sequence
 
     def runSequence(self):
         """Run sequence."""
