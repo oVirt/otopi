@@ -87,6 +87,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
             self.logger.debug('Cannot import miniyumlocal', exc_info=True)
 
     @plugin.event(
+        name=constants.Stages.PACKAGERS_DETECTION,
         stage=plugin.Stages.STAGE_INIT,
         priority=plugin.Stages.PRIORITY_HIGH,
         condition=lambda self: self._enabled,

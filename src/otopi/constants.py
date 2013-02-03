@@ -42,6 +42,17 @@ class Defaults(object):
 
 
 @util.export
+class Stages(object):
+    CORE_LOG_INIT = 'otopi.core.log.init'
+    CORE_CONFIG_INIT = 'otopi.core.config.init'
+    DIALOG_CLI_CUSTOMIZATION = 'otopi.dialog.cli.customization'
+    DIALOG_CLI_TERMINATION = 'otopi.dialog.cli.termination'
+    SYSTEM_COMMAND_DETECTION = 'otopi.system.command.detection'
+    SYSTEM_COMMAND_REDETECTION = 'otopi.system.command.redetection'
+    PACKAGERS_DETECTION = 'otopi.packagers.detection'
+
+
+@util.export
 class Log(object):
     LOGGER_BASE = 'otopi'
 

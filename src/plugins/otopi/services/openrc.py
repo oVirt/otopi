@@ -26,6 +26,7 @@ import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
 
+from otopi import constants
 from otopi import util
 from otopi import plugin
 from otopi import services
@@ -47,9 +48,11 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,
-        priority=plugin.Stages.PRIORITY_HIGH,
+        after=[
+            constants.Stages.SYSTEM_COMMAND_DETECTION,
+        ],
     )
-    def _validation(self):
+    def _programs(self):
         rc = self.command.get('rc', optional=True)
         if rc is not None:
             (ret, stdout, stderr) = self.execute(

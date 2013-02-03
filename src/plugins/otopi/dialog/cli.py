@@ -133,8 +133,8 @@ class Plugin(plugin.PluginBase):
         )
 
     @plugin.event(
+        name=constants.Stages.DIALOG_CLI_CUSTOMIZATION,
         stage=plugin.Stages.STAGE_CUSTOMIZATION,
-        priority=plugin.Stages.PRIORITY_LOW,
         condition=(
             lambda self: self.environment[constants.DialogEnv.CUSTOMIZATION]
         ),
@@ -149,8 +149,8 @@ class Plugin(plugin.PluginBase):
         )
 
     @plugin.event(
+        name=constants.Stages.DIALOG_CLI_TERMINATION,
         stage=plugin.Stages.STAGE_PRE_TERMINATE,
-        priority=plugin.Stages.PRIORITY_LOW,
         condition=(
             lambda self: self.environment[constants.DialogEnv.CUSTOMIZATION]
         ),

@@ -190,6 +190,7 @@ class Plugin(plugin.PluginBase):
             self._closeLogging()
 
     @plugin.event(
+        name=constants.Stages.CORE_LOG_INIT,
         stage=plugin.Stages.STAGE_BOOT,
         priority=plugin.Stages.PRIORITY_HIGH,
     )

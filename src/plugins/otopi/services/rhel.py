@@ -26,6 +26,7 @@ import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
 
+from otopi import constants
 from otopi import util
 from otopi import plugin
 from otopi import services
@@ -48,10 +49,12 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
         self.command.detect('initctl')
 
     @plugin.event(
-        stage=plugin.Stages.STAGE_VALIDATION,
-        priority=plugin.Stages.PRIORITY_HIGH,
+        stage=plugin.Stages.STAGE_PROGRAMS,
+        after=[
+            constants.Stages.SYSTEM_COMMAND_DETECTION,
+        ],
     )
-    def _validation(self):
+    def _programs(self):
         haveSystemd = False
         systemctl = self.command.get('systemctl', optional=True)
         if systemctl is not None:

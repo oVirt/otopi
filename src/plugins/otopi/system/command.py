@@ -64,12 +64,14 @@ class Plugin(plugin.PluginBase, command.CommandBase):
         self.context.registerCommand(command=self)
 
     @plugin.event(
+        name=constants.Stages.SYSTEM_COMMAND_DETECTION,
         stage=plugin.Stages.STAGE_PROGRAMS,
     )
-    def _customization(self):
+    def _programs(self):
         self._search()
 
     @plugin.event(
+        name=constants.Stages.SYSTEM_COMMAND_REDETECTION,
         stage=plugin.Stages.STAGE_MISC,
         priority=plugin.Stages.PRIORITY_HIGH,
     )

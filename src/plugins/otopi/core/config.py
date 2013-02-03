@@ -82,6 +82,7 @@ class Plugin(plugin.PluginBase):
         self._config.optionxform = str
 
     @plugin.event(
+        name=constants.Stages.CORE_CONFIG_INIT,
         stage=plugin.Stages.STAGE_INIT,
         priority=plugin.Stages.PRIORITY_HIGH - 10,
     )
