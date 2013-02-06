@@ -277,10 +277,10 @@ class Context(base.Base):
         # Handle before and after
         # KISS mode
         #
-        def _doit(l, what, op, offset):
+        def _doit(l, what, compare, aggregate, offset):
             def _indexOfName(names):
                 try:
-                    return min(
+                    return aggregate(
                         i for i, data in enumerate(l)
                         if data['name'] in names
                     )
@@ -293,7 +293,7 @@ class Context(base.Base):
                     candidateindex = _indexOfName(metadata[what])
                     if (
                         candidateindex is not None and
-                        op(candidateindex, index)
+                        compare(candidateindex, index)
                     ):
                         l.insert(candidateindex+offset, metadata)
                         if candidateindex < index:
@@ -307,8 +307,8 @@ class Context(base.Base):
             if modified:
                 raise RuntimeError(_('Sequence build loop detected'))
 
-        _doit(tmplist, 'before', operator.lt, 0)
-        _doit(tmplist, 'after', operator.gt, 1)
+        _doit(tmplist, 'before', operator.lt, min, 0)
+        _doit(tmplist, 'after', operator.gt, max, 1)
 
         sequence = {}
         for m in tmplist:
