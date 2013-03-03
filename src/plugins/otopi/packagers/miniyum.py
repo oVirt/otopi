@@ -557,18 +557,10 @@ class MiniYum(object):
             ctx1 = selinux.context_new(ctx)
             if not ctx1:
                 raise Exception(_('Cannot create selinux context'))
-            if selinux.context_type_get(ctx1) != 'rpm_t':
-                if selinux.context_type_set(ctx1, 'rpm_t') != 0:
-                    raise Exception(
-                        _('Cannot set type within selinux context')
-                    )
+            if selinux.context_role_get(ctx1) != 'system_r':
                 if selinux.context_role_set(ctx1, 'system_r') != 0:
                     raise Exception(
                         _('Cannot set role within selinux context')
-                    )
-                if selinux.context_user_set(ctx1, 'unconfined_u') != 0:
-                    raise Exception(
-                        _('Cannot set user within selinux context')
                     )
                 if selinux.setexeccon(selinux.context_str(ctx1)) != 0:
                     raise Exception(
