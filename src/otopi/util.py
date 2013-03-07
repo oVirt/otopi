@@ -46,6 +46,7 @@ def export(o):
     return o
 
 
+@export
 def codegen(o):
     """Decoration to code generate class symbols.
 
