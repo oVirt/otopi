@@ -96,6 +96,8 @@ class Installer(object):
                     e,
                 )
             )
+            if self._debug > 0:
+                traceback.print_exc()
             return False
         except Exception as e:
             if self._debug > 0:
