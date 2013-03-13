@@ -58,19 +58,14 @@ class Plugin(plugin.PluginBase):
         pattern=r"""
             ^
             \s*
-            ssh-(rsa|dss)
+            ssh-(?P<algo>rsa|dss)
             \s+
-            ([A-Za-z0-9+/]+={0,2})
-            (\s+[^\s]+)?
+            (?P<public>[A-Za-z0-9+/]+={0,2})
+            (?P<alias>\s+[^\s]+)?
             \s*
             $
         """
     )
-    (
-        _RE_SSHPUB_ALGO,
-        _RE_SSHPUB_PUB,
-        _RE_SSHPUB_ALIAS,
-    ) = range(1, 4)
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
@@ -94,17 +89,14 @@ class Plugin(plugin.PluginBase):
                 # accept only our key name
                 if (
                     (
-                        linematch.group(self._RE_SSHPUB_ALGO),
-                        linematch.group(self._RE_SSHPUB_PUB)
+                        linematch.group('algo'),
+                        linematch.group('public'),
                     ) == (
-                        keymatch.group(self._RE_SSHPUB_ALGO),
-                        keymatch.group(self._RE_SSHPUB_PUB)
+                        keymatch.group('algo'),
+                        keymatch.group('public'),
                     )
                 ):
-                    if (
-                        linematch.group(self._RE_SSHPUB_ALIAS) !=
-                            keymatch.group(self._RE_SSHPUB_ALIAS)
-                    ):
+                    if linematch.group('alias') != keymatch.group('alias'):
                         append = False
                     elif found:
                         append = False
@@ -115,9 +107,8 @@ class Plugin(plugin.PluginBase):
                 # remove if found
                 else:
                     if (
-                        keymatch.group(self._RE_SSHPUB_ALIAS) is not None and
-                        keymatch.group(self._RE_SSHPUB_ALIAS) ==
-                            linematch.group(self._RE_SSHPUB_ALIAS)
+                        keymatch.group('alias') is not None and
+                        keymatch.group('alias') == linematch.group('alias')
                     ):
                         append = False
             if append:

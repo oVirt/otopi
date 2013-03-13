@@ -42,9 +42,9 @@ class Plugin(plugin.PluginBase):
     _ADDRESS_RE = re.compile(
         flags=re.VERBOSE,
         pattern=r"""
-            ^\s*inet\s+([0-9.]+)/.*
+            ^\s*inet\s+(?P<ipv4>[0-9.]+)/.*
             |
-            ^\s*inet6\s+([0-9a-f:]+)/.*
+            ^\s*inet6\s+(?P<ipv6>[0-9a-f:]+)/.*
         """
     )
 
@@ -99,7 +99,7 @@ class Plugin(plugin.PluginBase):
                 for l in stdout:
                     m = self._ADDRESS_RE.match(l)
                     if m is not None:
-                        for g in range(1, 3):
+                        for g in ('ipv4', 'ipv6'):
                             if m.group(g) is not None:
                                 addresses.append(m.group(g))
                 addresses = [
