@@ -23,6 +23,8 @@ tmp.*
 *.tmp
 __pycache__
 
+intl
+
 .bundeled
 target
 src/otopi/config.py

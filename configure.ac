@@ -39,7 +39,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_USE_SYSTEM_EXTENSIONS
 AM_INIT_AUTOMAKE
 AM_GNU_GETTEXT_VERSION([0.17])
-AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT
 
 AC_ARG_ENABLE(
 	[python-syntax-check],
@@ -135,6 +135,7 @@ AC_CONFIG_FILES([
 	otopi.spec
 	build/Makefile
 	build/otopi-bundle.in
+	intl/Makefile
 	po/Makefile.in
 	src/Makefile
 	src/bin/Makefile

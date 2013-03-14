@@ -44,6 +44,7 @@ EXTRA_DIST = \
 
 SUBDIRS = \
 	build \
+	intl \
 	po \
 	src \
 	$(NULL)
