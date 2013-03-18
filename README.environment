@@ -70,8 +70,14 @@ DIALOG/customization(bool) [False]
 DIALOG/cliVersion
     Command line interface version.
 
+SYSTEM/rebootAllow [True]
+    Allow host to be rebooted.
+
 SYSTEM/clockSet(bool) [False]
     Synchronize clock.
+
+SYSTEM/clockMaxGap [5],
+    Maximum allowed gap in seconds for clock sync.
 
 NETWORK/sshEnable(bool) [False]
     Enable ssh key storage.
