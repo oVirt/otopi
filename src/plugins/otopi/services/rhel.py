@@ -166,7 +166,11 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
             )
 
     def state(self, name, state):
-        self.logger.debug('starting service %s', name)
+        self.logger.debug(
+            '%s service %s',
+            'starting' if state else 'stopping',
+            name
+        )
         (upstart, status) = self._isUpstart(name)
         if upstart:
             #

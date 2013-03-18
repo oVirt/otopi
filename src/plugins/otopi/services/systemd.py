@@ -128,7 +128,11 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
         )
 
     def state(self, name, state):
-        self.logger.debug('starting service %s', name)
+        self.logger.debug(
+            '%s service %s',
+            'starting' if state else 'stopping',
+            name
+        )
         self._executeServiceCommand(
             name,
             'start' if state else 'stop'
