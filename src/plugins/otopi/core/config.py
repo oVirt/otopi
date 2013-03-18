@@ -23,6 +23,7 @@
 
 import os
 import configparser
+import glob
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
@@ -112,12 +113,11 @@ class Plugin(plugin.PluginBase):
                     configDir = '%s.d' % configFile
                     if os.path.exists(configFile):
                         configs.append(configFile)
-                    if os.path.isdir(configDir):
-                        configs += [
-                            os.path.join(configDir, f)
-                            for f in sorted(os.listdir(configDir))
-                            if f.endswith('.conf')
-                        ]
+                    configs += sorted(
+                        glob.glob(
+                            os.path.join(configDir, '*.conf')
+                        )
+                    )
 
         self._configFiles = self._config.read(configs)
 
