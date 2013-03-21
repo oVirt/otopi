@@ -582,6 +582,12 @@ class MiniYum(object):
     def clean(self, what):
         """Clean yum data."""
 
+        self._sink.verbose(
+            _('Cleaning caches: {what}.')
+        ).format(
+            what=what,
+        )
+
         try:
             doall = 'all' in what
 
