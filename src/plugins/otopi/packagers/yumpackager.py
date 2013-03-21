@@ -21,6 +21,7 @@
 """yum packager provider."""
 
 
+import os
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
@@ -81,8 +82,9 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
 
             # the following will trigger the NOTIFY_REEXEC
             # and then reexecute
-            self._miniyum.selinux_role()
-            self._enabled = True
+            if os.geteuid() == 0:
+                self._miniyum.selinux_role()
+                self._enabled = True
         except ImportError:
             self.logger.debug('Cannot import miniyumlocal', exc_info=True)
 
