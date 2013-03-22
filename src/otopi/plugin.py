@@ -403,8 +403,9 @@ class PluginBase(base.Base):
             *eargs,
             **kwargs
         )
-        stdout = stdout.decode('utf-8').splitlines()
-        stderr = stderr.decode('utf-8').splitlines()
+        # warning: python-2.6 does not have kwargs for decode
+        stdout = stdout.decode('utf-8', 'replace').splitlines()
+        stderr = stderr.decode('utf-8', 'replace').splitlines()
         self.logger.debug(
             'execute-output: %s stdout:\n%s\n',
             args,
