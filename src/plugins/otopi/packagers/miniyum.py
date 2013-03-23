@@ -583,9 +583,9 @@ class MiniYum(object):
         """Clean yum data."""
 
         self._sink.verbose(
-            _('Cleaning caches: {what}.')
-        ).format(
-            what=what,
+            _('Cleaning caches: {what}.').format(
+                what=what,
+            )
         )
 
         try:
