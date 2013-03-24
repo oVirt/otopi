@@ -397,14 +397,15 @@ class PluginBase(base.Base):
         (rc, stdout, stderr) = self.executeRaw(
             args=args,
             stdin=(
-                '\n'.join(stdin).encode(encoding='utf-8')
+                '\n'.join(stdin).encode('utf-8')
                 if stdin is not None else None
             ),
             *eargs,
             **kwargs
         )
-        stdout = stdout.decode(encoding='utf-8', errors='replace').splitlines()
-        stderr = stderr.decode(encoding='utf-8', errors='replace').splitlines()
+        # warning: python-2.6 does not have kwargs for decode
+        stdout = stdout.decode('utf-8', 'replace').splitlines()
+        stderr = stderr.decode('utf-8', 'replace').splitlines()
         self.logger.debug(
             'execute-output: %s stdout:\n%s\n',
             args,
