@@ -38,6 +38,11 @@ find_util() {
 	done
 }
 
+ENV="/etc/otopi.env.d"
+for f in $([ -d "${ENV}" ] && find "${ENV}" -name '*.env' | sort); do
+	[ -r "${f}" ] && . "${f}"
+done
+
 script="$0"
 
 if [ -z "${OTOPI_NONROOT}" -a "$(id -u)" != 0 ]; then
