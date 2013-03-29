@@ -57,6 +57,7 @@ class Plugin(plugin.PluginBase):
         pid = os.fork()
         if pid == 0:
             try:
+                os.chdir('/')
                 os.setsid()
                 for fd in range(0, maxfd):
                     try:
