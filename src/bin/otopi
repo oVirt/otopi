@@ -39,7 +39,7 @@ find_util() {
 }
 
 ENV="/etc/otopi.env.d"
-for f in $([ -d "${ENV}" ] && find "${ENV}" -name '*.conf' | sort); do
+for f in $([ -d "${ENV}" ] && find "${ENV}" -name '*.env' | sort); do
 	[ -r "${f}" ] && . "${f}"
 done
 
