@@ -124,7 +124,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 flush=False,
             )
 
-        if isinstance(text, list):
+        if isinstance(text, list) or isinstance(text, tuple):
             for i in text:
                 self.note(text=i)
             return
