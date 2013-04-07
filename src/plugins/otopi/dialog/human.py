@@ -134,10 +134,11 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         text = str(text)
 
         lines = text.splitlines()
-        for line in lines[:-1]:
-            printline(line)
-        printline(lines[-1], newline=not prompt)
-        self._flush()
+        if len(lines) > 0:
+            for line in lines[:-1]:
+                printline(line)
+            printline(lines[-1], newline=not prompt)
+            self._flush()
 
     def queryString(
         self,
