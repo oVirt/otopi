@@ -287,6 +287,7 @@ class Context(base.Base):
                 except ValueError:
                     return None
 
+            everModified = False
             for limit in range(400):    # boundary
                 modified = False
                 for index, metadata in enumerate(l):
@@ -295,20 +296,46 @@ class Context(base.Base):
                         candidateindex is not None and
                         compare(candidateindex, index)
                     ):
-                        l.insert(candidateindex+offset, metadata)
+                        if self.environment[constants.BaseEnv.DEBUG] > 0:
+                            print(
+                                'modifing method location %s' % (
+                                    metadata['method'],
+                                )
+                            )
+                        l.insert(candidateindex + offset, metadata)
                         if candidateindex < index:
-                            del l[index+1]
+                            del l[index + 1]
                         else:
                             del l[index]
                         modified = True
+                        everModified = True
                         break
                 if not modified:
                     break
             if modified:
                 raise RuntimeError(_('Sequence build loop detected'))
+            return everModified
 
-        _doit(tmplist, 'before', operator.lt, min, 0)
-        _doit(tmplist, 'after', operator.gt, max, 1)
+        for x in range(400):
+            modified = False
+            modified = modified or _doit(
+                tmplist,
+                'before',
+                operator.lt,
+                min,
+                0
+            )
+            modified = modified or _doit(
+                tmplist,
+                'after',
+                operator.gt,
+                max,
+                1
+            )
+            if not modified:
+                break
+        if modified:
+            raise RuntimeError(_('Sequence build loop detected'))
 
         sequence = {}
         for m in tmplist:
