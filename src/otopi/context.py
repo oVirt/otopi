@@ -64,6 +64,10 @@ class Context(base.Base):
         BaseEnv.PLUGIN_GROUPS -- plugin groups to load
 
     """
+    def _earlyDebug(self, msg):
+        if self.environment[constants.BaseEnv.DEBUG] > 0:
+            print(msg)
+
     def _loadPlugins(self, plugindir, needgroups):
         def _fulldir(d):
             return [os.path.join(d, f) for f in os.listdir(d)]
@@ -81,17 +85,15 @@ class Context(base.Base):
         for group in _fulldir(plugindir):
             if _candidate(group):
                 groupname = os.path.basename(group)
-                if self.environment[constants.BaseEnv.DEBUG] > 0:
-                    print('Loading plugin group %s' % groupname)
+                self._earlyDebug('Loading plugin group %s' % groupname)
                 if groupname in needgroups:
                     needgroups.remove(groupname)
                     for p in _fulldir(group):
                         if _candidate(p):
-                            if self.environment[constants.BaseEnv.DEBUG] > 0:
-                                print(
-                                    'Loading plugin %s' %
-                                    os.path.basename(p)
-                                )
+                            self._earlyDebug(
+                                'Loading plugin %s' %
+                                os.path.basename(p)
+                            )
                             util.loadModule(
                                 group,
                                 'otopi.plugins.%s.%s' % (
@@ -296,12 +298,11 @@ class Context(base.Base):
                         candidateindex is not None and
                         compare(candidateindex, index)
                     ):
-                        if self.environment[constants.BaseEnv.DEBUG] > 0:
-                            print(
-                                'modifing method location %s' % (
-                                    metadata['method'],
-                                )
+                        self._earlyDebug(
+                            'modifing method location %s' % (
+                                metadata['method'],
                             )
+                        )
                         l.insert(candidateindex+offset, metadata)
                         if candidateindex < index:
                             del l[index+1]
