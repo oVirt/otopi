@@ -108,7 +108,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             p=dialogcons.DialogMachineConst.NOTE_PREFIX
         )
 
-        if isinstance(text, list):
+        if isinstance(text, list) or isinstance(text, tuple):
             for i in text:
                 self.note(text=i)
             return
