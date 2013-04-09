@@ -303,9 +303,9 @@ class Context(base.Base):
                                 metadata['method'],
                             )
                         )
-                        l.insert(candidateindex+offset, metadata)
+                        l.insert(candidateindex + offset, metadata)
                         if candidateindex < index:
-                            del l[index+1]
+                            del l[index + 1]
                         else:
                             del l[index]
                         modified = True
