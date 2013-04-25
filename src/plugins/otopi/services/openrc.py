@@ -95,12 +95,13 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
 
     def startup(self, name, state):
         self.logger.debug('set service %s startup to %s', name, state)
-        return self.execute(
+        self.execute(
             (
                 self.command.get('rc-update'),
                 'add' if state else 'del',
                 name
             ),
+            raiseOnError=False,
         )
 
     def state(self, name, state):
