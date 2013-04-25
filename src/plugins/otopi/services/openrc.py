@@ -86,7 +86,7 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
 
     def status(self, name):
         self.logger.debug('check service %s status', name)
-        (rc, stdout, stderr) = self._executeServiceCommand(
+        rc, stdout, stderr = self._executeServiceCommand(
             name,
             'status',
             raiseOnError=False

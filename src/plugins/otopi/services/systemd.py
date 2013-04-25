@@ -122,7 +122,7 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
         if len(stdout) == 1:
             name = stdout[0].split('=')[1].strip().replace('.service', '')
 
-        rc, stdout, stderr = self._executeServiceCommand(
+        self._executeServiceCommand(
             name,
             'enable' if state else 'disable'
         )
