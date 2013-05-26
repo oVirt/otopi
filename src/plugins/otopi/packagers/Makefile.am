@@ -28,7 +28,6 @@ dist_my_PYTHON = \
 	__init__.py \
 	yumpackager.py \
 	miniyumlocal.py \
-	miniyum.py \
 	$(NULL)
 
 clean-local: \

@@ -28,9 +28,7 @@ _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
 from otopi import constants
 from otopi import util
-
-
-from . import miniyum
+from otopi import miniyum
 
 
 class _MyMiniYumSink(miniyum.MiniYumSinkBase):

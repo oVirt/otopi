@@ -49,6 +49,7 @@ dist_otopilib_PYTHON = \
 	packager.py \
 	command.py \
 	plugin.py \
+	miniyum.py \
 	$(NULL)
 otopilib_PYTHON = \
 	config.py \
