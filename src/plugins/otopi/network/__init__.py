@@ -27,6 +27,7 @@ from otopi import util
 from . import hostname
 from . import ssh
 from . import iptables
+from . import firewalld
 
 
 @util.export
@@ -34,6 +35,7 @@ def createPlugins(context):
     hostname.Plugin(context=context)
     ssh.Plugin(context=context)
     iptables.Plugin(context=context)
+    firewalld.Plugin(context=context)
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

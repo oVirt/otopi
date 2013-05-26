@@ -26,6 +26,7 @@
 ./src/plugins/otopi/dialog/__init__.py
 ./src/plugins/otopi/dialog/machine.py
 ./src/plugins/otopi/dialog/misc.py
+./src/plugins/otopi/network/firewalld.py
 ./src/plugins/otopi/network/hostname.py
 ./src/plugins/otopi/network/__init__.py
 ./src/plugins/otopi/network/iptables.py

@@ -150,6 +150,9 @@ class NetEnv(object):
     SSH_USER = 'NETWORK/sshUser'
     IPTABLES_ENABLE = 'NETWORK/iptablesEnable'
     IPTABLES_RULES = 'NETWORK/iptablesRules'
+    FIREWALLD_ENABLE = 'NETWORK/firewalldEnable'
+    FIREWALLD_AVAILABLE = 'NETWORK/firewalldAvailable'
+    FIREWALLD_SERVICE_PREFIX = 'NETWORK_FIREWALLD_SERVICE/'
 
 
 @util.export

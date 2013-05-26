@@ -29,6 +29,7 @@ dist_my_PYTHON = \
 	hostname.py \
 	ssh.py \
 	iptables.py \
+	firewalld.py \
 	$(NULL)
 
 clean-local: \

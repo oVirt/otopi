@@ -94,6 +94,16 @@ NETWORK/iptablesEnable(bool) [False]
 NETWORK/iptablesRules(multi-str)
     iptables content.
 
+NETWORK/firewalldEnable(bool) [False]
+    Enable set of firewalld.
+
+NETWORK/firewalldAvailable(bool)
+    Firewalld is enabled.
+
+NETWORK_FIREWALLD_SERVICE/<service>
+    Firewalld service to write and enable.
+    <service> is the name and the value is the rule content.
+
 PACKAGER/yumpackagerEnabled(bool) [True]
     Enable yum packager.
 
