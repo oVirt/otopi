@@ -71,6 +71,14 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
     def _boot(self):
         try:
             self.environment.setdefault(
+                constants.PackEnv.YUM_DISABLED_PLUGINS,
+                []
+            )
+            self.environment.setdefault(
+                constants.PackEnv.YUM_ENABLED_PLUGINS,
+                []
+            )
+            self.environment.setdefault(
                 constants.PackEnv.KEEP_ALIVE_INTERVAL,
                 constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
             )
@@ -78,6 +86,12 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
             from . import miniyumlocal
             self._miniyum = miniyumlocal.getMiniYum(
                 parent=self,
+                disabledPlugins=self.environment[
+                    constants.PackEnv.YUM_DISABLED_PLUGINS
+                ],
+                enabledPlugins=self.environment[
+                    constants.PackEnv.YUM_ENABLED_PLUGINS
+                ],
             )
 
             # the following will trigger the NOTIFY_REEXEC

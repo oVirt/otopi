@@ -83,11 +83,17 @@ class _MyMiniYumSink(miniyum.MiniYumSinkBase):
 
 
 @util.export
-def getMiniYum(parent):
+def getMiniYum(
+    parent,
+    disabledPlugins=[],
+    enabledPlugins=[]
+):
     """Get miniyum objects at separate source to ease making it optional."""
     return miniyum.MiniYum(
         sink=_MyMiniYumSink(parent=parent),
         blockStdHandles=False,
+        disabledPlugins=disabledPlugins,
+        enabledPlugins=enabledPlugins,
     )
 
 

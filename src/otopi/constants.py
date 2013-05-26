@@ -157,6 +157,8 @@ class NetEnv(object):
 class PackEnv(object):
     YUMPACKAGER_ENABLED = 'PACKAGER/yumpackagerEnabled'
     KEEP_ALIVE_INTERVAL = 'PACKAGER/keepAliveInterval'
+    YUM_DISABLED_PLUGINS = 'PACKAGER/yumDisabledPlugins'
+    YUM_ENABLED_PLUGINS = 'PACKAGER/yumEnabledPlugins'
 
 
 @util.export
