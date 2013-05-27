@@ -73,6 +73,9 @@ STAGE_INTERNAL_PACKAGES
     Install local packages required for setup.
     No rollback for these packages.
 
+STAGE_LATE_SETUP
+    Late setup actions.
+
 STAGE_CUSTOMIZATION
     Customization phase for dialog, avoid.
 
@@ -82,6 +85,9 @@ STAGE_VALIDATION
 STAGE_TRANSACTION_BEGIN
     Transaction begins here, you can add elements
     before, at this point these will be prepared.
+
+STAGE_EARLY_MISC
+    Early misc actions.
 
 STAGE_PACKAGES
     Package installation.

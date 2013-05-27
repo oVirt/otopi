@@ -49,9 +49,11 @@ class Stages(object):
         STAGE_SETUP,
         STAGE_INTERNAL_PACKAGES,
         STAGE_PROGRAMS,
+        STAGE_LATE_SETUP,
         STAGE_CUSTOMIZATION,
         STAGE_VALIDATION,
         STAGE_TRANSACTION_BEGIN,
+        STAGE_EARLY_MISC,
         STAGE_PACKAGES,
         STAGE_MISC,
         STAGE_TRANSACTION_END,
@@ -60,7 +62,7 @@ class Stages(object):
         STAGE_PRE_TERMINATE,
         STAGE_TERMINATE,
         STAGE_REBOOT,
-    ) = range(16)
+    ) = range(18)
 
     DATABASE = {
         STAGE_BOOT: {
