@@ -66,12 +66,12 @@ STAGE_SETUP
     Use this stage to setup environment.
     Use only setdefault() to set environment.
 
-STAGE_PROGRAMS
-    Detect local programs.
-
 STAGE_INTERNAL_PACKAGES
     Install local packages required for setup.
     No rollback for these packages.
+
+STAGE_PROGRAMS
+    Detect local programs.
 
 STAGE_LATE_SETUP
     Late setup actions.
@@ -99,7 +99,7 @@ STAGE_TRANSACTION_END
     Transaction commit.
 
 STAGE_CLOSEUP
-    Non distructive actions.
+    Non destructive actions.
     Executed if no error.
 
 STAGE_CLEANUP
@@ -118,7 +118,7 @@ STAGE_REBOOT
 BUNDLE
 ------
 
-An installer bundle allows transfering of an installer to
+An installer bundle allows transferring of an installer to
 remote machine via ssh and executing it directly with no
 dependencies other than python.
 
@@ -134,7 +134,7 @@ installation script such as the following:
  #!/bin/sh
  exec "$(dirname "$0")/otopi" "APPEND:BASE/pluginGroups=str:my-group $*"
 
-Bundle can be exeucted using the following command, provided initial script is called
+Bundle can be executed using the following command, provided initial script is called
 setup:
 
     bundledir=LOCATION
