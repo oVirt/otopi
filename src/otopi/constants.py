@@ -87,7 +87,7 @@ class SystemEnvironment(object):
     LOG_FILE = 'OTOPI_LOGFILE'
     LOG_DIR = 'OTOPI_LOGDIR'
     CONFIG = 'OTOPI_CONFIG'
-    EXEC_DIR = '_OTOPI_EXECDIR'
+    EXEC_DIR = 'OTOPI_EXECDIR'
 
 
 @util.export
