@@ -27,7 +27,6 @@ mydir=$(otopiplugindir)/otopi/packagers
 dist_my_PYTHON = \
 	__init__.py \
 	yumpackager.py \
-	miniyumlocal.py \
 	$(NULL)
 
 clean-local: \

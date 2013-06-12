@@ -22,6 +22,7 @@
 
 
 import os
+import time
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
@@ -41,6 +42,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         Confirms.GPG_KEY -- confirm use of gpg key.
 
     """
+
     class YumTransaction(transaction.TransactionElement):
         """yum transaction element."""
 
@@ -58,6 +60,68 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
 
         def commit(self):
             self._miniyum.endTransaction(rollback=False)
+
+    def _getMiniYum(
+        self,
+        disabledPlugins=[],
+        enabledPlugins=[]
+    ):
+        from otopi import miniyum
+
+        class _MyMiniYumSink(miniyum.MiniYumSinkBase):
+            """miniyum interaction."""
+
+            def _touch(self):
+                self._last = time.time()
+
+            def __init__(self, parent):
+                super(_MyMiniYumSink, self).__init__()
+                self._parent = parent
+                self._touch()
+
+            def verbose(self, msg):
+                super(_MyMiniYumSink, self).verbose(msg)
+                self._parent.logger.debug('Yum %s' % msg)
+
+            def info(self, msg):
+                super(_MyMiniYumSink, self).info(msg)
+                self._parent.logger.info('Yum %s' % msg)
+                self._touch()
+
+            def error(self, msg):
+                super(_MyMiniYumSink, self).error(msg)
+                self._parent.logger.error('Yum %s' % msg)
+                self._touch()
+
+            def keepAlive(self, msg):
+                super(_MyMiniYumSink, self).keepAlive(msg)
+                if time.time() - self._last >= self._parent.environment[
+                    constants.PackEnv.KEEP_ALIVE_INTERVAL
+                ]:
+                    self.info(msg)
+
+            def askForGPGKeyImport(self, userid, hexkeyid):
+                return self._parent.dialog.confirm(
+                    constants.Confirms.GPG_KEY,
+                    _(
+                        'Confirm use of GPG Key '
+                        'userid={userid} hexkeyid={hexkeyid}'
+                    ).format(
+                        userid=userid,
+                        hexkeyid=hexkeyid,
+                    )
+                )
+
+            def reexec(self):
+                super(_MyMiniYumSink, self).reexec()
+                self._parent.context.notify(self._parent.context.NOTIFY_REEXEC)
+
+        return miniyum.MiniYum(
+            sink=_MyMiniYumSink(parent=self),
+            blockStdHandles=False,
+            disabledPlugins=disabledPlugins,
+            enabledPlugins=enabledPlugins,
+        )
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
@@ -83,9 +147,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
                 constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
             )
 
-            from . import miniyumlocal
-            self._miniyum = miniyumlocal.getMiniYum(
-                parent=self,
+            self._miniyum = self._getMiniYum(
                 disabledPlugins=self.environment[
                     constants.PackEnv.YUM_DISABLED_PLUGINS
                 ],

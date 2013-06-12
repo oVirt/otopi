@@ -32,7 +32,6 @@
 ./src/plugins/otopi/network/iptables.py
 ./src/plugins/otopi/network/ssh.py
 ./src/plugins/otopi/packagers/__init__.py
-./src/plugins/otopi/packagers/miniyumlocal.py
 ./src/plugins/otopi/packagers/yumpackager.py
 ./src/plugins/otopi/services/__init__.py
 ./src/plugins/otopi/services/openrc.py
