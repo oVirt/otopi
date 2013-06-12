@@ -468,6 +468,8 @@ class MiniYum(object):
 
         """
         try:
+            self._yb = None
+
             if sink is None:
                 self._sink = self._VoidSink()
             else:
@@ -513,6 +515,12 @@ class MiniYum(object):
 
         except Exception as e:
             self._sink.error(e)
+
+    def __del__(self):
+        """Destructor"""
+        if self._yb is not None:
+            del self._yb
+            self._yb = None
 
     def selinux_role(self):
         """Setup proper selinux role.
