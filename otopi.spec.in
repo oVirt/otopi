@@ -170,10 +170,13 @@ cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_ve
 %dir %{python_sitelib}/%{name}
 %{python_sitelib}/%{name}/*.py*
 %dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/plugins
+%dir %{_datadir}/%{name}/plugins/%{name}
 %{_datadir}/%{name}/plugins/%{name}/*/*.py*
 #%{_datadir}/locale/*/*/%{name}.mo
 
 %files java
+%dir %{_javadir}/%{name}
 %{_javadir}/%{name}/%{name}*.jar
 %if 0%{?fedora:1}
 %{_mavenpomdir}/JPP.%{name}-%{name}.pom
@@ -182,10 +185,12 @@ cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_ve
 
 %if 0%{?fedora:1}
 %files javadoc
+%dir %{_javadocdir}/%{name}
 %{_javadocdir}/%{name}
 %endif
 
 %files devel
+%dir %{python_sitelib}/%{name}/codegen
 %{python_sitelib}/%{name}/codegen/*.py*
 %{_datadir}/%{name}/%{name}-bundle
 
