@@ -149,6 +149,8 @@ cp "%{buildroot}%{_javadir}/%{name}/%{name}.jar" "%{buildroot}%{maven2brewrepodi
 cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.pom"
 %endif
 
+install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
+
 %post java
 %if 0%{?fedora:1}
 %update_maven_depmap
@@ -169,6 +171,7 @@ cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_ve
 %{_sbindir}/%{name}
 %dir %{python_sitelib}/%{name}
 %{python_sitelib}/%{name}/*.py*
+%dir %{_sysconfdir}/%{name}.conf.d
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/plugins
 %dir %{_datadir}/%{name}/plugins/%{name}
