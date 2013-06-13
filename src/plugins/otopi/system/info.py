@@ -21,6 +21,7 @@
 """System information plugin."""
 
 
+import os
 import sys
 import platform
 import socket
@@ -50,6 +51,13 @@ class Plugin(plugin.PluginBase):
         self.logger.debug('platform %s', sys.platform)
         self.logger.debug('distribution %s', platform.linux_distribution())
         self.logger.debug("host '%s'", socket.gethostname())
+        self.logger.debug(
+            'uid %s euid %s gid %s egid %s',
+            os.getuid(),
+            os.geteuid(),
+            os.getgid(),
+            os.getegid(),
+        )
         self.logger.debug('SYSTEM INFORMATION - END')
 
 
