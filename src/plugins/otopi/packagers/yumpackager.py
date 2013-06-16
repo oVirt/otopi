@@ -46,20 +46,20 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
     class YumTransaction(transaction.TransactionElement):
         """yum transaction element."""
 
-        def __init__(self, miniyum):
-            self._miniyum = miniyum
+        def __init__(self, parent):
+            self._parent = parent
 
         def __str__(self):
             return _("Yum Transaction")
 
         def prepare(self):
-            self._miniyum.beginTransaction()
+            self._parent.beginTransaction()
 
         def abort(self):
-            self._miniyum.endTransaction(rollback=True)
+            self._parent.endTransaction(rollback=True)
 
         def commit(self):
-            self._miniyum.endTransaction(rollback=False)
+            self._parent.endTransaction(rollback=False)
 
     def _getMiniYum(
         self,
@@ -123,6 +123,27 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
             enabledPlugins=enabledPlugins,
         )
 
+    def _refreshMiniyum(self):
+        #
+        # @WORKAROUND-BEGIN
+        # yum has long memory, especially
+        # the exclude/include added to the suck
+        # as we need to handle versionlock
+        # manipulation we need to reconstruct.
+        # I would have expected this information will be
+        # re-read at every new transaction... but apparently not.
+        if self._miniyum is not None:
+            del self._miniyum
+        self._miniyum = self._getMiniYum(
+            disabledPlugins=self.environment[
+                constants.PackEnv.YUM_DISABLED_PLUGINS
+            ],
+            enabledPlugins=self.environment[
+                constants.PackEnv.YUM_ENABLED_PLUGINS
+            ],
+        )
+        # @WORKAROUND-END
+
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
         self._miniyum = None
@@ -147,14 +168,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
                 constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
             )
 
-            self._miniyum = self._getMiniYum(
-                disabledPlugins=self.environment[
-                    constants.PackEnv.YUM_DISABLED_PLUGINS
-                ],
-                enabledPlugins=self.environment[
-                    constants.PackEnv.YUM_ENABLED_PLUGINS
-                ],
-            )
+            self._refreshMiniyum()
 
             # the following will trigger the NOTIFY_REEXEC
             # and then reexecute
@@ -190,14 +204,14 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
             self._miniyum.clean(['expire-cache'])
         self.environment[constants.CoreEnv.MAIN_TRANSACTION].append(
             self.YumTransaction(
-                miniyum=self._miniyum
+                parent=self,
             )
         )
         self.environment[
             constants.CoreEnv.INTERNAL_PACKAGES_TRANSACTION
         ].append(
             self.YumTransaction(
-                miniyum=self._miniyum
+                parent=self,
             )
         )
 
@@ -236,10 +250,13 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
     # PackagerBase
 
     def beginTransaction(self):
+        self._refreshMiniyum()
         return self._miniyum.beginTransaction()
 
     def endTransaction(self, rollback=False):
-        return self._miniyum.endTransaction(rollback=rollback)
+        ret = self._miniyum.endTransaction(rollback=rollback)
+        self._refreshMiniyum()
+        return ret
 
     def installGroup(self, group, ignoreErrors=False):
         return self._miniyum.installGroup(
