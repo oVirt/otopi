@@ -110,6 +110,14 @@ class Stages(object):
             'description': _("Programs detection"),
             'if-success': True,
         },
+        STAGE_LATE_SETUP: {
+            #
+            # Late setup actions.
+            #
+            'id': 'late_setup',
+            'description': _("Installation setup"),
+            'if-success': True,
+        },
         STAGE_CUSTOMIZATION: {
             #
             # Customization phase for dialog, avoid.
@@ -133,6 +141,14 @@ class Stages(object):
             #
             'id': 'transaction-prepare',
             'description': _("Transaction setup"),
+            'if-success': True,
+        },
+        STAGE_EARLY_MISC: {
+            #
+            # Misc actions before package update.
+            #
+            'id': 'early_misc',
+            'description': _("Misc configuration"),
             'if-success': True,
         },
         STAGE_PACKAGES: {
