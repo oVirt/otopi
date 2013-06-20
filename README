@@ -42,7 +42,7 @@ CUSTOMIZATION
 
 Set the following environment:
 
-    DIALIG/customization=bool:True
+    DIALOG/customization=bool:True
 
 This will trigger command-line prompt before validation and
 before termination.
