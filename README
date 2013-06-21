@@ -81,7 +81,7 @@ Structure:
     [environment:enforce]
     key=type:value
 
-defaults is applied during setup without override.
+default is applied during setup without override.
 init is applied during setup with override.
 override is applied before customization with override.
 enforce is applied after customization with override.
