@@ -16,18 +16,18 @@ OTOPI_DEBUG
     Overrides BASE/debug.
 
 OTOPI_LOGDIR
-	Log directory.
+    Log directory.
     Overrides CORE/logDir.
 
 OTOPI_LOGFILE
-	Set explicit log file name.
+    Set explicit log file name.
     Overrides CORE/logFileName.
 
 OTOPI_NONROOT
-	If '1' allow non root execution using sudo.
+    If '1' allow non root execution using sudo.
 
 OTOPI_PYTHON [/usr/bin/python]
-	Python to use.
+    Python to use.
 
 INSTALLER ENVIRONMENT
 ---------------------
