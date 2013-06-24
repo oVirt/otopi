@@ -46,6 +46,9 @@ BASE/executionDirectory(str)
     Directory where instaler was executed.
     Installer changes to '/' to avoid errors during program execution.
 
+BASE/suppressEnvironmentKeys(list)
+    Suppress output of environment keys.
+
 BASE/pluginGroups(str)
     Plugin groups to load. ':' separated.
 

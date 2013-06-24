@@ -101,6 +101,7 @@ class BaseEnv(object):
     PLUGIN_GROUPS = 'BASE/pluginGroups'
     DEBUG = 'BASE/debug'
     EXECUTION_DIRECTORY = 'BASE/executionDirectory'
+    SUPPRESS_ENVIRONMENT_KEYS = 'BASE/suppressEnvironmentKeys'
     COMMAND_PREFIX = 'COMMAND/'
 
 

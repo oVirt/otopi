@@ -190,6 +190,7 @@ class Context(base.Base):
             constants.BaseEnv.ABORTED: False,
             constants.BaseEnv.EXCEPTION_INFO: [],
             constants.BaseEnv.EXECUTION_DIRECTORY: '.',
+            constants.BaseEnv.SUPPRESS_ENVIRONMENT_KEYS: [],
             constants.BaseEnv.LOG: False,
             constants.BaseEnv.PLUGIN_PATH: config.otopiplugindir,
             constants.BaseEnv.PLUGIN_GROUPS: 'otopi',
@@ -423,11 +424,14 @@ class Context(base.Base):
                 old is None or
                 self.environment[key] != old.get(key)
             ):
+                value = self.environment[key]
+                if key in constants.BaseEnv.SUPPRESS_ENVIRONMENT_KEYS:
+                    value = '***'
                 self.logger.debug(
                     "ENV %s=%s:'%s'",
                     key,
                     type(self.environment[key]).__name__,
-                    self.environment[key],
+                    value,
                 )
         self.logger.debug('ENVIRONMENT DUMP - END')
 
