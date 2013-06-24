@@ -391,12 +391,21 @@ class PluginBase(base.Base):
 
         return (rc, stdout, stderr)
 
-    def execute(self, args, raiseOnError=True, stdin=None, *eargs, **kwargs):
+    def execute(
+        self,
+        args,
+        raiseOnError=True,
+        logStreams=True,
+        stdin=None,
+        *eargs,
+        **kwargs
+    ):
         """Execute system command.
 
         Keyword arguments:
         args -- a list of command arguments.
         raiseOnError -- raise exception if an error.
+        logStreams -- log streams' content.
         stdin -- a list of lines.
         eargs -- extra args to subprocess.Popen.
         kwargs - extra kwargs to subprocess.Popen.
@@ -406,7 +415,7 @@ class PluginBase(base.Base):
 
         stdour, stderr are list of lines.
         """
-        if stdin is not None:
+        if logStreams and stdin is not None:
             self.logger.debug(
                 'execute-input: %s stdin:\n%s\n',
                 args,
@@ -424,16 +433,17 @@ class PluginBase(base.Base):
         # warning: python-2.6 does not have kwargs for decode
         stdout = stdout.decode('utf-8', 'replace').splitlines()
         stderr = stderr.decode('utf-8', 'replace').splitlines()
-        self.logger.debug(
-            'execute-output: %s stdout:\n%s\n',
-            args,
-            '\n'.join(stdout)
-        )
-        self.logger.debug(
-            'execute-output: %s stderr:\n%s\n',
-            args,
-            '\n'.join(stderr)
-        )
+        if logStreams:
+            self.logger.debug(
+                'execute-output: %s stdout:\n%s\n',
+                args,
+                '\n'.join(stdout)
+            )
+            self.logger.debug(
+                'execute-output: %s stderr:\n%s\n',
+                args,
+                '\n'.join(stderr)
+            )
         if rc != 0 and raiseOnError:
             raise RuntimeError(
                 _("Command '{command}' failed to execute").format(
