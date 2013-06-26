@@ -21,6 +21,7 @@
 """firewalld plugin."""
 
 import os
+import re
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='ovirt-engine-setup')
 
@@ -42,23 +43,43 @@ class Plugin(plugin.PluginBase):
     """
 
     FIREWALLD_SERVICES_DIR = '/etc/firewalld/services'
+    _ZONE_RE = re.compile(r'^\w+$')
+    _INTERFACE_RE = re.compile(
+        flags=re.VERBOSE,
+        pattern=r"""
+            \s+
+            interfaces:
+            \s+
+            (?P<interfaces>[\w,]+)
+        """
+    )
 
-    def _isPermanentSupported(self):
-        """
-        check if firewall-cmd support --permanent option
-        """
-        ret = False
-        firewall_cmd = self.command.get(command='firewall-cmd', optional=True)
-        if firewall_cmd is not None:
-            rc, stdout, stderr = self.execute(
-                (
-                    firewall_cmd,
-                    '--help',
-                ),
-                raiseOnError=False,
+    def _get_firewalld_cmd_version(self):
+        should_stop = False
+        if not self.services.status(name='firewalld'):
+            should_stop = True
+            self.services.state(
+                name='firewalld',
+                state=True,
             )
-            ret = ''.join(stdout).find('--permanent') != -1
-        return ret
+        rc, stdout, stderr = self.execute(
+            (
+                self.command.get('firewall-cmd'),
+                '--version',
+            ),
+        )
+        if should_stop:
+            self.services.state(
+                name='firewalld',
+                state=False,
+            )
+        return int(
+            '%02x%02x%02x' % tuple([
+                int(x)
+                for x in stdout[0].split('.')
+            ]),
+            16
+        )
 
     def _get_active_zones(self):
         rc, stdout, stderr = self.execute(
@@ -68,15 +89,29 @@ class Plugin(plugin.PluginBase):
             ),
         )
         zones = {}
-        for line in stdout:
-            zone_name, devices = line.split(':')
-            zones[zone_name] = devices.split()
+        if self._firewalld_version < 0x000303:
+            for line in stdout:
+                zone_name, devices = line.split(':')
+                zones[zone_name] = devices.split()
+        else:
+            #0.3.3 has changed output
+            zone_name = None
+            for line in stdout:
+                if self._ZONE_RE.match(line):
+                    zone_name = line
+                elif self._INTERFACE_RE.match(line):
+                    devices = self._INTERFACE_RE.match(
+                        line
+                    ).group('interfaces')
+                    zones[zone_name] = devices.split()
+
         return zones
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
         self._enabled = True
         self._services = []
+        self._firewalld_version = 0
 
     @plugin.event(
         stage=plugin.Stages.STAGE_INIT,
@@ -104,11 +139,12 @@ class Plugin(plugin.PluginBase):
         priority=plugin.Stages.PRIORITY_FIRST,
     )
     def _customization(self):
+        self._firewalld_version = self._get_firewalld_cmd_version()
         self._enabled = self.environment[
             constants.NetEnv.FIREWALLD_AVAILABLE
         ] = (
             self.services.exists('firewalld') and
-            self._isPermanentSupported()
+            self._firewalld_version >= 0x000206
         )
 
     @plugin.event(
