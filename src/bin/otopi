@@ -63,14 +63,14 @@ if [ -f "${scriptdir}/.source" ]; then
 	export OTOPI_INSOURCETREE=1
 	# make sure we are first
 	export PYTHONPATH="$(cd "${scriptdir}" && pwd)/..:${PYTHONPATH}"
-	extraenv="BASE/pluginPath=str:${scriptdir}/../plugins"
+	extraenv="\"BASE/pluginPath=str:${scriptdir}/../plugins\""
 fi
 
 if [ -f "${scriptdir}/.bundled" ]; then
 	export OTOPI_BUNDLED="${scriptdir}"
 	# make sure we are first
 	export PYTHONPATH="${scriptdir}/pythonlib:${PYTHONPATH}"
-	extraenv="BASE/pluginPath=str:${scriptdir}/otopi-plugins"
+	extraenv="\"BASE/pluginPath=str:${scriptdir}/otopi-plugins\""
 fi
 
 OTOPI_PYTHON="${OTOPI_PYTHON:-$(find_util python)}"
