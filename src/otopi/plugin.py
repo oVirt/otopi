@@ -242,11 +242,12 @@ def event(
     """Decoration to specify sequence event method.
 
     Keyword arguments:
-    name -- name of stage.
-    stage -- stage out of Stages.STAGE_*.
-    before -- place before plugin.
-    after -- place after plugin.
-    priority -- priority out of Stages.PRIORITY_*.
+    name -- give this event a name. Used with before and after.
+    stage -- stage to place this even in. One of Stages.STAGE_*.
+    before=EVENTNAMESLIST -- place this event before the events with
+        names EVENTNAMESLIST.
+    after -- place this event after the events with names EVENTNAMESLIST.
+    priority -- priority to place this event in. One of Stages.PRIORITY_*.
     condition -- optional condition function.
 
     """
