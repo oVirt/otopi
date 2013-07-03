@@ -55,6 +55,9 @@ class Plugin(plugin.PluginBase):
     )
 
     def _get_firewalld_cmd_version(self):
+        if not self.services.exists('firewalld'):
+            return 0
+
         should_stop = False
         if not self.services.status(name='firewalld'):
             should_stop = True
