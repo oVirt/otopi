@@ -112,7 +112,7 @@ class Plugin(plugin.PluginBase):
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
-        self._enabled = True
+        self._enabled = os.geteuid() == 0
         self._services = []
         self._firewalld_version = 0
 
