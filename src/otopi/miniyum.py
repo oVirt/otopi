@@ -658,6 +658,7 @@ class MiniYum(object):
                                     cacheonly=1
                                 )
                                 del self._yb.tsInfo
+                                del self._yb.ts
                                 if self._yb.history_undo(transactionCurrent):
                                     if self.buildTransaction():
                                         self.processTransaction()
