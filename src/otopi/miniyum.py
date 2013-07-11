@@ -775,6 +775,13 @@ class MiniYum(object):
                 else:
                     raise yum.Errors.YumBaseError(msg)
 
+                self._sink.verbose('Transaction Summary:')
+                for p in self.queryTransaction():
+                    self._sink.verbose('    %-10s - %s' % (
+                        p['operation'],
+                        p['display_name']
+                    ))
+
                 return ret
 
         except Exception as e:
