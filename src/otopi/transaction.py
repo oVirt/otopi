@@ -151,7 +151,11 @@ class Transaction(base.Base):
                 _('Cannot commit transaction as one of the elements failed')
             )
 
-        for element in self._prepared:
+        # remove elements from list
+        # so that if we fail we won't
+        # abort committed
+        while self._prepared:
+            element = self._prepared.pop()
             self.logger.debug("committing '%s'", element)
             element.commit()
 
