@@ -172,6 +172,7 @@ class Plugin(plugin.PluginBase):
                 name=authkeys,
                 content=content,
                 owner=sshUser if sshUser else getpass.getuser(),
+                downer=sshUser if sshUser else getpass.getuser(),
                 mode=0o600,
                 dmode=0o700,
                 enforcePermissions=True,
