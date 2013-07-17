@@ -154,6 +154,7 @@ class NetEnv(object):
     FIREWALLD_ENABLE = 'NETWORK/firewalldEnable'
     FIREWALLD_AVAILABLE = 'NETWORK/firewalldAvailable'
     FIREWALLD_SERVICE_PREFIX = 'NETWORK_FIREWALLD_SERVICE/'
+    FIREWALLD_DISBALE_SERVICES = 'NETWORK/firewalldDisableServices'
 
 
 @util.export

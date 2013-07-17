@@ -39,6 +39,7 @@ class Plugin(plugin.PluginBase):
     Environment:
         NetEnv.FIREWALLD_ENABLE -- enable firewalld update
         NetEnv.FIREWALLD_SERVICE_PREFIX -- services key=service value=content
+        NetEnv.FIREWALLD_DISBALE_SERVICES -- list of services to be disabled
 
     """
 
@@ -110,6 +111,15 @@ class Plugin(plugin.PluginBase):
 
         return zones
 
+    def _get_zones(self):
+        rc, stdout, stderr = self.execute(
+            (
+                self.command.get('firewall-cmd'),
+                '--get-zones',
+            ),
+        )
+        return ' '.join(stdout).split()
+
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
         self._enabled = os.geteuid() == 0
@@ -126,6 +136,10 @@ class Plugin(plugin.PluginBase):
         )
         self.environment.setdefault(
             constants.NetEnv.FIREWALLD_AVAILABLE,
+            False
+        )
+        self.environment.setdefault(
+            constants.NetEnv.FIREWALLD_DISBALE_SERVICES,
             False
         )
 
@@ -206,6 +220,24 @@ class Plugin(plugin.PluginBase):
             state=True,
         )
         self.services.startup(name='firewalld', state=True)
+
+        #
+        # Disabling existing services before configuration reload
+        # because the service file may be emptied or removed in misc stage by
+        # the plugins requesting this action and in this case reload will fail
+        #
+        for zone in self._get_zones():
+            for service in self.environment[
+                constants.NetEnv.FIREWALLD_DISBALE_SERVICES
+            ]:
+                self.execute(
+                    (
+                        self.command.get('firewall-cmd'),
+                        '--zone', zone,
+                        '--permanent',
+                        '--remove-service', service,
+                    ),
+                )
 
         #
         # Ensure to load the newly written services if firewalld was already
