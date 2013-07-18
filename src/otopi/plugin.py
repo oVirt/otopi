@@ -99,7 +99,7 @@ class Stages(object):
             # No rollback for these packages.
             #
             'id': 'internal_packages',
-            'description': _("Installation packages setup"),
+            'description': _("Environment packages setup"),
             'if-success': True,
         },
         STAGE_PROGRAMS: {
@@ -115,7 +115,7 @@ class Stages(object):
             # Late setup actions.
             #
             'id': 'late_setup',
-            'description': _("Installation setup"),
+            'description': _("Environment setup"),
             'if-success': True,
         },
         STAGE_CUSTOMIZATION: {
