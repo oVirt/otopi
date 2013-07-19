@@ -39,7 +39,7 @@ class Plugin(plugin.PluginBase):
     Environment:
         NetEnv.FIREWALLD_ENABLE -- enable firewalld update
         NetEnv.FIREWALLD_SERVICE_PREFIX -- services key=service value=content
-        NetEnv.FIREWALLD_DISBALE_SERVICES -- list of services to be disabled
+        NetEnv.FIREWALLD_DISABLE_SERVICES -- list of services to be disabled
 
     """
 
@@ -139,8 +139,8 @@ class Plugin(plugin.PluginBase):
             False
         )
         self.environment.setdefault(
-            constants.NetEnv.FIREWALLD_DISBALE_SERVICES,
-            False
+            constants.NetEnv.FIREWALLD_DISABLE_SERVICES,
+            []
         )
 
     @plugin.event(
@@ -228,7 +228,7 @@ class Plugin(plugin.PluginBase):
         #
         for zone in self._get_zones():
             for service in self.environment[
-                constants.NetEnv.FIREWALLD_DISBALE_SERVICES
+                constants.NetEnv.FIREWALLD_DISABLE_SERVICES
             ]:
                 self.execute(
                     (
