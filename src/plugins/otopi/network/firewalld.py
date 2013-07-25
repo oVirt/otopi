@@ -56,34 +56,29 @@ class Plugin(plugin.PluginBase):
     )
 
     def _get_firewalld_cmd_version(self):
-        if not self.services.exists('firewalld'):
-            return 0
+        version = 0
 
-        should_stop = False
-        if not self.services.status(name='firewalld'):
-            should_stop = True
-            self.services.state(
-                name='firewalld',
-                state=True,
-            )
-        rc, stdout, stderr = self.execute(
-            (
-                self.command.get('firewall-cmd'),
-                '--version',
-            ),
-        )
-        if should_stop:
-            self.services.state(
-                name='firewalld',
-                state=False,
-            )
-        return int(
-            '%02x%02x%02x' % tuple([
-                int(x)
-                for x in stdout[0].split('.')
-            ]),
-            16
-        )
+        if self.services.exists('firewalld'):
+            try:
+                from firewall import client
+
+                self.logger.debug('firewalld version: %s', client.VERSION)
+                version = int(
+                    '%02x%02x%02x' % tuple([
+                        int(x)
+                        for x in client.VERSION.split('.')[:3]
+                    ]),
+                    16
+                )
+            except ImportError:
+                self.logger.debug('No firewalld python module')
+            except:
+                self.logger.debug(
+                    'Exception during firewalld dection',
+                    exc_info=True,
+                )
+
+        return version
 
     def _get_active_zones(self):
         rc, stdout, stderr = self.execute(
@@ -159,10 +154,7 @@ class Plugin(plugin.PluginBase):
         self._firewalld_version = self._get_firewalld_cmd_version()
         self._enabled = self.environment[
             constants.NetEnv.FIREWALLD_AVAILABLE
-        ] = (
-            self.services.exists('firewalld') and
-            self._firewalld_version >= 0x000206
-        )
+        ] = self._firewalld_version >= 0x000206
 
     @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,
