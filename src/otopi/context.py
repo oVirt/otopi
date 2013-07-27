@@ -141,7 +141,6 @@ class Context(base.Base):
                         exception=e,
                     )
                 )
-            self.dumpEnvironment()
             self.notify(event=self.NOTIFY_ERROR)
 
     (

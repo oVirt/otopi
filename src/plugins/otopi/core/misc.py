@@ -77,5 +77,13 @@ class Plugin(plugin.PluginBase):
         # of something before validation
         self.context.dumpEnvironment()
 
+    @plugin.event(
+        stage=plugin.Stages.STAGE_PRE_TERMINATE,
+    )
+    def _preTerminate(self):
+        # as we want full dump and not delta
+        # of something before termination
+        self.context.dumpEnvironment()
+
 
 # vim: expandtab tabstop=4 shiftwidth=4
