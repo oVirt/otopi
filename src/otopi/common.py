@@ -21,6 +21,7 @@
 """Common misc functions."""
 
 
+import builtins
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
@@ -65,7 +66,7 @@ def typeName(value):
         ret = constants.Types.BOOLEAN
     elif isinstance(value, int):
         ret = constants.Types.INTEGER
-    elif isinstance(value, str) or isinstance(value, unicode):
+    elif isinstance(value, str) or isinstance(value, builtins.unicode):
         ret = constants.Types.STRING
     elif isinstance(value, list):
         ret = constants.Types.MULTI_STRING
