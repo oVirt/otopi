@@ -63,7 +63,7 @@ class Plugin(plugin.PluginBase):
         stage=plugin.Stages.STAGE_INTERNAL_PACKAGES,
     )
     def _internal_packages(self):
-        self.packager.install(packages=['iproute'])
+        self.packager.install(packages=('iproute',))
 
     @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,

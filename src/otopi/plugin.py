@@ -234,8 +234,8 @@ class Stages(object):
 def event(
     name=None,
     stage=None,
-    before=[],
-    after=[],
+    before=(),
+    after=(),
     priority=Stages.PRIORITY_DEFAULT,
     condition=None,
 ):

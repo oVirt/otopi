@@ -48,9 +48,9 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,
-        after=[
+        after=(
             constants.Stages.SYSTEM_COMMAND_DETECTION,
-        ],
+        ),
     )
     def _programs(self):
         rc = self.command.get('rc', optional=True)

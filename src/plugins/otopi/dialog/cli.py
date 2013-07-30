@@ -51,7 +51,7 @@ class Plugin(plugin.PluginBase):
         Queries.TERMINATION_COMMAND -- termination command.
 
     """
-    def _command(command, description, stages=[]):
+    def _command(command, description, stages=()):
         def decorator(f):
             f.decoration_command = {
                 'method': f,
@@ -211,7 +211,7 @@ class Plugin(plugin.PluginBase):
     @_command(
         command='abort',
         description=_('Abort process'),
-        stages=[plugin.Stages.STAGE_CUSTOMIZATION],
+        stages=(plugin.Stages.STAGE_CUSTOMIZATION,),
     )
     def _cmd_abort(self, cmd):
         parser = self._MyOptionParser(cmd[0], logger=self.logger)
@@ -227,7 +227,7 @@ class Plugin(plugin.PluginBase):
     @_command(
         command='install',
         description=_('Install software'),
-        stages=[plugin.Stages.STAGE_CUSTOMIZATION],
+        stages=(plugin.Stages.STAGE_CUSTOMIZATION,),
     )
     def _cmd_install(self, cmd):
         parser = self._MyOptionParser(cmd[0], logger=self.logger)
@@ -243,7 +243,7 @@ class Plugin(plugin.PluginBase):
     @_command(
         command='quit',
         description=_('Quit'),
-        stages=[plugin.Stages.STAGE_PRE_TERMINATE],
+        stages=(plugin.Stages.STAGE_PRE_TERMINATE,),
     )
     def _cmd_quit(self, cmd):
         parser = self._MyOptionParser(cmd[0], logger=self.logger)

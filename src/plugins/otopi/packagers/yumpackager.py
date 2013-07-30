@@ -63,8 +63,8 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
 
     def _getMiniYum(
         self,
-        disabledPlugins=[],
-        enabledPlugins=[]
+        disabledPlugins=(),
+        enabledPlugins=(),
     ):
         from otopi import miniyum
 

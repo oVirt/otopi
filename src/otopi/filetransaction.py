@@ -113,7 +113,7 @@ class FileTransaction(transaction.TransactionElement):
         dgroup=None,
         enforcePermissions=False,
         visibleButUnsafe=False,
-        modifiedList=[],
+        modifiedList=None,
     ):
         """Constructor.
 
@@ -296,7 +296,8 @@ class FileTransaction(transaction.TransactionElement):
                     source=self._tmpname,
                     destination=self._name,
                 )
-            self._modifiedList.append(self._name)
+            if self._modifiedList is not None:
+                self._modifiedList.append(self._name)
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

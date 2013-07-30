@@ -84,7 +84,7 @@ class Transaction(base.Base):
                 self._failed = True
                 raise
 
-    def __init__(self, elements=[]):
+    def __init__(self, elements=()):
         """Constructor.
 
         Keyword arguments:

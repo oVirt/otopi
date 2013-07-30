@@ -996,7 +996,7 @@ class Example(object):
             miniyum.clean(['expire-cache'])
 
         miniyumsink.info('Search Summary:')
-        for p in miniyum.queryPackages(patterns=['vdsm']):
+        for p in miniyum.queryPackages(patterns=('vdsm',)):
             miniyumsink.info(
                 _('    {operation} - {package}').format(
                     operation=p['operation'],
