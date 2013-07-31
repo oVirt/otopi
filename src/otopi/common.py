@@ -68,7 +68,7 @@ def typeName(value):
         ret = constants.Types.INTEGER
     elif isinstance(value, str) or isinstance(value, builtins.unicode):
         ret = constants.Types.STRING
-    elif isinstance(value, list):
+    elif isinstance(value, list) or isinstance(value, tuple):
         ret = constants.Types.MULTI_STRING
     else:
         ret = constants.Types.OBJECT
