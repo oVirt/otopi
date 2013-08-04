@@ -24,6 +24,13 @@
 %global		maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
 %endif
 
+# rhel does not support complex boolean statements
+%if 0%{?fedora:1}
+%if %{fedora} >= 19
+%global		fedora_19_maven	1
+%endif
+%endif
+
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
 Name:		@PACKAGE_NAME@
 Version:	@PACKAGE_RPM_VERSION@
@@ -39,14 +46,11 @@ BuildArch:	noarch
 Requires:	python
 BuildRequires:	gettext
 BuildRequires:	python2-devel
-
 BuildRequires:	java-devel
-BuildRequires:	jpackage-utils
 
 %if 0%{?fedora:1}
 BuildRequires:	apache-commons-logging
 BuildRequires:	junit
-BuildRequires:	maven
 BuildRequires:	maven-compiler-plugin
 BuildRequires:	maven-enforcer-plugin
 BuildRequires:	maven-install-plugin
@@ -54,6 +58,14 @@ BuildRequires:	maven-jar-plugin
 BuildRequires:	maven-javadoc-plugin
 BuildRequires:	maven-source-plugin
 BuildRequires:	maven-surefire-provider-junit4
+
+%if 0%{?fedora_19_maven:1}
+BuildRequires:	maven-local
+%else
+BuildRequires:	maven
+BuildRequires:	jpackage-utils
+%endif
+
 %else
 BuildRequires:	jakarta-commons-logging
 BuildRequires:	junit4
@@ -69,9 +81,15 @@ and transaction management.
 Summary:	%{name} java support
 Requires:	%{name} = %{version}-%{release}
 Requires:	java
-Requires:	jpackage-utils
 %if 0%{?fedora:1}
 Requires:	apache-commons-logging
+
+%if 0%{?fedora:1}
+%if !0%{?fedora_19_maven:1}
+Requires:	jpackage-utils
+%endif
+%endif
+
 %else
 Requires:	jakarta-commons-logging
 %endif
@@ -82,7 +100,10 @@ java libraries.
 %package javadoc
 Summary:	Javadocs for %{name}
 Group:		Documentation
+
+%if !0%{?fedora_19_maven:1}
 Requires:	jpackage-utils
+%endif
 
 %description javadoc
 This package contains the API documentation for %{name}.
@@ -118,8 +139,13 @@ Summary:	%{name} maven repo
 make %{?_smp_mflags}
 
 %if 0%{?fedora:1}
+
 cd src/java
+%if 0%{?fedora_19_maven:1}
+%mvn_build
+%else
 mvn-rpmbuild install javadoc:aggregate
+%endif
 cd ../..
 %endif
 
@@ -128,19 +154,28 @@ rm -rf "%{buildroot}"
 make %{?_smp_mflags} install DESTDIR="%{buildroot}"
 
 %if 0%{?fedora:1}
+
+%if 0%{?fedora_19_maven:1}
+cd src/java
+%mvn_install
+cd ../..
+%else
 install -d -m 755 "%{buildroot}%{_javadir}/%{name}"
 install -d -m 755 "%{buildroot}%{_mavenpomdir}"
 install -pm 644 src/java/target/%{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}
 ln -s "%{name}-%{package_maven_version}.jar" "%{buildroot}%{_javadir}/%{name}/%{name}.jar"
 install -pm 644 "src/java/pom.xml" "%{buildroot}%{_mavenpomdir}/JPP.%{name}-%{name}.pom"
 %add_maven_depmap "JPP.%{name}-%{name}.pom" "%{name}/%{name}.jar"
-
 mkdir -p "%{buildroot}%{_javadocdir}/%{name}"
 cp -rp src/java/target/apidocs/*  "%{buildroot}%{_javadocdir}/%{name}"
+%endif
+
 %else
+
 install -d "%{buildroot}%{_javadir}/%{name}"
 install target/%{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}
 ln -s %{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}/%{name}.jar
+
 %endif
 
 %if 0%{?rhel:1}
@@ -151,14 +186,13 @@ cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_ve
 
 install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 
-%post java
 %if 0%{?fedora:1}
+%if !0%{?fedora_19_maven:1}
+%post java
+%update_maven_depmap
+%postun java
 %update_maven_depmap
 %endif
-
-%postun java
-%if 0%{?fedora:1}
-%update_maven_depmap
 %endif
 
 %files
@@ -178,6 +212,9 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %{_datadir}/%{name}/plugins/%{name}/*/*.py*
 #%{_datadir}/locale/*/*/%{name}.mo
 
+%if 0%{?fedora_19_maven:1}
+%files java -f src/java/.mfiles
+%else
 %files java
 %dir %{_javadir}/%{name}
 %{_javadir}/%{name}/%{name}*.jar
@@ -185,11 +222,18 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %{_mavenpomdir}/JPP.%{name}-%{name}.pom
 %{_mavendepmapfragdir}/%{name}
 %endif
+%endif
 
 %if 0%{?fedora:1}
+
+%if 0%{?fedora_19_maven:1}
+%files javadoc -f src/java/.mfiles-javadoc
+%else
 %files javadoc
 %dir %{_javadocdir}/%{name}
 %{_javadocdir}/%{name}
+%endif
+
 %endif
 
 %files devel
@@ -206,5 +250,5 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 * Thu Feb 14 2013 Alon Bar-Lev <alonbl@redhat.com> - 1.0.0-1
 - Release.
 
-* Tue Oct 13 2012 Alon Bar-Lev <alonbl@redhat.com> - 1.0.0-0.1_beta
+* Sat Oct 13 2012 Alon Bar-Lev <alonbl@redhat.com> - 1.0.0-0.1_beta
 - Initial add.
