@@ -72,7 +72,7 @@ class Plugin(plugin.PluginBase):
                             exception=e,
                         )
                     )
-                if True or override:
+                if override:
                     self.environment[name] = value
                 else:
                     self.environment.setdefault(name, value)
