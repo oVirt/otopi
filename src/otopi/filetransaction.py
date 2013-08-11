@@ -141,7 +141,7 @@ class FileTransaction(transaction.TransactionElement):
         super(FileTransaction, self).__init__()
         self._name = name
 
-        if isinstance(content, list):
+        if isinstance(content, list) or isinstance(content, tuple):
             self._content = '\n'.join(content)
         else:
             self._content = str(content)
