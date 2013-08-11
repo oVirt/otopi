@@ -300,7 +300,7 @@ class Plugin(plugin.PluginBase):
         else:
             if options.key in self.environment:
                 value = self.environment[options.key]
-                if isinstance(value, list):
+                if isinstance(value, list) or isinstance(value, tuple):
                     self.dialog.displayMultiString(
                         name=options.key,
                         value=self.environment[options.key]
