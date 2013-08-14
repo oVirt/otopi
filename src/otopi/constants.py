@@ -161,6 +161,7 @@ class NetEnv(object):
 @util.codegen
 class PackEnv(object):
     YUMPACKAGER_ENABLED = 'PACKAGER/yumpackagerEnabled'
+    YUMPACKAGER_EXPIRE_CACHE = 'PACKAGER/yumExpireCache'
     KEEP_ALIVE_INTERVAL = 'PACKAGER/keepAliveInterval'
     YUM_DISABLED_PLUGINS = 'PACKAGER/yumDisabledPlugins'
     YUM_ENABLED_PLUGINS = 'PACKAGER/yumEnabledPlugins'

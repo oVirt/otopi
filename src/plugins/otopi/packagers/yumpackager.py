@@ -167,6 +167,10 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
                 constants.PackEnv.KEEP_ALIVE_INTERVAL,
                 constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
             )
+            self.environment.setdefault(
+                constants.PackEnv.YUMPACKAGER_EXPIRE_CACHE,
+                True
+            )
 
             self._refreshMiniyum()
 
@@ -200,8 +204,9 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         condition=lambda self: self._enabled,
     )
     def _setup(self):
-        with self._miniyum.transaction():
-            self._miniyum.clean(['expire-cache'])
+        if self.environment[constants.PackEnv.YUMPACKAGER_EXPIRE_CACHE]:
+            with self._miniyum.transaction():
+                self._miniyum.clean(['expire-cache'])
         self.environment[constants.CoreEnv.MAIN_TRANSACTION].append(
             self.YumTransaction(
                 parent=self,

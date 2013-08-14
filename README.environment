@@ -110,5 +110,8 @@ NETWORK_FIREWALLD_SERVICE/<service>
 PACKAGER/yumpackagerEnabled(bool) [True]
     Enable yum packager.
 
+PACKAGER/yumExpireCache(bool) [True]
+    Expire yum cache at startup.
+
 PACKAGER/keepAliveInterval(int) [30]
     Keep alive interval for status in seconds.
