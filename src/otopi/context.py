@@ -392,7 +392,9 @@ class Context(base.Base):
 
     def resolveFile(self, file):
         """Resolve file based on installer execution directory"""
-        if os.path.isabs(file):
+        if file is None:
+            return None
+        elif os.path.isabs(file):
             return file
         else:
             return os.path.join(
