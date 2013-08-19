@@ -47,7 +47,7 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
         self.command.detect('rc-update')
 
     @plugin.event(
-        stage=plugin.Stages.STAGE_VALIDATION,
+        stage=plugin.Stages.STAGE_PROGRAMS,
         after=(
             constants.Stages.SYSTEM_COMMAND_DETECTION,
         ),
