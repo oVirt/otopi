@@ -887,7 +887,8 @@ class MiniYum(object):
                     ('updates', holder.updates),
                     ('extras', holder.extras),
                     ('obsoletes', holder.obsoletes),
-                    ('recent', holder.recent)
+                    ('recent', holder.recent),
+                    ('reinstall_available', holder.reinstall_available),
                 ):
                     for entry in l:
                         if isinstance(entry, tuple):
