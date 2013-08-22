@@ -300,7 +300,12 @@ class Context(base.Base):
                         compare(candidateindex, index)
                     ):
                         self._earlyDebug(
-                            'modifing method location %s' % (
+                            'modifying location: candidateindex %s index %s '
+                            'what %s metadata[what] %s method %s' % (
+                                candidateindex,
+                                index,
+                                what,
+                                metadata[what],
                                 metadata['method'],
                             )
                         )
