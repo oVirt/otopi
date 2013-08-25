@@ -30,6 +30,7 @@ from otopi import util
 from otopi import plugin
 from otopi import constants
 from otopi import filetransaction
+from otopi import transaction
 
 
 @util.export
@@ -43,6 +44,41 @@ class Plugin(plugin.PluginBase):
 
     """
 
+    class FirewalldTransaction(transaction.TransactionElement):
+        """firewalld transaction element."""
+
+        def __init__(self, parent):
+            self._parent = parent
+
+        def __str__(self):
+            return _('Firewalld Transaction')
+
+        def prepare(self):
+            pass
+
+        def abort(self):
+            for (
+                zone,
+                services,
+            ) in self._parent._disabled_zones_services.items():
+                for service in services:
+                    rc, stdout, stderr = self._parent.execute(
+                        args = (
+                            self._parent.command.get('firewall-cmd'),
+                            '--zone', zone,
+                            '--permanent',
+                            '--add-service', service,
+                        ),
+                        raiseOnError=False,
+                    )
+                    if rc != 0:
+                        self._parent.logger.debug(
+                            'Error during firewalld restore',
+                        )
+
+        def commit(self):
+            pass
+
     FIREWALLD_SERVICES_DIR = '/etc/firewalld/services'
     _ZONE_RE = re.compile(r'^\w+$')
     _INTERFACE_RE = re.compile(
@@ -52,6 +88,15 @@ class Plugin(plugin.PluginBase):
             interfaces:
             \s+
             (?P<interfaces>[\w,]+)
+        """
+    )
+    _SERVICE_RE = re.compile(
+        flags=re.VERBOSE,
+        pattern=r"""
+            \s+
+            services:
+            \s+
+            (?P<services>.+)
         """
     )
 
@@ -115,10 +160,31 @@ class Plugin(plugin.PluginBase):
         )
         return ' '.join(stdout).split()
 
+    def _get_zones_services(self):
+        rc, stdout, stderr = self.execute(
+            (
+                self.command.get('firewall-cmd'),
+                '--list-all-zones',
+            ),
+        )
+        zones = {}
+        zone_name = None
+        for line in stdout:
+            if self._ZONE_RE.match(line):
+                zone_name = line
+            elif self._SERVICE_RE.match(line):
+                services = self._SERVICE_RE.match(
+                    line
+                ).group('services')
+                zones[zone_name] = services.split()
+
+        return zones
+
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
         self._enabled = os.geteuid() == 0
-        self._services = []
+        self._enabled_services = []
+        self._disabled_zones_services = {}
         self._firewalld_version = 0
 
     @plugin.event(
@@ -158,12 +224,62 @@ class Plugin(plugin.PluginBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,
+        name=constants.Stages.FIREWALLD_VALIDATION,
         condition=lambda self: self._enabled,
     )
     def _validation(self):
         self._enabled = self.environment[
             constants.NetEnv.FIREWALLD_ENABLE
         ]
+
+    @plugin.event(
+        stage=plugin.Stages.STAGE_EARLY_MISC,
+        condition=lambda self: self._enabled,
+    )
+    def _early_misc(self):
+        self.environment[constants.CoreEnv.MAIN_TRANSACTION].append(
+            self.FirewalldTransaction(
+                parent=self,
+            )
+        )
+
+        #
+        # avoid conflicts, disable iptables
+        #
+        if self.services.exists(name='iptables'):
+            self.services.startup(name='iptables', state=False)
+            self.services.state(name='iptables', state=False)
+
+        self.services.state(
+            name='firewalld',
+            state=True,
+        )
+        self.services.startup(name='firewalld', state=True)
+
+        #
+        # Disabling existing services before configuration reload
+        # because the service file may be emptied or removed in misc stage by
+        # the plugins requesting this action and in this case reload will fail
+        #
+        zones_services = self._get_zones_services()
+        self.logger.debug('zones_services = %s', zones_services)
+        for zone in zones_services:
+            for service in self.environment[
+                constants.NetEnv.FIREWALLD_DISABLE_SERVICES
+            ]:
+                if service in zones_services[zone]:
+                    self._disabled_zones_services.setdefault(
+                        zone,
+                        []
+                    ).append(service)
+                    self.execute(
+                        (
+                            self.command.get('firewall-cmd'),
+                            '--zone', zone,
+                            '--permanent',
+                            '--remove-service', service,
+                        ),
+                    )
 
     @plugin.event(
         stage=plugin.Stages.STAGE_MISC,
@@ -180,7 +296,7 @@ class Plugin(plugin.PluginBase):
                 constants.NetEnv.FIREWALLD_SERVICE_PREFIX
             )
         ]:
-            self._services.append(service)
+            self._enabled_services.append(service)
             self.environment[constants.CoreEnv.MAIN_TRANSACTION].append(
                 filetransaction.FileTransaction(
                     name=os.path.join(
@@ -199,38 +315,6 @@ class Plugin(plugin.PluginBase):
         condition=lambda self: self._enabled,
     )
     def _closeup(self):
-
-        #
-        # avoid conflicts, diable iptables
-        #
-        if self.services.exists(name='iptables'):
-            self.services.startup(name='iptables', state=False)
-            self.services.state(name='iptables', state=False)
-
-        self.services.state(
-            name='firewalld',
-            state=True,
-        )
-        self.services.startup(name='firewalld', state=True)
-
-        #
-        # Disabling existing services before configuration reload
-        # because the service file may be emptied or removed in misc stage by
-        # the plugins requesting this action and in this case reload will fail
-        #
-        for zone in self._get_zones():
-            for service in self.environment[
-                constants.NetEnv.FIREWALLD_DISABLE_SERVICES
-            ]:
-                self.execute(
-                    (
-                        self.command.get('firewall-cmd'),
-                        '--zone', zone,
-                        '--permanent',
-                        '--remove-service', service,
-                    ),
-                )
-
         #
         # Ensure to load the newly written services if firewalld was already
         # running.
@@ -242,7 +326,7 @@ class Plugin(plugin.PluginBase):
             )
         )
         for zone in self._get_active_zones():
-            for service in self._services:
+            for service in self._enabled_services:
                 self.execute(
                     (
                         self.command.get('firewall-cmd'),

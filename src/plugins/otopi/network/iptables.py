@@ -59,6 +59,7 @@ class Plugin(plugin.PluginBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,
+        name=constants.Stages.IPTABLES_VALIDATION,
         condition=(
             lambda self: self.environment[constants.NetEnv.IPTABLES_ENABLE]
         ),

@@ -50,6 +50,8 @@ class Stages(object):
     SYSTEM_COMMAND_DETECTION = 'otopi.system.command.detection'
     SYSTEM_COMMAND_REDETECTION = 'otopi.system.command.redetection'
     PACKAGERS_DETECTION = 'otopi.packagers.detection'
+    FIREWALLD_VALIDATION = 'otopi.network.firealld.validation'
+    IPTABLES_VALIDATION = 'otopi.network.iptables.validation'
 
 
 @util.export
