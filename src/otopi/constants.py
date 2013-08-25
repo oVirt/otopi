@@ -103,6 +103,7 @@ class BaseEnv(object):
     EXECUTION_DIRECTORY = 'BASE/executionDirectory'
     SUPPRESS_ENVIRONMENT_KEYS = 'BASE/suppressEnvironmentKeys'
     COMMAND_PREFIX = 'COMMAND/'
+    RANDOMIZE_EVENTS = 'CORE/randomizeEvents'
 
 
 @util.export

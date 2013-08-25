@@ -25,6 +25,7 @@ import sys
 import os
 import traceback
 import operator
+import random
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
@@ -199,6 +200,7 @@ class Context(base.Base):
                     '0'
                 )
             ),
+            constants.BaseEnv.RANDOMIZE_EVENTS: False,
         }
         self.registerDialog(dialog.DialogBase())
         self.registerServices(services.ServicesBase())
@@ -270,6 +272,14 @@ class Context(base.Base):
                 metadata['method'] = metadata['method'].__get__(p)
                 metadata['condition'] = metadata['condition'].__get__(p)
                 tmplist.append(metadata)
+
+        #
+        # Set some stable order or randomize
+        #
+        if self.environment[constants.BaseEnv.RANDOMIZE_EVENTS]:
+            random.shuffle(tmplist)
+        else:
+            tmplist.sort(key=self._methodName)
 
         #
         # sort based on priority
