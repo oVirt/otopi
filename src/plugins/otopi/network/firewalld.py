@@ -63,7 +63,7 @@ class Plugin(plugin.PluginBase):
             ) in self._parent._disabled_zones_services.items():
                 for service in services:
                     rc, stdout, stderr = self._parent.execute(
-                        args = (
+                        args=(
                             self._parent.command.get('firewall-cmd'),
                             '--zone', zone,
                             '--permanent',
