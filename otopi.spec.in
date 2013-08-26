@@ -135,6 +135,7 @@ Summary:	%{name} maven repo
 	--docdir="%{_docdir}/%{name}-%{version}" \
 	--disable-python-syntax-check \
 	--enable-java-sdk \
+	--with-local-version="%{name}-%{version}-%{release}" \
 	%{?conf}
 make %{?_smp_mflags}
 

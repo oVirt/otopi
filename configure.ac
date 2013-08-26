@@ -63,6 +63,13 @@ AC_ARG_ENABLE(
 )
 
 AC_ARG_WITH(
+	[local-version],
+	[AS_HELP_STRING([--with-local-version], [local version to use])],
+	[LOCAL_VERSION="${withval}"],
+	[LOCAL_VERSION=""]
+)
+
+AC_ARG_WITH(
 	[maven],
 	[AS_HELP_STRING([--with-maven], [use maven to build java-sdk @<:@default=no@:>@])],
 	,
@@ -125,6 +132,7 @@ otopilibdir="\$(pythondir)/otopi"
 otopiplugindir="\$(pkgdatadir)/plugins"
 AC_SUBST([otopilibdir])
 AC_SUBST([otopiplugindir])
+AC_SUBST([LOCAL_VERSION])
 AM_CONDITIONAL([PYTHON_SYNTAX_CHECK], [test "${enable_python_syntax_check}" = "yes"])
 AM_CONDITIONAL([JAVA_SDK], [test "${enable_java_sdk}" = "yes"])
 AM_CONDITIONAL([JAVA_SDK_COMPILE], [test "${enable_java_sdk_compile}" = "yes"])

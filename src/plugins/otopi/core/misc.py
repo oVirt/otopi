@@ -62,9 +62,10 @@ class Plugin(plugin.PluginBase):
     )
     def _setup(self):
         self.dialog.note(
-            text=_('Version: {package}-{version}').format(
+            text=_('Version: {package}-{version} ({local_version})').format(
                 package=config.PACKAGE_NAME,
                 version=config.PACKAGE_VERSION,
+                local_version=config.LOCAL_VERSION,
             )
         )
 
