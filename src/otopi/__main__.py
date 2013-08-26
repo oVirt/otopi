@@ -62,6 +62,15 @@ class Installer(object):
                         )
                         environment.setdefault(key, '')
                         environment[key] += ':%s' % value
+                    elif key.startswith(
+                        constants.Const.ENVIRONMENT_PREPEND_PREFIX
+                    ):
+                        key = key.replace(
+                            constants.Const.ENVIRONMENT_PREPEND_PREFIX,
+                            ''
+                        )
+                        environment.setdefault(key, '')
+                        environment[key] = '%s:%s' % (value, environment[key])
                     else:
                         environment[key] = value
 

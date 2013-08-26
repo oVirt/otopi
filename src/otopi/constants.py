@@ -74,6 +74,7 @@ class Types(object):
 @util.codegen
 class Const(object):
     ENVIRONMENT_APPEND_PREFIX = 'APPEND:'
+    ENVIRONMENT_PREPEND_PREFIX = 'PREPEND:'
     CONFIG_SECTION_DEFAULT = 'environment:default'
     CONFIG_SECTION_INIT = 'environment:init'
     CONFIG_SECTION_OVERRIDE = 'environment:override'
