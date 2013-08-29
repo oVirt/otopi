@@ -143,10 +143,12 @@ class FileTransaction(transaction.TransactionElement):
 
         if isinstance(content, list) or isinstance(content, tuple):
             self._content = '\n'.join(content)
+            if content:
+                self._content += '\n'
         else:
             self._content = str(content)
-        if not self._content.endswith('\n'):
-            self._content += '\n'
+            if not self._content.endswith('\n'):
+                self._content += '\n'
 
         self._mode = mode
         self._dmode = dmode
