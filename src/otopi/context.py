@@ -23,6 +23,7 @@
 
 import sys
 import os
+import glob
 import traceback
 import operator
 import random
@@ -90,7 +91,10 @@ class Context(base.Base):
                 if groupname in needgroups:
                     needgroups.remove(groupname)
                     for p in _fulldir(group):
-                        if _candidate(p):
+                        if (
+                            _candidate(p) and
+                            glob.glob(os.path.join(p, '__init__.py*'))
+                        ):
                             self._earlyDebug(
                                 'Loading plugin %s' %
                                 os.path.basename(p)
