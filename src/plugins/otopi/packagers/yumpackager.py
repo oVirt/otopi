@@ -56,7 +56,11 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
             self._parent.beginTransaction()
 
         def abort(self):
-            self._parent.endTransaction(rollback=True)
+            self._parent.endTransaction(
+                rollback=self._parent.environment[
+                    constants.PackEnv.YUM_ROLLBACK
+                ],
+            )
 
         def commit(self):
             self._parent.endTransaction(rollback=False)
@@ -189,6 +193,10 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         condition=lambda self: self._enabled,
     )
     def _init(self):
+        self.environment.setdefault(
+            constants.PackEnv.YUM_ROLLBACK,
+            True
+        )
         if self.environment.setdefault(
             constants.PackEnv.YUMPACKAGER_ENABLED,
             True
