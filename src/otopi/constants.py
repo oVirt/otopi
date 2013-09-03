@@ -169,6 +169,7 @@ class PackEnv(object):
     KEEP_ALIVE_INTERVAL = 'PACKAGER/keepAliveInterval'
     YUM_DISABLED_PLUGINS = 'PACKAGER/yumDisabledPlugins'
     YUM_ENABLED_PLUGINS = 'PACKAGER/yumEnabledPlugins'
+    YUM_ROLLBACK = 'PACKAGER/yumRollback'
 
 
 @util.export

@@ -339,14 +339,20 @@ class MiniYum(object):
             yum.YumBase.verifyPkg(self, fo, po, raiseError)
 
     class _MiniYumTransaction(object):
-        def __init__(self, managed):
+        def __init__(self, managed, rollback=True):
             self._managed = managed
+            self._rollback = rollback
 
         def __enter__(self):
             self._managed.beginTransaction()
 
         def __exit__(self, exc_type, exc_value, traceback):
-            self._managed.endTransaction(rollback=exc_type is not None)
+            self._managed.endTransaction(
+                rollback=(
+                    self._rollback and
+                    exc_type is not None
+                ),
+            )
 
     @classmethod
     def _get_package_name(clz, po):
@@ -599,14 +605,14 @@ class MiniYum(object):
                 os.execv(sys.executable, [sys.executable] + sys.argv)
                 os._exit(1)
 
-    def transaction(self):
+    def transaction(self, rollback=True):
         """Manage transaction.
 
         Usage:
             with miniyum.transaction():
                 do anything
         """
-        return self._MiniYumTransaction(self)
+        return self._MiniYumTransaction(self, rollback=rollback)
 
     def clean(self, what):
         """Clean yum data."""
