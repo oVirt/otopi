@@ -1,5 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.1.2
+
+
 2013-09-07 - Version 1.1.1
 
  * core: do not load plugins from empty directories.
