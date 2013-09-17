@@ -80,7 +80,13 @@ class Plugin(plugin.PluginBase):
             pass
 
     FIREWALLD_SERVICES_DIR = '/etc/firewalld/services'
-    _ZONE_RE = re.compile(r'^\w+$')
+    _ZONE_RE = re.compile(
+        flags=re.VERBOSE,
+        pattern=r"""
+            ^
+            (?P<zone>\w+)
+        """
+    )
     _INTERFACE_RE = re.compile(
         flags=re.VERBOSE,
         pattern=r"""
@@ -141,13 +147,15 @@ class Plugin(plugin.PluginBase):
             #0.3.3 has changed output
             zone_name = None
             for line in stdout:
-                if self._ZONE_RE.match(line):
-                    zone_name = line
-                elif self._INTERFACE_RE.match(line):
-                    devices = self._INTERFACE_RE.match(
-                        line
-                    ).group('interfaces')
-                    zones[zone_name] = devices.split()
+                zoneMatch = self._ZONE_RE.match(line)
+                if zoneMatch is not None:
+                    zone_name = zoneMatch.group('zone')
+                else:
+                    interfacesMatch = self._INTERFACE_RE.match(line)
+                    if interfacesMatch is not None:
+                        zones[zone_name] = interfacesMatch.group(
+                            'interfaces'
+                        ).split()
 
         return zones
 
@@ -170,13 +178,15 @@ class Plugin(plugin.PluginBase):
         zones = {}
         zone_name = None
         for line in stdout:
-            if self._ZONE_RE.match(line):
-                zone_name = line
-            elif self._SERVICE_RE.match(line):
-                services = self._SERVICE_RE.match(
-                    line
-                ).group('services')
-                zones[zone_name] = services.split()
+            zoneMatch = self._ZONE_RE.match(line)
+            if zoneMatch is not None:
+                zone_name = zoneMatch.group('zone')
+            else:
+                servicesMatch = self._SERVICE_RE.match(line)
+                if servicesMatch is not None:
+                    zones[zone_name] = servicesMatch.group(
+                        'services'
+                    ).split()
 
         return zones
 
