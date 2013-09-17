@@ -101,19 +101,17 @@ java libraries.
 Summary:	Javadocs for %{name}
 Group:		Documentation
 
-%if !0%{?fedora_19_maven:1}
-Requires:	jpackage-utils
-%endif
-
 %description javadoc
 This package contains the API documentation for %{name}.
 %endif
 
-%package devel
-Summary:	%{name} development components
+%package devtools
+Summary:	%{name} development tools
 Requires:	%{name}-java = %{version}-%{release}
-%description devel
-Development environment for %{name}.
+Obsoletes:	%{name}-devel < 1.2.0
+Provides:	%{name}-devel = %{version}-%{release}
+%description devtools
+Development tools for %{name}.
 
 %if 0%{?rhel:1}
 %package repolib
@@ -212,6 +210,7 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 
 %if 0%{?fedora_19_maven:1}
 %files java -f src/java/.mfiles
+%dir %{_javadir}/%{name}
 %else
 %files java
 %dir %{_javadir}/%{name}
@@ -234,7 +233,7 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 
 %endif
 
-%files devel
+%files devtools
 %{_datadir}/%{name}/%{name}-bundle
 %{python_sitelib}/%{name}/codegen/
 
