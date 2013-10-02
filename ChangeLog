@@ -3,6 +3,7 @@ otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 ????-??-?? - Version 1.1.2
 
  * network: firewalld: fix service deletion.
+ * core: fix suppress environment variable logic.
 
 2013-09-07 - Version 1.1.1
 
