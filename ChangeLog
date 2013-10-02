@@ -4,6 +4,7 @@ otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
  * core: do not load plugins from empty directories.
  * core: support binary file transaction.
+ * core: fix suppress environment variable logic.
  * packagers: yum: support disable transaction rollback.
  * network: firewalld: fix service deletion.
 
