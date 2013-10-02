@@ -68,20 +68,30 @@ class Plugin(plugin.PluginBase):
     class _MyFormatter(logging.Formatter):
         """Filter strings from log entries."""
 
+        @property
+        def environment(self):
+            return self._environment
+
         def __init__(
             self,
             fmt=None,
             datefmt=None,
-            filter=None,
+            environment=None,
         ):
             logging.Formatter.__init__(self, fmt=fmt, datefmt=datefmt)
-            self._filter = filter
+            self._environment = environment
 
         def format(self, record):
             msg = logging.Formatter.format(self, record)
 
-            if self._filter is not None:
-                for f in self._filter._list:
+            for f in (
+                self.environment[constants.CoreEnv.LOG_FILTER]._list +
+                [
+                    self.environment[k] for k in
+                    self.environment[constants.CoreEnv.LOG_FILTER_KEYS]
+                ]
+            ):
+                if f not in (None, ''):
                     msg = msg.replace(f, '**FILTERED**')
 
             return msg
@@ -93,6 +103,7 @@ class Plugin(plugin.PluginBase):
     def _setupLogging(self):
         self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = None
         self.environment[constants.CoreEnv.LOG_FILTER] = self._MyLoggerFilter()
+        self.environment[constants.CoreEnv.LOG_FILTER_KEYS] = []
         self.environment.setdefault(
             constants.CoreEnv.LOG_FILE_NAME_PREFIX,
             constants.Defaults.LOG_FILE_PREFIX
@@ -148,7 +159,7 @@ class Plugin(plugin.PluginBase):
                     '%(message)s'
                 ),
                 datefmt='%Y-%m-%d %H:%M:%S',
-                filter=self.environment[constants.CoreEnv.LOG_FILTER],
+                environment=self.environment,
             )
         )
         l = logging.getLogger("otopi")

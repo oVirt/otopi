@@ -121,6 +121,7 @@ class CoreEnv(object):
     LOG_DIR = 'CORE/logDir'
     LOG_FILE_NAME = 'CORE/logFileName'
     LOG_FILTER = 'CORE/logFilter'
+    LOG_FILTER_KEYS = 'CORE/logFilterKeys'
     LOG_FILE_HANDLE = 'CORE/logFileHandle'
     LOG_REMOVE_AT_EXIT = 'CORE/logRemoveAtExit'
     CONFIG_FILE_NAME = 'CORE/configFileName'
