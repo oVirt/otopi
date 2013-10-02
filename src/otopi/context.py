@@ -445,7 +445,9 @@ class Context(base.Base):
                 self.environment[key] != old.get(key)
             ):
                 value = self.environment[key]
-                if key in constants.BaseEnv.SUPPRESS_ENVIRONMENT_KEYS:
+                if key in self.environment[
+                    constants.BaseEnv.SUPPRESS_ENVIRONMENT_KEYS
+                ]:
                     value = '***'
                 self.logger.debug(
                     "ENV %s=%s:'%s'",
