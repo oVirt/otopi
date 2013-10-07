@@ -456,11 +456,12 @@ class Plugin(plugin.PluginBase):
         elif args:
             self.logger.error(_("Syntax error"))
         else:
-            exceptionInfo = self.environment[constants.BaseEnv.EXCEPTION_INFO]
-            if exceptionInfo is not None:
-                self.dialog.note(
-                    text=traceback.format_exception(*exceptionInfo)
-                )
+            exceptionInfos = self.environment[constants.BaseEnv.EXCEPTION_INFO]
+            if exceptionInfos is not None:
+                for exceptionInfo in exceptionInfos:
+                    self.dialog.note(
+                        text=traceback.format_exception(*exceptionInfo)
+                    )
         return True
 
 
