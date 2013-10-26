@@ -70,42 +70,36 @@ class Context(base.Base):
         if self.environment[constants.BaseEnv.DEBUG] > 0:
             print(msg)
 
-    def _loadPlugins(self, plugindir, needgroups):
-        def _fulldir(d):
-            return [os.path.join(d, f) for f in os.listdir(d)]
+    def _loadPlugins(self, base, groupname):
+        for p in glob.glob(os.path.join(base, '*')):
+            if (
+                os.path.isdir(p) and
+                os.path.basename(p)[0] not in ('_', '.') and
+                glob.glob(os.path.join(p, '__init__.py*'))
+            ):
+                self._earlyDebug(
+                    'Loading plugin %s:%s' % (
+                        groupname,
+                        os.path.basename(p),
+                    )
+                )
+                util.loadModule(
+                    base,
+                    'otopi.plugins.%s.%s' % (
+                        groupname.replace('-', '_'),
+                        os.path.basename(p),
+                    ),
+                ).createPlugins(self)
 
-        def _candidate(f):
-            b = os.path.basename(f)
-            return (
-                not b.startswith('_') and
-                not b.startswith('.') and
-                os.path.isdir(f)
-            )
+    def _loadPluginGroups(self, plugindir, needgroups, loadedgroups):
 
-        plugindir = self.resolveFile(plugindir)
-
-        for group in _fulldir(plugindir):
-            if _candidate(group):
-                groupname = os.path.basename(group)
-                self._earlyDebug('Loading plugin group %s' % groupname)
+        for path in glob.glob(os.path.join(self.resolveFile(plugindir), '*')):
+            if os.path.isdir(path):
+                groupname = os.path.basename(path)
                 if groupname in needgroups:
-                    needgroups.remove(groupname)
-                    for p in _fulldir(group):
-                        if (
-                            _candidate(p) and
-                            glob.glob(os.path.join(p, '__init__.py*'))
-                        ):
-                            self._earlyDebug(
-                                'Loading plugin %s' %
-                                os.path.basename(p)
-                            )
-                            util.loadModule(
-                                group,
-                                'otopi.plugins.%s.%s' % (
-                                    groupname.replace('-', '_'),
-                                    os.path.basename(p),
-                                ),
-                            ).createPlugins(self)
+                    self._earlyDebug('Loading plugin group %s' % groupname)
+                    loadedgroups.append(groupname)
+                    self._loadPlugins(path, groupname)
 
     def _methodName(self, methodinfo):
         method = methodinfo['method']
@@ -475,12 +469,13 @@ class Context(base.Base):
         ))
         needgroups.add('otopi')   # always load us
 
+        loadedgroups = []
         for plugindir in mysplit(
             self.environment[constants.BaseEnv.PLUGIN_PATH]
         ):
-            self._loadPlugins(plugindir, needgroups)
+            self._loadPluginGroups(plugindir, needgroups, loadedgroups)
 
-        if needgroups:
+        if set(needgroups) != set(loadedgroups):
             raise RuntimeError(
                 _('Internal error, plugins {groups} are missing').format(
                     groups=needgroups
