@@ -71,23 +71,26 @@ class Context(base.Base):
             print(msg)
 
     def _loadPlugins(self, base, groupname):
-        for p in glob.glob(os.path.join(base, '*')):
-            if (
-                os.path.isdir(p) and
-                os.path.basename(p)[0] not in ('_', '.') and
-                glob.glob(os.path.join(p, '__init__.py*'))
-            ):
+        if (
+            os.path.isdir(base) and
+            os.path.basename(base)[0] not in ('_', '.')
+        ):
+            if not glob.glob(os.path.join(base, '__init__.py*')):
+                for d in glob.glob(os.path.join(base, '*')):
+                    self._loadPlugins(d, groupname)
+            else:
                 self._earlyDebug(
-                    'Loading plugin %s:%s' % (
+                    'Loading plugin %s:%s (%s)' % (
                         groupname,
-                        os.path.basename(p),
+                        os.path.basename(base),
+                        base,
                     )
                 )
                 util.loadModule(
-                    base,
+                    os.path.dirname(base),
                     'otopi.plugins.%s.%s' % (
                         groupname.replace('-', '_'),
-                        os.path.basename(p),
+                        os.path.basename(base),
                     ),
                 ).createPlugins(self)
 
