@@ -70,27 +70,45 @@ class Context(base.Base):
         if self.environment[constants.BaseEnv.DEBUG] > 0:
             print(msg)
 
-    def _loadPlugins(self, base, groupname):
+    def _loadPlugins(self, base, path, groupname):
         if (
-            os.path.isdir(base) and
-            os.path.basename(base)[0] not in ('_', '.')
+            os.path.isdir(path) and
+            os.path.basename(path)[0] not in ('_', '.')
         ):
-            if not glob.glob(os.path.join(base, '__init__.py*')):
-                for d in glob.glob(os.path.join(base, '*')):
-                    self._loadPlugins(d, groupname)
+            if not glob.glob(os.path.join(path, '__init__.py*')):
+                for d in glob.glob(os.path.join(path, '*')):
+                    self._loadPlugins(base, d, groupname)
             else:
                 self._earlyDebug(
                     'Loading plugin %s:%s (%s)' % (
                         groupname,
-                        os.path.basename(base),
-                        base,
+                        os.path.basename(path),
+                        path,
                     )
                 )
+
+                def _synth(s):
+                    r = ''
+                    for c in s:
+                        if c in '._' or c.isalnum():
+                            r += c
+                        else:
+                            r += '_'
+                    return r
+
+                prefix = _synth(
+                    os.path.relpath(
+                        os.path.dirname(path),
+                        base
+                    ).replace('/', '.')
+                ).lstrip('.')
+
                 util.loadModule(
-                    os.path.dirname(base),
-                    'otopi.plugins.%s.%s' % (
-                        groupname.replace('-', '_'),
-                        os.path.basename(base),
+                    os.path.dirname(path),
+                    'otopi.plugins.%s.%s%s' % (
+                        _synth(groupname),
+                        '%s.' % prefix if prefix else '',
+                        os.path.basename(path),
                     ),
                 ).createPlugins(self)
 
@@ -102,7 +120,7 @@ class Context(base.Base):
                 if groupname in needgroups:
                     self._earlyDebug('Loading plugin group %s' % groupname)
                     loadedgroups.append(groupname)
-                    self._loadPlugins(path, groupname)
+                    self._loadPlugins(path, path, groupname)
 
     def _methodName(self, methodinfo):
         method = methodinfo['method']
