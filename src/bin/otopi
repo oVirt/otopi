@@ -87,4 +87,4 @@ PYTHON_VERSION="$("${OTOPI_PYTHON}" -c "import sys; print(sys.version_info[0]*10
 	die "Python version $(pythonver ${PYTHON_VERSION}) is too old, expecting at least $(pythonver ${PYTHON_VERSION_MIN})"
 
 # TODO remove '.__main__' when python-2.6 gone
-exec "${OTOPI_PYTHON}" -m otopi.__main__ "${extraenv} $*"
+exec "${OTOPI_PYTHON}" -B -m otopi.__main__ "${extraenv} $*"
