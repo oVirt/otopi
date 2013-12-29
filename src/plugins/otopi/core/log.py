@@ -99,6 +99,7 @@ class Plugin(plugin.PluginBase):
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
         self._handler = None
+        self._logerror = None
 
     def _setupLogging(self):
         self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = None
@@ -138,15 +139,26 @@ class Plugin(plugin.PluginBase):
             ),
         )
 
+        logFileName = self.resolveFile(logFileName)
+
         # put in our environment
         # so when re-exec we use same log
         os.environ[constants.SystemEnvironment.LOG_FILE] = logFileName
 
-        self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = open(
-            self.resolveFile(logFileName),
-            mode='a',
-            buffering=1
-        )
+        try:
+            self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = open(
+                logFileName,
+                mode='a',
+                buffering=1,
+            )
+        except IOError as e:
+            self._logerror = str(e)
+            self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = open(
+                os.devnull,
+                mode='a',
+                buffering=1,
+            )
+
         self._handler = logging.StreamHandler(
             self.environment[constants.CoreEnv.LOG_FILE_HANDLE]
         )
@@ -220,11 +232,23 @@ class Plugin(plugin.PluginBase):
         priority=plugin.Stages.PRIORITY_HIGH,
     )
     def _setup(self):
-        self.dialog.note(
-            _('Log file: {logFileName}').format(
-                logFileName=self.environment[constants.CoreEnv.LOG_FILE_NAME]
+        if self._logerror:
+            self.logger.warning(
+                _("Cannot open log file '{logFileName}': {error}").format(
+                    logFileName=self.environment[
+                        constants.CoreEnv.LOG_FILE_NAME
+                    ],
+                    error=self._logerror,
+                )
             )
-        )
+        else:
+            self.dialog.note(
+                _('Log file: {logFileName}').format(
+                    logFileName=self.environment[
+                        constants.CoreEnv.LOG_FILE_NAME
+                    ],
+                )
+            )
 
     @plugin.event(
         stage=plugin.Stages.STAGE_TERMINATE,
