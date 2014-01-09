@@ -150,6 +150,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         prompt=False,
         default=None,
     ):
+        self.logger.debug('query %s', name)
         if default is not None:
             default = str(default)
         if validValues is not None:
@@ -181,6 +182,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         return value
 
     def queryMultiString(self, name, note=None):
+        self.logger.debug('query %s', name)
         if note is None:
             note = _("\nPlease specify multiple strings for '{name}':").format(
                 name=name
@@ -200,6 +202,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         return value
 
     def queryValue(self, name, note=None):
+        self.logger.debug('query %s', name)
         if note is None:
             note = _("\nPlease specify value for '{name}':").format(
                 name=name
@@ -210,6 +213,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         return value
 
     def displayValue(self, name, value, note=None):
+        self.logger.debug('display %s', name)
         if note is not None:
             self.note(text=note)
 
@@ -222,6 +226,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         )
 
     def displayMultiString(self, name, value, note=None):
+        self.logger.debug('display %s', name)
         if note is not None:
             self.note(text=note)
 
@@ -241,6 +246,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         note=None,
         prompt=False,
     ):
+        self.logger.debug('confirm %s', name)
         if note is None:
             note = _(
                 "\nPlease confirm {description} [yes/no]: "
