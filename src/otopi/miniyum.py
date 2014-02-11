@@ -860,13 +860,15 @@ class MiniYum(object):
                 for grp in installed:
                     ret.append({
                         'operation': 'installed',
-                        'name': grp.name,
+                        'name': grp.groupid,
+                        'description': grp.name,
                         'uservisible': grp.user_visible
                     })
                 for grp in available:
                     ret.append({
                         'operation': 'available',
-                        'name': grp.name,
+                        'name': grp.groupid,
+                        'description': grp.name,
                         'uservisible': grp.user_visible
                     })
         except yum.Errors.GroupsError as e:
