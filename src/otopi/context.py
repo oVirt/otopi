@@ -403,10 +403,12 @@ class Context(base.Base):
                         not if_no_error or
                         not self.environment[constants.BaseEnv.ERROR]
                     ):
-                        oldEnvironment = self.environment.copy()
+                        oldEnvironment = dict(
+                            (k, str(v))
+                            for k, v in self.environment.items()
+                        )
                         self._executeMethod(self._currentStage, methodinfo)
-                        if oldEnvironment != self.environment:
-                            self.dumpEnvironment(old=oldEnvironment)
+                        self.dumpEnvironment(old=oldEnvironment)
 
         if self.environment[constants.BaseEnv.ERROR]:
             infos = self.environment[
@@ -453,13 +455,18 @@ class Context(base.Base):
 
     def dumpEnvironment(self, old=None):
         """Dump environment."""
-        self.logger.debug('ENVIRONMENT DUMP - BEGIN')
+        diff = False
         for key in sorted(self.environment.keys()):
+            value = str(self.environment[key])
+
             if (
                 old is None or
-                self.environment[key] != old.get(key)
+                value != str(old.get(key))
             ):
-                value = self.environment[key]
+                if not diff:
+                    diff = True
+                    self.logger.debug('ENVIRONMENT DUMP - BEGIN')
+
                 if key in self.environment[
                     constants.BaseEnv.SUPPRESS_ENVIRONMENT_KEYS
                 ]:
@@ -470,7 +477,9 @@ class Context(base.Base):
                     type(self.environment[key]).__name__,
                     value,
                 )
-        self.logger.debug('ENVIRONMENT DUMP - END')
+
+        if diff:
+            self.logger.debug('ENVIRONMENT DUMP - END')
 
     def loadPlugins(self):
         """Load plugins.
