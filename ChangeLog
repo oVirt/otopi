@@ -1,5 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.2.0_???
+
+
 2014-02-27 - Version 1.2.0_beta2
 
  * yum: return group id and not name out of query groups.
