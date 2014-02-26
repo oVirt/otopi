@@ -336,7 +336,7 @@ class MiniYum(object):
                         package=MiniYum._get_package_name(po),
                     )
                 )
-            yum.YumBase.verifyPkg(self, fo, po, raiseError)
+            return yum.YumBase.verifyPkg(self, fo, po, raiseError)
 
     class _MiniYumTransaction(object):
         def __init__(self, managed, rollback=True):
