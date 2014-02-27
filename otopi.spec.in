@@ -244,6 +244,9 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %endif
 
 %changelog
+* Thu Feb 27 2014 Alon Bar-Lev <alonbl@redhat.com> - 1.2.0-0.5.rc
+- Release candidate.
+
 * Mon Feb 17 2014 Alon Bar-Lev <alonbl@redhat.com> - 1.2.0-0.3.beta2
 - Beta.
 
