@@ -1,5 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+???-??-?? - Version 1.2.0
+
+
 2014-02-27 - Version 1.2.0_rc
 
  * yum: fix HTTP range error when yum cache exists.
