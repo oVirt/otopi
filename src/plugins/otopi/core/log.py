@@ -87,7 +87,7 @@ class Plugin(plugin.PluginBase):
             for f in (
                 self.environment[constants.CoreEnv.LOG_FILTER]._list +
                 [
-                    self.environment[k] for k in
+                    self.environment.get(k, None) for k in
                     self.environment[constants.CoreEnv.LOG_FILTER_KEYS]
                 ]
             ):
