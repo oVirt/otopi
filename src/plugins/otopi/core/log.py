@@ -72,6 +72,47 @@ class Plugin(plugin.PluginBase):
         def environment(self):
             return self._environment
 
+        def _filter(self, content, tokens):
+            """
+            Filter overlapping tokens within content.
+
+            Examples:
+            content=abcabca, tokens=('abca')
+            content=aaabbbccc, tokens=('bbb', 'abbba')
+            content=aaaababbbb, tokens=('aaab', 'aaa', 'bbb')
+            """
+
+            def _insertFilter(content, begin, end):
+                return content[:begin] + '**FILTERED**' + content[end:]
+
+            tofilter = []
+
+            for token in tokens:
+                if token not in (None, ''):
+                    index = -1
+                    while True:
+                        index = content.find(token, index+1)
+                        if index == -1:
+                            break
+                        tofilter.append((index, index + len(token)))
+
+            tofilter = sorted(tofilter, key=lambda e: e[1], reverse=True)
+            begin = None
+            end = None
+            for entry in tofilter:
+                if begin is None or entry[1] < begin:
+                    if begin is not None:
+                        content = _insertFilter(content, begin, end)
+                    begin = entry[0]
+                    end = entry[1]
+                elif entry[0] < begin:
+                    begin = entry[0]
+            else:
+                if begin is not None:
+                    content = _insertFilter(content, begin, end)
+
+            return content
+
         def __init__(
             self,
             fmt=None,
@@ -82,19 +123,16 @@ class Plugin(plugin.PluginBase):
             self._environment = environment
 
         def format(self, record):
-            msg = logging.Formatter.format(self, record)
-
-            for f in (
-                self.environment[constants.CoreEnv.LOG_FILTER]._list +
-                [
-                    self.environment.get(k, None) for k in
-                    self.environment[constants.CoreEnv.LOG_FILTER_KEYS]
-                ]
-            ):
-                if f not in (None, ''):
-                    msg = msg.replace(f, '**FILTERED**')
-
-            return msg
+            return self._filter(
+                logging.Formatter.format(self, record),
+                (
+                    self.environment[constants.CoreEnv.LOG_FILTER]._list +
+                    [
+                        self.environment.get(k, None) for k in
+                        self.environment[constants.CoreEnv.LOG_FILTER_KEYS]
+                    ]
+                ),
+            )
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
