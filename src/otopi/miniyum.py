@@ -437,7 +437,14 @@ class MiniYum(object):
 
         return ret
 
-    def _queue(self, action, call, packages, ignoreErrors=False):
+    def _queue(
+        self,
+        action,
+        getpackages,
+        call,
+        packages,
+        ignoreErrors=False,
+    ):
         ret = True
 
         with self._disableOutput:
@@ -446,9 +453,31 @@ class MiniYum(object):
                     self._sink.verbose(
                         'queue package %s for %s' % (package, action)
                     )
-                    call(name=package)
-                    self._sink.verbose('package %s queued' % package)
-                except yum.Errors.YumBaseError as e:
+
+                    mergedpatterns = []
+
+                    for po in self._yb.searchPackageProvides(args=(package,)):
+                        mergedpatterns.append(MiniYum._get_package_name(po))
+
+                    if not mergedpatterns:
+                        raise RuntimeError(
+                            _('Package {package} cannot be found').format(
+                                package=package,
+                            )
+                        )
+
+                    holder = self._yb.doPackageLists(
+                        patterns=mergedpatterns,
+                    )
+
+                    for po in getpackages(holder):
+                        self._sink.verbose(
+                            'processing package %s for %s' % (po, action)
+                        )
+                        call(po=po)
+                        self._sink.verbose('package %s queued' % po)
+
+                except (RuntimeError, yum.Errors.YumBaseError) as e:
                     ret = False
                     self._sink.error(
                         _('Cannot queue package {package}: {error}').format(
@@ -779,7 +808,13 @@ class MiniYum(object):
         ignoreErrors - to ignore errors, will return False
 
         """
-        return self._queue('install', self._yb.install, packages, **kwargs)
+        return self._queue(
+            'install',
+            lambda h: h.available,
+            self._yb.install,
+            packages,
+            **kwargs
+        )
 
     def update(self, packages, **kwargs):
         """Update packages.
@@ -789,7 +824,13 @@ class MiniYum(object):
         ignoreErrors - to ignore errors, will return False
 
         """
-        return self._queue('update', self._yb.update, packages, **kwargs)
+        return self._queue(
+            'update',
+            lambda h: h.available,
+            self._yb.update,
+            packages,
+            **kwargs
+        )
 
     def remove(self, packages, **kwargs):
         """Remove packages.
@@ -799,7 +840,13 @@ class MiniYum(object):
         ignoreErrors - to ignore errors, will return False
 
         """
-        return self._queue('remove', self._yb.remove, packages, **kwargs)
+        return self._queue(
+            'remove',
+            lambda h: h.installed,
+            self._yb.remove,
+            packages,
+            **kwargs
+        )
 
     def buildTransaction(self):
         """Build transaction.
@@ -883,10 +930,15 @@ class MiniYum(object):
     def queryPackages(self, pkgnarrow='all', patterns=None, showdups=None):
         try:
             with self._disableOutput:
+                mergedpatterns = list(patterns)
                 ret = []
+
+                for po in self._yb.searchPackageProvides(args=patterns):
+                    mergedpatterns.append(MiniYum._get_package_name(po))
+
                 holder = self._yb.doPackageLists(
                     pkgnarrow=pkgnarrow,
-                    patterns=patterns,
+                    patterns=mergedpatterns,
                     showdups=showdups,
                 )
                 for op, l in (
