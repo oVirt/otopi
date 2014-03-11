@@ -1,6 +1,6 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.2.0
+2014-03-11 - Version 1.2.0_rc3
 
  * core: log: filter overlapping patterns.
  * yum: consider provides in addition to packages.
