@@ -1,5 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.2.0
+
+
 2014-03-12 - Version 1.2.0_rc4
 
  * yum: fix provides handling to better match yum.
