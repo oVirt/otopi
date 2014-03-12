@@ -31,6 +31,9 @@ import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
 
+import rpmUtils.miscutils
+
+
 import yum
 import yum.rpmtrans
 import yum.callbacks
@@ -356,9 +359,9 @@ class MiniYum(object):
 
     @classmethod
     def _get_package_name(clz, po):
-        return '%s-%s%s-%s.%s' % (
+        return '%s%s-%s-%s.%s' % (
+            '' if po.epoch == '0' else '%s:' % po.epoch,
             po.name,
-            '%s:' % po.epoch if po.epoch == 0 else '',
             po.version,
             po.release,
             po.arch
@@ -437,6 +440,55 @@ class MiniYum(object):
 
         return ret
 
+    def _queryProvides(self, packages, showdups=None):
+        database = {}
+        ret = []
+
+        for po in self._yb.searchPackageProvides(args=packages):
+            if po.arch in (
+                list(self._yb.arch.legit_multi_arches) +
+                ['noarch']
+            ):
+                database.setdefault(
+                    '%s%s' % (
+                        po.epoch,
+                        po.name,
+                    ),
+                    [],
+                ).append(po)
+
+        if showdups:
+            ret = sum(database.values(), [])
+        else:
+            for entry in database.values():
+                class EVR(object):
+
+                    def _evr(self, po):
+                        return (
+                            po['epoch'],
+                            po['version'],
+                            po['release'],
+                        )
+
+                    def __init__(self, po):
+                        self._po = po
+
+                    def __cmp__(self, other):
+                        return rpmUtils.miscutils.compareEVR(
+                            self._evr(self._po),
+                            self._evr(other._po),
+                        )
+
+                ret.append(
+                    sorted(
+                        entry,
+                        key=lambda x: EVR(x),
+                        reverse=True,
+                    )[0]
+                )
+
+        return ret
+
     def _queue(
         self,
         action,
@@ -454,12 +506,9 @@ class MiniYum(object):
                         'queue package %s for %s' % (package, action)
                     )
 
-                    mergedpatterns = []
+                    provides = self._queryProvides(packages=(package,))
 
-                    for po in self._yb.searchPackageProvides(args=(package,)):
-                        mergedpatterns.append(MiniYum._get_package_name(po))
-
-                    if not mergedpatterns:
+                    if not provides:
                         raise RuntimeError(
                             _('Package {package} cannot be found').format(
                                 package=package,
@@ -467,7 +516,7 @@ class MiniYum(object):
                         )
 
                     holder = self._yb.doPackageLists(
-                        patterns=mergedpatterns,
+                        patterns=[self._get_package_name(p) for p in provides],
                     )
 
                     for po in getpackages(holder):
@@ -930,15 +979,20 @@ class MiniYum(object):
     def queryPackages(self, pkgnarrow='all', patterns=None, showdups=None):
         try:
             with self._disableOutput:
-                mergedpatterns = list(patterns)
                 ret = []
-
-                for po in self._yb.searchPackageProvides(args=patterns):
-                    mergedpatterns.append(MiniYum._get_package_name(po))
 
                 holder = self._yb.doPackageLists(
                     pkgnarrow=pkgnarrow,
-                    patterns=mergedpatterns,
+                    patterns=(
+                        list(patterns) +
+                        [
+                            self._get_package_name(p)
+                            for p in self._queryProvides(
+                                packages=patterns,
+                                showdups=showdups,
+                            )
+                        ]
+                    ),
                     showdups=showdups,
                 )
                 for op, l in (
