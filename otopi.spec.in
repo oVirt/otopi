@@ -37,7 +37,7 @@ Version:	@PACKAGE_RPM_VERSION@
 Release:	@PACKAGE_RPM_RELEASE@%{?release_suffix}%{?dist}
 License:	LGPLv2+
 URL:		http://www.ovirt.org
-Source:		http://resources.ovirt.org/releases/3.3/src/%{name}-%{package_version}.tar.gz
+Source:		http://resources.ovirt.org/pub/src/%{name}-%{package_version}.tar.gz
 Group:		Development/Libraries
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -244,7 +244,10 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %endif
 
 %changelog
-* Tue Mar 12 2014 Alon Bar-Lev <alonbl@redhat.com> - 1.2.0-0.11.rc4
+* Tue Mar 18 2014 Alon Bar-Lev <alonbl@redhat.com> - 1.2.0-1
+- Release.
+
+* Wed Mar 12 2014 Alon Bar-Lev <alonbl@redhat.com> - 1.2.0-0.11.rc4
 - Release candidate.
 
 * Tue Mar 11 2014 Alon Bar-Lev <alonbl@redhat.com> - 1.2.0-0.9.rc3
