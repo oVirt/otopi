@@ -22,8 +22,10 @@
 
 
 import os
+import string
 import time
 import tempfile
+import random
 import logging
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
@@ -159,6 +161,7 @@ class Plugin(plugin.PluginBase):
                 tempfile.gettempdir(),
             ),
         )
+
         logFileName = self.environment[
             constants.CoreEnv.LOG_FILE_NAME
         ] = os.environ.get(
@@ -167,11 +170,19 @@ class Plugin(plugin.PluginBase):
                 constants.CoreEnv.LOG_FILE_NAME,
                 os.path.join(
                     self.environment[constants.CoreEnv.LOG_DIR],
-                    "%s-%s.log" % (
+                    "%s-%s-%s.log" % (
                         self.environment[
                             constants.CoreEnv.LOG_FILE_NAME_PREFIX
                         ],
                         time.strftime("%Y%m%d%H%M%S"),
+                        ''.join(
+                            [
+                                random.choice(
+                                    string.ascii_lowercase +
+                                    string.digits
+                                ) for i in range(6)
+                            ]
+                        )
                     )
                 )
             ),
