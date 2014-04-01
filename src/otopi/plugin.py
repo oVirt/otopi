@@ -768,7 +768,7 @@ class PluginBase(base.Base):
         Returns:
         (rc, stdout, stderr)
 
-        stdour, stderr binary blobs.
+        stdout, stderr binary blobs.
         """
         try:
             if envAppend is not None:
@@ -834,7 +834,7 @@ class PluginBase(base.Base):
         Returns:
         (rc, stdout, stderr)
 
-        stdour, stderr are list of lines.
+        stdout, stderr are list of lines.
         """
         if logStreams and stdin is not None:
             self.logger.debug(
