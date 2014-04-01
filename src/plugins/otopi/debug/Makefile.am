@@ -7,11 +7,6 @@ MAINTAINERCLEANFILES = \
 	$(NULL)
 
 SUBDIRS = \
-	core \
-	debug \
-	dialog \
-	network \
-	packagers \
-	services \
-	system \
+	force_fail \
+	wait_on_error \
 	$(NULL)

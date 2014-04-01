@@ -62,6 +62,12 @@ Provides:	%{name}-devel = %{version}-%{release}
 %description devtools
 Development tools for %{name}.
 
+%package debug-plugins
+Summary:	%{name} debug plugins
+Requires:	%{name} = %{version}-%{release}
+%description debug-plugins
+Debug plugins for %{name}.
+
 %prep
 %setup -q -n %{name}-%{package_version}
 
@@ -106,6 +112,9 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %files devtools
 %{_datadir}/%{name}/%{name}-bundle
 %{python_sitelib}/%{name}/codegen/
+
+%files debug-plugins
+%{_datadir}/%{name}/plugins/%{name}/debug/
 
 %changelog
 * Tue Feb 9 2016 Yedidyah Bar David <didi@redhat.com> - 1.4.1-1

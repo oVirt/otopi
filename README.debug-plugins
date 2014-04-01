@@ -1,0 +1,30 @@
+otopi - debug plugins
+=====================
+
+The optional package otopi-debug-plugins provides plugins that can help
+debug otopi-based tools.
+
+wait_on_error
+-------------
+Activated by setting in the system environment OTOPI_WAIT_ON_ERROR=1.
+
+If activated, each occurence of an [ERROR] message triggers a prompt:
+
+    Press Enter to continue.
+
+force_fail
+----------
+Activated by setting in the system environment OTOPI_FORCE_FAIL_STAGE.
+The value set there should be a name of one of the STAGE_* constants
+in plugin.Stages .
+
+Optionally can set priority for the failure by setting also
+OTOPI_FORCE_FAIL_PRIORITY to one of the PRIORITY_* constants in the
+same class.
+
+If activated, causes a RuntimeError at the specified stage and priority.
+
+Examples
+========
+
+OTOPI_WAIT_ON_ERROR=1 OTOPI_FORCE_FAIL_STAGE=STAGE_SETUP engine-setup

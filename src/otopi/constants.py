@@ -79,6 +79,9 @@ class SystemEnvironment(object):
     LOG_DIR = 'OTOPI_LOGDIR'
     CONFIG = 'OTOPI_CONFIG'
     EXEC_DIR = 'OTOPI_EXECDIR'
+    WAIT_ON_ERROR = 'OTOPI_WAIT_ON_ERROR'
+    FORCE_FAIL_STAGE = 'OTOPI_FORCE_FAIL_STAGE'
+    FORCE_FAIL_PRIORITY = 'OTOPI_FORCE_FAIL_PRIORITY'
 
 
 @util.export
@@ -179,6 +182,12 @@ class Queries(object):
 @util.codegen
 class Confirms(object):
     GPG_KEY = 'GPG_KEY'
+
+
+@util.export
+@util.codegen
+class DebugEnv(object):
+    WAIT_ON_ERROR = 'ODEBUG/WaitOnError'
 
 
 # vim: expandtab tabstop=4 shiftwidth=4
