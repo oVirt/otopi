@@ -35,6 +35,11 @@ def _pythonModulesCompat():
         import __builtin__
         sys.modules['builtins'] = __builtin__
 
+        class COMPAT_BlockingIOError(OSError):
+            pass
+
+        setattr(__builtin__, 'BlockingIOError', COMPAT_BlockingIOError)
+
 
 _pythonModulesCompat()
 
