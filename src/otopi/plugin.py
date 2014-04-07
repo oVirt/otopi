@@ -752,6 +752,7 @@ class PluginBase(base.Base):
         stdin=None,
         cwd=None,
         env=None,
+        preexec_fn=None,
         envAppend=None,
     ):
         """Execute a process.
@@ -792,6 +793,7 @@ class PluginBase(base.Base):
                 close_fds=True,
                 cwd=cwd,
                 env=env,
+                preexec_fn=preexec_fn,
             )
             stdout, stderr = p.communicate(input=stdin)
             rc = p.returncode
