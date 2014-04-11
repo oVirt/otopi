@@ -73,7 +73,7 @@ class Otopi(object):
             """
             def __init__(self):
                 # python2-6 has not real object
-                #super(NullHandler, self).__init__()
+                # super(NullHandler, self).__init__()
                 logging.Handler.__init__(self)
 
             def emit(self, record):

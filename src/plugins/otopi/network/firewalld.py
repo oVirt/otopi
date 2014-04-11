@@ -144,7 +144,7 @@ class Plugin(plugin.PluginBase):
                 zone_name, devices = line.split(':')
                 zones[zone_name] = devices.split()
         else:
-            #0.3.3 has changed output
+            # 0.3.3 has changed output
             zone_name = None
             for line in stdout:
                 zoneMatch = self._ZONE_RE.match(line)
