@@ -100,9 +100,8 @@ AC_ARG_VAR([MVN], [path to mvn utility])
 AC_CHECK_PROGS([MVN], [mvn])
 AC_ARG_VAR([JAVAC], [path to java compiler])
 AC_CHECK_PROGS([JAVAC], [javac])
-AC_ARG_VAR([jar], [path to jar utility])
+AC_ARG_VAR([JAR], [path to jar utility])
 AC_CHECK_PROGS([JAR], [jar])
-
 
 AC_ARG_VAR([COMMONS_LOGGING_JAR], [path to commons-logging jar])
 AC_ARG_VAR([JUNIT_JAR], [path to junit jar])
