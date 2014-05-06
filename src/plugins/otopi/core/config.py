@@ -81,6 +81,7 @@ class Plugin(plugin.PluginBase):
         super(Plugin, self).__init__(context=context)
         self._config = configparser.ConfigParser()
         self._config.optionxform = str
+        self._missingconf = []
 
     @plugin.event(
         name=constants.Stages.CORE_CONFIG_INIT,
@@ -102,24 +103,35 @@ class Plugin(plugin.PluginBase):
             None
         )
 
-        configs = []
-        for f in (
-            self.environment[constants.CoreEnv.CONFIG_FILE_NAME],
-            self.environment[constants.CoreEnv.CONFIG_FILE_APPEND],
-        ):
+        def _addConfig(f, missingOK):
+            configs = []
             if f:
                 for c in f.split(':'):
+                    myconfigs = []
                     configFile = self.resolveFile(c)
                     configDir = '%s.d' % configFile
                     if os.path.exists(configFile):
-                        configs.append(configFile)
-                    configs += sorted(
+                        myconfigs.append(configFile)
+                    myconfigs += sorted(
                         glob.glob(
                             os.path.join(configDir, '*.conf')
                         )
                     )
+                    configs.extend(myconfigs)
+                    if not missingOK and not myconfigs:
+                        self._missingconf.append(c)
+            return configs
 
-        self._configFiles = self._config.read(configs)
+        self._configFiles = self._config.read(
+            _addConfig(
+                f=self.environment[constants.CoreEnv.CONFIG_FILE_NAME],
+                missingOK=True
+            ) +
+            _addConfig(
+                f=self.environment[constants.CoreEnv.CONFIG_FILE_APPEND],
+                missingOK=False
+            )
+        )
 
         self._readEnvironment(
             section=constants.Const.CONFIG_SECTION_DEFAULT,
@@ -140,6 +152,15 @@ class Plugin(plugin.PluginBase):
                 files=self._configFiles,
             )
         )
+        if self._missingconf:
+            self.logger.warning(
+                _(
+                    'The following configuration files are missing: '
+                    '{configs}.'
+                ).format(
+                    configs=','.join(self._missingconf),
+                )
+            )
 
     @plugin.event(
         stage=plugin.Stages.STAGE_CUSTOMIZATION,

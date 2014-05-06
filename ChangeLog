@@ -2,6 +2,7 @@ otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
 ????-??-?? - Version 1.2.2
 
+ * config: warn if config append is missing, rhbz#1092397.
 
 2014-05-02 - Version 1.2.1
 
