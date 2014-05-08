@@ -535,7 +535,7 @@ class PluginBase(base.Base):
                                     ],
                                 )
                             should_close = True
-                        except BlockingIOError:
+                        except builtins.BlockingIOError:
                             pass
                         except OSError as e:
                             if e.errno != errno.EWOULDBLOCK:
@@ -550,7 +550,7 @@ class PluginBase(base.Base):
                                     break
                                 entry['buffer'] += buf
                             should_close = True
-                        except BlockingIOError:
+                        except builtins.BlockingIOError:
                             pass
                         except OSError as e:
                             if e.errno != errno.EWOULDBLOCK:
