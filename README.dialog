@@ -19,6 +19,10 @@ The interface can be selected using the following environment:
 COMMAND LINE
 ------------
 
+The command line interface is prompted by using the following environment:
+
+ DIALOG/customization=bool:True
+
 List:
 
 abort - Abort process
@@ -98,9 +102,9 @@ Termiante dialog.
 
 Log
 
-^***D:INFO (.*)\n$
-^***D:WARNING (.*)\n$
-^***D:ERROR (.*)\n$
+^***L:INFO (.*)\n$
+^***L:WARNING (.*)\n$
+^***L:ERROR (.*)\n$
     Group1 - message.
 
 Query
