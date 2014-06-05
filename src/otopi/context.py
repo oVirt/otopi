@@ -273,12 +273,11 @@ class Context(base.Base):
         """Register command provider."""
         self._command = command
 
-    def buildSequence(self):
-        """Build sequence.
+    def _castlingBuildSequence(self):
+        # Enforce before/after by replacing locations of offending events
+        # TODO Remove once the toposort version is considered stable and
+        # all code using otopi is verified to work with it.
 
-        Should be called after plugins are loaded.
-
-        """
         #
         # bind functions to plugin
         #
@@ -398,7 +397,279 @@ class Context(base.Base):
             self._earlyDebug(msg)
             if self.environment[constants.BaseEnv.FAIL_ON_PRIO_OVERRIDE]:
                 raise RuntimeError(msg)
-        self._sequence = sequence
+        return sequence
+
+    class ToposortCycleException(Exception):
+        def __init__(self, leftovers):
+            self.leftovers = leftovers
+
+    # Based on https://pypi.python.org/pypi/toposort/1.0
+    def _toposort(self, data):
+        """Dependencies are expressed as a dictionary whose keys are items
+        and whose values are a set of dependent items. Output is a list of
+        sets in topological order. The first set consists of items with no
+        dependences, each subsequent set consists of items that depend upon
+        items in the preceeding sets.
+        """
+
+        # Special case empty input.
+        if len(data) == 0:
+            return
+
+        # Copy the input so as to leave it unmodified.
+        data = data.copy()
+
+        # Ignore self dependencies.
+        for k, v in data.items():
+            v.discard(k)
+        # Find all items that don't depend on anything.
+        allvalues = set()
+        for v in data.values():
+            allvalues |= v
+        extra_items_in_deps = allvalues - set(data.keys())
+        # Add empty dependences where needed.
+        # warning: python-2.6 does not have dict comprehension
+        data.update({item: set() for item in extra_items_in_deps})
+        while True:
+            ordered = set(item for item, dep in data.items() if len(dep) == 0)
+            if not ordered:
+                break
+            yield ordered
+            data = {
+                item: (dep - ordered)
+                for item, dep in data.items()
+                if item not in ordered
+            }
+        if len(data) != 0:
+            raise Context.ToposortCycleException(data)
+
+    def _toposortBuildSequence(self):
+        # Build the sequence by doing a topological sort over the list of
+        # events with the comparison being both on before/after and priority.
+        # Stage is currently checked independently to ease debugging.
+
+        #
+        # bind functions to plugin
+        #
+        had_errors = False
+        methods = []
+        for p in self._plugins:
+            for metadata in util.methodsByAttribute(
+                p.__class__, 'decoration_event'
+            ):
+                metadata = metadata.copy()
+                metadata['method'] = metadata['method'].__get__(p)
+                metadata['condition'] = metadata['condition'].__get__(p)
+                methods.append(metadata)
+
+        method_by_name = {}
+        self._earlyDebug('methods:')
+        for index, method in enumerate(methods):
+            self._earlyDebug(
+                '  method %s %s %s' % (
+                    index,
+                    self._methodName(method),
+                    method
+                )
+            )
+            if method['name'] is not None:
+                if method_by_name.get(method['name']):
+                    self._earlyDebug(
+                        '    error: duplicate name: %s %s %s' % (
+                            method['name'],
+                            self._methodName(method),
+                            self._methodName(method_by_name[method['name']]),
+                        )
+                    )
+                    had_errors = True
+                method_by_name[method['name']] = method
+
+        deps = {}
+        self._earlyDebug('deps:')
+        for index, method in enumerate(methods):
+            # list of methods that method depends on, i.e. should be run
+            # before it.
+            before_after_method_deps = [
+                i for i, m in enumerate(methods)
+                if (
+                    (
+                        method['name'] is not None and
+                        m['before'] is not None and
+                        method['name'] in m['before']
+                    ) or (
+                        m['name'] is not None and
+                        method['after'] is not None and
+                        m['name'] in method['after']
+                    )
+                )
+            ]
+            if before_after_method_deps:
+                self._earlyDebug(
+                    (
+                        '  deps due to before= or after= for {index} :'
+                        '{methods}'
+                    ).format(
+                        index=index,
+                        methods=before_after_method_deps,
+                    )
+                )
+            for i in before_after_method_deps:
+                if method['stage'] < methods[i]['stage']:
+                    self._earlyDebug(
+                        (
+                            'error: method {m} is in a later stage '
+                            'than method {method} although it depends on it'
+                        ).format(
+                            method=self._methodName(method),
+                            m=self._methodName(methods[i]),
+                        )
+                    )
+                    had_errors = True
+                elif method['stage'] > methods[i]['stage']:
+                    self._earlyDebug(
+                        (
+                            'warning: method {m} is in an earlier stage '
+                            'than method {method} and also has before/after it'
+                        ).format(
+                            method=self._methodName(method),
+                            m=self._methodName(methods[i]),
+                        )
+                    )
+                if (
+                    m['stage'] == method['stage'] and
+                    method['priority'] < methods[i]['priority']
+                ):
+                    self._earlyDebug(
+                        (
+                            'error: method {method} has a higher priority '
+                            'than method {m} '
+                            'although dependencies require opposite order'
+                        ).format(
+                            method=self._methodName(method),
+                            m=self._methodName(methods[i]),
+                        )
+                    )
+                    had_errors = True
+            method_deps = [
+                j for j, m in enumerate(methods)
+                if (
+                    (
+                        m['stage'] == method['stage'] and
+                        m['priority'] < method['priority']
+                    ) or
+                    j in before_after_method_deps
+                )
+            ]
+            if set(method_deps) != set(before_after_method_deps):
+                self._earlyDebug(
+                    (
+                        '  deps added due to priority for {index} :'
+                        '{methods}'
+                    ).format(
+                        index=index,
+                        methods=list(
+                            set(method_deps)-set(before_after_method_deps)
+                        ),
+                    )
+                )
+            deps[index] = set(method_deps)
+        sortedmethods = []
+        try:
+            for s in self._toposort(deps):
+                # toposort yields sets
+                l = list(s)
+                if self.environment[constants.BaseEnv.RANDOMIZE_EVENTS]:
+                    random.shuffle(l)
+                else:
+                    l.sort(key=lambda i: self._methodName(methods[i]))
+                self._earlyDebug('toposort group:')
+                for i in l:
+                    self._earlyDebug(
+                        '  %s %s %s' % (
+                            i,
+                            self._methodName(methods[i]),
+                            methods[i]['name']
+                        )
+                    )
+                sortedmethods.extend([methods[i] for i in l])
+        except Context.ToposortCycleException as e:
+            leftovers = e.leftovers
+            self._earlyDebug(
+                (
+                    'error: toposort failed due to a cycle: {leftovers}\n'
+                    'More details:\n{details}'
+                ).format(
+                    leftovers=leftovers,
+                    details='\n'.join(
+                        (
+                            '\n  method {i} {methodName} {name} needs to run '
+                            'after:\n\n{deps}'
+                        ).format(
+                            i=i,
+                            methodName=self._methodName(methods[i]),
+                            name=methods[i]['name'],
+                            deps='\n'.join(
+                                '    method {di} {dmethodName} {dname}'.format(
+                                    di=di,
+                                    dmethodName=self._methodName(methods[di]),
+                                    dname=methods[di]['name'],
+                                )
+                                for di in list(s)
+                            )
+                        )
+                        for i, s in leftovers.items()
+                    )
+                )
+            )
+            raise RuntimeError(_('Cyclic dependencies found'))
+
+        sequence = {}
+        for m in sortedmethods:
+            sequence.setdefault(m['stage'], []).append(m)
+
+        prio_dep_reverses = []
+        for stage, methods in sequence.items():
+            for i, m in enumerate(methods[:-1]):
+                if m['priority'] > methods[i + 1]['priority']:
+                    prio_dep_reverses.append(
+                        (
+                            'Priorities were reversed during buildSequence: '
+                            'method %s with priority %s appears after '
+                            'method %s with priority %s'
+                        ) % (
+                            methods[i+1]['method'],
+                            methods[i+1]['priority'],
+                            m['method'],
+                            m['priority'],
+                        )
+                    )
+        if prio_dep_reverses:
+            msg = '\n'.join(prio_dep_reverses)
+            self._earlyDebug(msg)
+            if self.environment[constants.BaseEnv.FAIL_ON_PRIO_OVERRIDE]:
+                raise RuntimeError(msg)
+
+        if had_errors:
+            raise RuntimeError('Had errors during buildSequence, please fix')
+
+        return sequence
+
+    def buildSequence(self):
+        """Build sequence.
+
+        Should be called after plugins are loaded.
+
+        """
+
+        try:
+            self._sequence = self._toposortBuildSequence()
+        except Exception as e:
+            self._earlyDebug("_toposortBuildSequence failed: %s" % e)
+            if not os.environ.get(
+                constants.SystemEnvironment.ALLOW_LEGACY_BUILDSEQ
+            ):
+                raise
+            self._sequence = self._castlingBuildSequence()
 
     def runSequence(self):
         """Run sequence."""
