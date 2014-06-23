@@ -3,6 +3,8 @@ otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 ????-??-?? - Version 1.3.0
 
  * config: warn if config append is missing, rhbz#1092397.
+ * packagers: yum: disable self if other packager installed,
+   rhbz#1112370.
 
 2014-05-02 - Version 1.2.1
 
