@@ -208,6 +208,14 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_SETUP,
+        priority=plugin.Stages.PRIORITY_HIGH-1,
+        condition=lambda self: self._enabled,
+    )
+    def _setup_existence(self):
+        self._enabled = self.packager == self
+
+    @plugin.event(
+        stage=plugin.Stages.STAGE_SETUP,
         priority=plugin.Stages.PRIORITY_HIGH,
         condition=lambda self: self._enabled,
     )
