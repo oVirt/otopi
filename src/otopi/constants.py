@@ -107,6 +107,7 @@ class BaseEnv(object):
     SUPPRESS_ENVIRONMENT_KEYS = 'BASE/suppressEnvironmentKeys'
     COMMAND_PREFIX = 'COMMAND/'
     RANDOMIZE_EVENTS = 'CORE/randomizeEvents'
+    FAIL_ON_PRIO_OVERRIDE = 'CORE/failOnPrioOverride'
 
 
 @util.export

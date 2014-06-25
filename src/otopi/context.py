@@ -220,6 +220,7 @@ class Context(base.Base):
                 )
             ),
             constants.BaseEnv.RANDOMIZE_EVENTS: False,
+            constants.BaseEnv.FAIL_ON_PRIO_OVERRIDE: False,
         }
         self.registerDialog(dialog.DialogBase())
         self.registerServices(services.ServicesBase())
@@ -377,6 +378,27 @@ class Context(base.Base):
         for m in tmplist:
             sequence.setdefault(m['stage'], []).append(m)
 
+        prio_dep_reverses = []
+        for stage, methods in sequence.items():
+            for i, m in enumerate(methods[:-1]):
+                if m['priority'] > methods[i + 1]['priority']:
+                    prio_dep_reverses.append(
+                        (
+                            'Priorities were reversed during buildSequence: '
+                            'method %s with priority %s appears after '
+                            'method %s with priority %s'
+                        ) % (
+                            methods[i+1]['method'],
+                            methods[i+1]['priority'],
+                            m['method'],
+                            m['priority'],
+                        )
+                    )
+        if prio_dep_reverses:
+            msg = '\n'.join(prio_dep_reverses)
+            self._earlyDebug(msg)
+            if self.environment[constants.BaseEnv.FAIL_ON_PRIO_OVERRIDE]:
+                raise RuntimeError(msg)
         self._sequence = sequence
 
     def runSequence(self):
