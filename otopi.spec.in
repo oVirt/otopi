@@ -20,8 +20,17 @@
 %global		package_version @PACKAGE_VERSION@
 %global		package_maven_version @PACKAGE_MAVEN_VERSION@
 
+%if 0%{?fedora:1}
+%global _use_maven 1
+%endif
 %if 0%{?rhel:1}
-%global		maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
+%if %{rhel} >= 7
+%global _use_maven 1
+%else
+%global _use_maven 0
+%global _use_repolib 1
+%global maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
+%endif
 %endif
 
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
@@ -41,7 +50,7 @@ BuildRequires:	gettext
 BuildRequires:	python2-devel
 BuildRequires:	java-devel
 
-%if 0%{?fedora:1}
+%if %{_use_maven}
 BuildRequires:	apache-commons-logging
 BuildRequires:	junit
 BuildRequires:	maven-compiler-plugin
@@ -67,7 +76,7 @@ and transaction management.
 Summary:	%{name} java support
 Requires:	%{name} = %{version}-%{release}
 Requires:	java
-%if 0%{?fedora:1}
+%if %{_use_maven}
 Requires:	apache-commons-logging
 %else
 Requires:	jakarta-commons-logging
@@ -75,7 +84,7 @@ Requires:	jakarta-commons-logging
 %description java
 java libraries.
 
-%if 0%{?fedora:1}
+%if %{_use_maven}
 %package javadoc
 Summary:	Javadocs for %{name}
 Group:		Documentation
@@ -92,7 +101,7 @@ Provides:	%{name}-devel = %{version}-%{release}
 %description devtools
 Development tools for %{name}.
 
-%if 0%{?rhel:1}
+%if 0%{?_use_repolib:1}
 %package repolib
 Summary:	%{name} maven repo
 %description repolib
@@ -103,7 +112,7 @@ Summary:	%{name} maven repo
 %setup -q -n %{name}-%{package_version}
 
 %build
-%if 0%{?fedora:1}
+%if %{_use_maven}
 %global conf --disable-java-sdk-compile
 %else
 %global conf COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$(build-classpath junit4)
@@ -116,7 +125,7 @@ Summary:	%{name} maven repo
 	%{?conf}
 make %{?_smp_mflags}
 
-%if 0%{?fedora:1}
+%if %{_use_maven}
 cd src/java
 %mvn_build
 cd ../..
@@ -126,7 +135,7 @@ cd ../..
 rm -rf "%{buildroot}"
 make %{?_smp_mflags} install DESTDIR="%{buildroot}"
 
-%if 0%{?fedora:1}
+%if %{_use_maven}
 cd src/java
 %mvn_install
 cd ../..
@@ -162,7 +171,7 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 
 %files java -f src/java/.mfiles
 
-%if 0%{?fedora:1}
+%if %{_use_maven}
 %files javadoc -f src/java/.mfiles-javadoc
 %endif
 
@@ -170,7 +179,7 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %{_datadir}/%{name}/%{name}-bundle
 %{python_sitelib}/%{name}/codegen/
 
-%if 0%{?rhel:1}
+%if 0%{?_use_repolib:1}
 %files repolib
 %{maven2brewrepodir}/
 %endif
