@@ -24,13 +24,6 @@
 %global		maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
 %endif
 
-# rhel does not support complex boolean statements
-%if 0%{?fedora:1}
-%if %{fedora} >= 19
-%global		fedora_19_maven	1
-%endif
-%endif
-
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
 Name:		@PACKAGE_NAME@
 Version:	@PACKAGE_RPM_VERSION@
@@ -58,14 +51,7 @@ BuildRequires:	maven-jar-plugin
 BuildRequires:	maven-javadoc-plugin
 BuildRequires:	maven-source-plugin
 BuildRequires:	maven-surefire-provider-junit4
-
-%if 0%{?fedora_19_maven:1}
 BuildRequires:	maven-local
-%else
-BuildRequires:	maven
-BuildRequires:	jpackage-utils
-%endif
-
 %else
 BuildRequires:	jakarta-commons-logging
 BuildRequires:	junit4
@@ -83,13 +69,6 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	java
 %if 0%{?fedora:1}
 Requires:	apache-commons-logging
-
-%if 0%{?fedora:1}
-%if !0%{?fedora_19_maven:1}
-Requires:	jpackage-utils
-%endif
-%endif
-
 %else
 Requires:	jakarta-commons-logging
 %endif
@@ -138,13 +117,8 @@ Summary:	%{name} maven repo
 make %{?_smp_mflags}
 
 %if 0%{?fedora:1}
-
 cd src/java
-%if 0%{?fedora_19_maven:1}
 %mvn_build
-%else
-mvn-rpmbuild install javadoc:aggregate
-%endif
 cd ../..
 %endif
 
@@ -153,46 +127,23 @@ rm -rf "%{buildroot}"
 make %{?_smp_mflags} install DESTDIR="%{buildroot}"
 
 %if 0%{?fedora:1}
-
-%if 0%{?fedora_19_maven:1}
 cd src/java
 %mvn_install
 cd ../..
 %else
-install -d -m 755 "%{buildroot}%{_javadir}/%{name}"
-install -d -m 755 "%{buildroot}%{_mavenpomdir}"
-install -pm 644 src/java/target/%{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}
-ln -s "%{name}-%{package_maven_version}.jar" "%{buildroot}%{_javadir}/%{name}/%{name}.jar"
-install -pm 644 "src/java/pom.xml" "%{buildroot}%{_mavenpomdir}/JPP.%{name}-%{name}.pom"
-%add_maven_depmap "JPP.%{name}-%{name}.pom" "%{name}/%{name}.jar"
-mkdir -p "%{buildroot}%{_javadocdir}/%{name}"
-cp -rp src/java/target/apidocs/*  "%{buildroot}%{_javadocdir}/%{name}"
-%endif
-
-%else
-
 install -d "%{buildroot}%{_javadir}/%{name}"
-install target/%{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}
-ln -s %{name}-%{package_maven_version}.jar %{buildroot}%{_javadir}/%{name}/%{name}.jar
+install target/%{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}"
+ln -s %{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}/%{name}.jar"
+cat > src/java/.mfiles << __EOF__
+%{_javadir}/%{name}/
+__EOF__
 
-%endif
-
-%if 0%{?rhel:1}
 install -d "%{buildroot}%{maven2brewrepodir}"
 cp "%{buildroot}%{_javadir}/%{name}/%{name}.jar" "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.jar"
 cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.pom"
 %endif
 
 install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
-
-%if 0%{?fedora:1}
-%if !0%{?fedora_19_maven:1}
-%post java
-%update_maven_depmap
-%postun java
-%update_maven_depmap
-%endif
-%endif
 
 %files
 %dir %{_datadir}/%{name}
@@ -209,29 +160,10 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %{_sbindir}/%{name}
 %{python_sitelib}/%{name}/
 
-%if 0%{?fedora_19_maven:1}
 %files java -f src/java/.mfiles
-%dir %{_javadir}/%{name}
-%else
-%files java
-%dir %{_javadir}/%{name}
-%{_javadir}/%{name}/%{name}*.jar
-%if 0%{?fedora:1}
-%{_mavenpomdir}/JPP.%{name}-%{name}.pom
-%{_mavendepmapfragdir}/%{name}
-%endif
-%endif
 
 %if 0%{?fedora:1}
-
-%if 0%{?fedora_19_maven:1}
 %files javadoc -f src/java/.mfiles-javadoc
-%else
-%files javadoc
-%dir %{_javadocdir}/%{name}
-%{_javadocdir}/%{name}
-%endif
-
 %endif
 
 %files devtools
