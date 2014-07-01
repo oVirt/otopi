@@ -115,7 +115,7 @@ Summary:	%{name} maven repo
 %if %{_use_maven}
 %global conf --disable-java-sdk-compile
 %else
-%global conf COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$(build-classpath junit4)
+%global conf COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
 %endif
 %configure \
 	--docdir="%{_docdir}/%{name}-%{version}" \
