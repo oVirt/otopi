@@ -1,5 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.2.4
+
+
 2014-09-03 - Version 1.2.3
 
  * network: support ibm_powerkvm distribution, rhbz#1131180.
