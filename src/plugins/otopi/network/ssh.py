@@ -49,9 +49,6 @@ class Plugin(plugin.PluginBase):
 
     Remove different alias of ours' key.
 
-    If we create the file, we should also restore SELinux
-    properties (if available).
-
     """
     _RE_SSHPUB = re.compile(
         flags=re.VERBOSE,
@@ -123,13 +120,6 @@ class Plugin(plugin.PluginBase):
         self.environment.setdefault(constants.NetEnv.SSH_ENABLE, False)
         self.environment.setdefault(constants.NetEnv.SSH_KEY, None)
         self.environment.setdefault(constants.NetEnv.SSH_USER, '')
-        self._needSelinuxFixup = None
-
-    @plugin.event(
-        stage=plugin.Stages.STAGE_SETUP,
-    )
-    def _setup(self):
-        self.command.detect('restorecon')
 
     @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,
@@ -155,14 +145,8 @@ class Plugin(plugin.PluginBase):
 
         content = []
         found = False
-        if (
-            not os.path.exists(authkeysdir) and
-            self.command.get('restorecon', optional=True) is not None
-        ):
-            self._needSelinuxFixup = authkeysdir
-        else:
-            if os.path.exists(authkeys):
-                found, content = self._mergeAuthKeysFile(authkeys, sshKey)
+        if os.path.exists(authkeys):
+            found, content = self._mergeAuthKeysFile(authkeys, sshKey)
 
         if not found:
             content.append(sshKey)
@@ -181,25 +165,6 @@ class Plugin(plugin.PluginBase):
                 ],
             )
         )
-
-    @plugin.event(
-        stage=plugin.Stages.STAGE_CLOSEUP,
-        condition=lambda self: self._needSelinuxFixup,
-    )
-    def _cleanup(self):
-        rc, stdout, stderr = self.execute(
-            (
-                self.command.get('restorecon'),
-                '-r',
-                self._needSelinuxFixup
-            ),
-            raiseOnError=False,
-        )
-
-        if rc != 0:
-            self.logger.warning(
-                _('Cannot set SELinux properties on SSH directory')
-            )
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

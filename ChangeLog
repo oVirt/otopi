@@ -6,6 +6,8 @@ otopi -- oVirt Task Oriented Pluggable Installer/Implementation
  * packagers: yum: disable self if other packager installed,
    rhbz#1112370.
  * network: support ibm_powerkvm distribution, rhbz#1131180.
+ * filetransaction: restore default selinux attibutes to modified
+   files, rhbz#1146689.
 
 2014-05-02 - Version 1.2.1
 

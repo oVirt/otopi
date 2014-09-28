@@ -25,6 +25,7 @@ import os
 import tempfile
 import datetime
 import shutil
+import subprocess
 import pwd
 import grp
 import gettext
@@ -69,9 +70,11 @@ class FileTransaction(transaction.TransactionElement):
             os.unlink(source)
 
     def _createDirRecursive(self, d):
+        ret = None
         if d and d != '/':
-            self._createDirRecursive(os.path.dirname(d))
+            ret = self._createDirRecursive(os.path.dirname(d))
             if not os.path.exists(d):
+                ret = d if ret is None else ret
                 os.mkdir(d)
                 os.chmod(d, self._dmode)
                 os.chown(
@@ -79,6 +82,7 @@ class FileTransaction(transaction.TransactionElement):
                     self._downer,
                     self._dgroup
                 )
+        return ret
 
     _atomicMove = _defaultAtomicMove
 
@@ -178,6 +182,7 @@ class FileTransaction(transaction.TransactionElement):
         self._originalFileWasMissing = not os.path.exists(self._name)
         self._prepared = False
         self._originalDiffer = True
+        self._createdDirectory = None
 
     def __str__(self):
         return _("File transaction for '{file}'").format(
@@ -200,7 +205,7 @@ class FileTransaction(transaction.TransactionElement):
             mydir = os.path.dirname(self._name)
             if self._originalFileWasMissing:
                 if not os.path.exists(mydir):
-                    self._createDirRecursive(mydir)
+                    self._createdDirectory = self._createDirRecursive(mydir)
             else:
                 # check we can open file for write
                 with open(self._name, 'a'):
@@ -309,6 +314,52 @@ class FileTransaction(transaction.TransactionElement):
                 )
             if self._modifiedList is not None:
                 self._modifiedList.append(self._name)
+
+            RESTORECON = '/sbin/restorecon'
+            if os.path.exists(RESTORECON):
+                what = (
+                    self._name if self._createdDirectory is None
+                    else self._createdDirectory
+                )
+                try:
+                    self.logger.debug(
+                        'Executing restorecon for %s',
+                        what
+                    )
+                    p = subprocess.Popen(
+                        (RESTORECON, '-r', what),
+                        executable=RESTORECON,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        close_fds=True,
+                    )
+                    stdout, stderr = p.communicate()
+                    self.logger.debug(
+                        'restorecon result rc=%s, stdout=%s, stderr=%s',
+                        p.returncode,
+                        stdout,
+                        stderr,
+                    )
+                    if p.returncode != 0:
+                        self.logger.warning(
+                            _(
+                                "Failed to restore SELinux attributes "
+                                "for '{file}'"
+                            ).format(
+                                file=what,
+                            )
+                        )
+                except Exception:
+                    self.logger.warning(
+                        _(
+                            "Failed to restore SELinux attributes "
+                            "for '{file}'"
+                        ).format(
+                            file=what,
+                        )
+                    )
+                    self.logger.debug('Exception', exc_info=True)
+                    raise
 
 
 # vim: expandtab tabstop=4 shiftwidth=4
