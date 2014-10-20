@@ -59,7 +59,7 @@ BuildRequires:	maven-install-plugin
 BuildRequires:	maven-jar-plugin
 BuildRequires:	maven-javadoc-plugin
 BuildRequires:	maven-source-plugin
-BuildRequires:	maven-surefire-provider-junit4
+BuildRequires:	maven-surefire-provider-junit
 BuildRequires:	maven-local
 %else
 BuildRequires:	jpackage-utils
