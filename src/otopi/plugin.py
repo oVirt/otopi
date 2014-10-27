@@ -390,6 +390,12 @@ class PluginBase(base.Base):
                 _callCallback.next = datetime.datetime.now()
                 callback(state=popens)
 
+        def _isString(s):
+            return (
+                isinstance(s, str) or
+                isinstance(s, builtins.unicode)
+            )
+
         _callCallback.next = datetime.datetime.now()
 
         end_time = datetime.datetime.now()
@@ -423,6 +429,31 @@ class PluginBase(base.Base):
                         kw['env'] = os.environ
                     kw['env'] = kw['env'].copy()
                     kw['env'].update(envAppend)
+
+                for v in kw.get('args', []):
+                    if not _isString(v):
+                        raise RuntimeError(
+                            _(
+                               'Malformed argument {argType}:{arg}.'
+                            ).format(
+                                argType=type(v),
+                                arg=v,
+                            )
+                        )
+
+                for k, v in kw.get('env', {}).items():
+                    if not _isString(k) or not _isString(v):
+                        raise RuntimeError(
+                            _(
+                                'Bad environment '
+                                '{keyType}:{key}={valueType}:{value}.'
+                            ).format(
+                                keyType=type(k),
+                                key=k,
+                                valueType=type(v),
+                                value=v,
+                            )
+                        )
 
                 if 'preexec_fn' not in kw:
 
@@ -629,7 +660,7 @@ class PluginBase(base.Base):
                 _("Command '{command}' failed to execute: {error}").format(
                     command=(
                         ' | '.join([
-                            ' '.join(kw['args'])
+                            ' '.join([str(a) for a in kw['args']])
                             for kw in popenArgs
                         ])
                     ),
@@ -770,6 +801,13 @@ class PluginBase(base.Base):
 
         stdout, stderr binary blobs.
         """
+
+        def _isString(s):
+            return (
+                isinstance(s, str) or
+                isinstance(s, builtins.unicode)
+            )
+
         try:
             if envAppend is not None:
                 if env is None:
@@ -784,6 +822,38 @@ class PluginBase(base.Base):
                 cwd,
                 env,
             )
+
+            if args is not None:
+                for v in args:
+                    if not _isString(v):
+                        raise RuntimeError(
+                            _(
+                                'Bad argument when trying to execute {args}, '
+                                'Malformed argument is {argType}:{arg}.'
+                            ).format(
+                                args=args,
+                                argType=type(v),
+                                arg=v,
+                            )
+                        )
+
+            if env is not None:
+                for k, v in env.items():
+                    if not _isString(k) or not _isString(v):
+                        raise RuntimeError(
+                            _(
+                                'Bad environment when trying to execute '
+                                '{args}, Malformed environment is '
+                                '{keyType}:{key}={valueType}:{value}.'
+                            ).format(
+                                args=args,
+                                keyType=type(k),
+                                key=k,
+                                valueType=type(v),
+                                value=v,
+                            )
+                        )
+
             p = subprocess.Popen(
                 args,
                 executable=executable,
