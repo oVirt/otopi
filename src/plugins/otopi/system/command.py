@@ -45,12 +45,12 @@ class Plugin(plugin.PluginBase, command.CommandBase):
         searchPath = self.environment[
             constants.SysEnv.COMMAND_PATH
         ].split(':')
-        for command in self.command.enum():
-            if self.command.get(command=command, optional=True) is None:
+        for cmd in self.command.enum():
+            if self.command.get(command=cmd, optional=True) is None:
                 for path in searchPath:
-                    commandPath = os.path.join(path, command)
-                    if os.path.exists(commandPath):
-                        self.command.set(command=command, path=commandPath)
+                    cmdPath = os.path.join(path, cmd)
+                    if os.path.exists(cmdPath):
+                        self.command.set(command=cmd, path=cmdPath)
 
     @plugin.event(
         stage=plugin.Stages.STAGE_INIT,

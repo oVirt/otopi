@@ -434,7 +434,7 @@ class PluginBase(base.Base):
                     if not _isString(v):
                         raise RuntimeError(
                             _(
-                               'Malformed argument {argType}:{arg}.'
+                                'Malformed argument {argType}:{arg}.'
                             ).format(
                                 argType=type(v),
                                 arg=v,
