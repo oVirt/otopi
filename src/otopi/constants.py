@@ -81,6 +81,9 @@ class Const(object):
     CONFIG_SECTION_ENFORCE = 'environment:enforce'
     DIALOG_DIALECT_MACHINE = 'machine'
     DIALOG_DIALECT_HUMAN = 'human'
+    EXIT_CODE_SUCCESS = 0
+    EXIT_CODE_GENERAL_ERROR = 1
+    EXIT_CODE_INITIALIZATION_ERROR = 2
 
 
 @util.export
@@ -99,6 +102,7 @@ class BaseEnv(object):
     ERROR = 'BASE/error'
     ABORTED = 'BASE/aborted'
     EXCEPTION_INFO = 'BASE/exceptionInfo'
+    EXIT_CODE = 'BASE/exitCode'
     LOG = 'BASE/log'
     PLUGIN_PATH = 'BASE/pluginPath'
     PLUGIN_GROUPS = 'BASE/pluginGroups'

@@ -74,6 +74,12 @@ class Installer(object):
                     else:
                         environment[key] = value
 
+    def _getExitCode(self, environment):
+        return sorted(
+            environment[constants.BaseEnv.EXIT_CODE],
+            key=lambda x: x['priority'],
+        )[0]['code']
+
     def __init__(self):
         self._debug = int(
             os.environ.get(
@@ -97,7 +103,7 @@ class Installer(object):
                     constants.BaseEnv.EXECUTION_DIRECTORY
                 ]
             )
-            return True
+            return self._getExitCode(installer.environment)
         except main.PluginLoadException as e:
             print(
                 '***L:ERROR %s: %s' % (
@@ -107,7 +113,7 @@ class Installer(object):
             )
             if self._debug > 0:
                 traceback.print_exc()
-            return False
+            return constants.Const.EXIT_CODE_INITIALIZATION_ERROR
         except Exception as e:
             if self._debug > 0:
                 print(
@@ -116,11 +122,16 @@ class Installer(object):
                     ),
                 )
                 traceback.print_exc()
-            return False
+
+            # return failure if someone set, never success
+            return max(
+                self._getExitCode(installer.environment),
+                constants.Const.EXIT_CODE_GENERAL_ERROR,
+            )
 
 if __name__ == '__main__':
     installer = Installer()
-    sys.exit(0 if installer.main() else 1)
+    sys.exit(installer.main())
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

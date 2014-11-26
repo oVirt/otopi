@@ -46,6 +46,11 @@ BASE/executionDirectory(str)
     Directory where instaler was executed.
     Installer changes to '/' to avoid errors during program execution.
 
+BASE/exitCode(list)
+    List of dictionary entires, keys are priority, code.
+    Highest priority wins.
+    Keys should be based on Stages.PRIORITY_*.
+
 BASE/suppressEnvironmentKeys(list)
     Suppress output of environment keys.
 

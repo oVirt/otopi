@@ -208,6 +208,12 @@ class Context(base.Base):
             constants.BaseEnv.ERROR: False,
             constants.BaseEnv.ABORTED: False,
             constants.BaseEnv.EXCEPTION_INFO: [],
+            constants.BaseEnv.EXIT_CODE: [
+                {
+                    'priority': plugin.Stages.PRIORITY_LAST + 1,
+                    'code': constants.Const.EXIT_CODE_SUCCESS,
+                },
+            ],
             constants.BaseEnv.EXECUTION_DIRECTORY: '.',
             constants.BaseEnv.SUPPRESS_ENVIRONMENT_KEYS: [],
             constants.BaseEnv.LOG: False,
