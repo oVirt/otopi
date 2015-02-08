@@ -237,7 +237,7 @@ public class MachineDialogParser {
 			String.format(
 				"env-get %1$s=%2$s:%3$s",
 				name,
-				value.getClass().getName(),
+				value == null ? "null" : value.getClass().getName(),
 				value
 			)
 		);
