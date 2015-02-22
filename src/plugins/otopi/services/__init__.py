@@ -24,16 +24,16 @@
 from otopi import util
 
 
-from . import systemd
-from . import rhel
 from . import openrc
+from . import rhel
+from . import systemd
 
 
 @util.export
 def createPlugins(context):
-    systemd.Plugin(context=context)
-    rhel.Plugin(context=context)
     openrc.Plugin(context=context)
+    rhel.Plugin(context=context)
+    systemd.Plugin(context=context)
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

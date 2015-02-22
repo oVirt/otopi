@@ -25,20 +25,23 @@ Refer to README.dialog.
 """
 
 
-import logging
 import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import logging
 
 
-from otopi import constants
-from otopi import util
 from otopi import common
-from otopi import plugin
+from otopi import constants
 from otopi import context
 from otopi import dialog
+from otopi import plugin
+from otopi import util
 
 
 from . import constants as dialogcons
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

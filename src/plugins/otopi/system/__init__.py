@@ -24,18 +24,18 @@
 from otopi import util
 
 
-from . import info
-from . import command
-from . import reboot
 from . import clock
+from . import command
+from . import info
+from . import reboot
 
 
 @util.export
 def createPlugins(context):
-    info.Plugin(context=context)
-    command.Plugin(context=context)
-    reboot.Plugin(context=context)
     clock.Plugin(context=context)
+    command.Plugin(context=context)
+    info.Plugin(context=context)
+    reboot.Plugin(context=context)
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

@@ -25,18 +25,23 @@ Refer to README.dialog.
 """
 
 
-from optparse import OptionParser, OptParseError   # python-2.6
-import traceback
-import shlex
 import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import shlex
+import traceback
 
 
-from otopi import constants
-from otopi import util
+from optparse import OptionParser, OptParseError   # python-2.6
+
+
 from otopi import common
+from otopi import constants
 from otopi import context
 from otopi import plugin
+from otopi import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

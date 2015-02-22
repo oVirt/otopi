@@ -21,13 +21,16 @@
 """Utilities and tools."""
 
 
-import sys
-import imp
 import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import imp
+import sys
 
 
 __all__ = ['export']
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 def export(o):

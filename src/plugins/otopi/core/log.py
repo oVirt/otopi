@@ -21,19 +21,22 @@
 """Log plugin."""
 
 
-import os
-import string
-import time
-import tempfile
-import random
-import logging
 import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import logging
+import os
+import random
+import string
+import tempfile
+import time
 
 
 from otopi import constants
-from otopi import util
 from otopi import plugin
+from otopi import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

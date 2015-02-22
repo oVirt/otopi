@@ -21,19 +21,22 @@
 """File transaction element."""
 
 
-import os
-import tempfile
 import datetime
+import gettext
+import grp
+import os
+import pwd
 import shutil
 import subprocess
-import pwd
-import grp
-import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import tempfile
 
 
-from . import util
 from . import transaction
+from . import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

@@ -22,13 +22,16 @@
 
 
 import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
 
-from otopi import constants
-from otopi import util
-from otopi import plugin
 from otopi import config
+from otopi import constants
+from otopi import plugin
+from otopi import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

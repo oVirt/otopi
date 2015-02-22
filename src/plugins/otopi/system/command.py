@@ -24,10 +24,10 @@
 import os
 
 
-from otopi import constants
-from otopi import util
 from otopi import command
+from otopi import constants
 from otopi import plugin
+from otopi import util
 
 
 @util.export

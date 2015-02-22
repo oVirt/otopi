@@ -21,17 +21,20 @@
 """otopi entry point."""
 
 
-import os
-import sys
-import shlex
-import traceback
 import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import os
+import shlex
+import sys
+import traceback
 
 
+from otopi import common
 from otopi import constants
 from otopi import main
-from otopi import common
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 class Installer(object):

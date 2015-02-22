@@ -21,25 +21,28 @@
 """Context management."""
 
 
-import sys
-import os
-import glob
-import traceback
-import operator
-import random
 import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import glob
+import operator
+import os
+import random
+import sys
+import traceback
 
 
+from . import base
+from . import command
 from . import config
 from . import constants
-from . import base
-from . import util
-from . import plugin
 from . import dialog
-from . import services
 from . import packager
-from . import command
+from . import plugin
+from . import services
+from . import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

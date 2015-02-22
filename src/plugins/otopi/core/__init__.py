@@ -24,17 +24,17 @@
 from otopi import util
 
 
+from . import config
 from . import log
 from . import misc
-from . import config
 from . import transaction
 
 
 @util.export
 def createPlugins(context):
+    config.Plugin(context=context)
     log.Plugin(context=context)
     misc.Plugin(context=context)
-    config.Plugin(context=context)
     transaction.Plugin(context=context)
 
 

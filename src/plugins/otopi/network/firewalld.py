@@ -20,17 +20,21 @@
 
 """firewalld plugin."""
 
+
+import gettext
 import os
 import re
-import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='ovirt-engine-setup')
 
 
-from otopi import util
-from otopi import plugin
 from otopi import constants
 from otopi import filetransaction
+from otopi import plugin
 from otopi import transaction
+from otopi import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

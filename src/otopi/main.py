@@ -21,17 +21,20 @@
 """otopi main class."""
 
 
-import sys
+import gettext
+import logging
 import os
 import signal
-import logging
-import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import sys
 
 
 from otopi import constants
-from otopi import util
 from otopi import context
+from otopi import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

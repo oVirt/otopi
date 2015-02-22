@@ -22,24 +22,26 @@
 """Minimalist yum API interaction."""
 
 
+import gettext
+import logging
 import os
 import sys
-import logging
 import time
 import traceback
-import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
 
 import rpmUtils.miscutils
 
 
 import yum
-import yum.rpmtrans
-import yum.callbacks
 import yum.Errors
 import yum.callbacks
 import yum.constants
+import yum.rpmtrans
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 class MiniYumSinkBase(object):

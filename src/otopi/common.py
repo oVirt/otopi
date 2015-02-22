@@ -23,11 +23,14 @@
 
 import builtins
 import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
 
 
 from . import constants
 from . import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

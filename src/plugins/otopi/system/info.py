@@ -21,16 +21,19 @@
 """System information plugin."""
 
 
+import gettext
 import os
-import sys
 import platform
 import socket
-import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import sys
 
 
-from otopi import util
 from otopi import plugin
+from otopi import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

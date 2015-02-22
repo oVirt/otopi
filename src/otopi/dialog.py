@@ -25,16 +25,19 @@ Dialog is the component responsible of intraction with manager.
 """
 
 
-import sys
-import os
 import getpass
-import logging
 import gettext
-_ = lambda m: gettext.dgettext(message=m, domain='otopi')
+import logging
+import os
+import sys
 
 
 from . import constants
 from . import util
+
+
+def _(m):
+    return gettext.dgettext(message=m, domain='otopi')
 
 
 @util.export

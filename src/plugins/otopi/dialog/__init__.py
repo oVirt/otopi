@@ -24,18 +24,18 @@
 from otopi import util
 
 
-from . import misc
-from . import machine
-from . import human
 from . import cli
+from . import human
+from . import machine
+from . import misc
 
 
 @util.export
 def createPlugins(context):
-    misc.Plugin(context=context)
-    machine.Plugin(context=context)
-    human.Plugin(context=context)
     cli.Plugin(context=context)
+    human.Plugin(context=context)
+    machine.Plugin(context=context)
+    misc.Plugin(context=context)
 
 
 # vim: expandtab tabstop=4 shiftwidth=4
