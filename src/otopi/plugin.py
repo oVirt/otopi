@@ -388,7 +388,8 @@ class PluginBase(base.Base):
                 ) < now
             ):
                 _callCallback.next = datetime.datetime.now()
-                callback(state=popens)
+                if callback:
+                    callback(state=popens)
 
         _callCallback.next = datetime.datetime.now()
 
