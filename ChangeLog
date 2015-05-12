@@ -1,6 +1,6 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.3.2
+2015-05-12 - Version 1.3.2
 
  * core: executePipe: call callback only if set rhbz#1214724.
 
