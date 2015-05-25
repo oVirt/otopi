@@ -4,6 +4,7 @@ otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
  * core: support different exit codes.
  * core: executePipe: call callback only if set rhbz#1214724.
+ * network: install iptables-services if available, rhbz#1224799.
 
 2015-01-15 - Version 1.3.1
 

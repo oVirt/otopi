@@ -85,7 +85,11 @@ class Plugin(plugin.PluginBase):
         condition=lambda self: self._enabled,
     )
     def _packages(self):
-        self.packager.install(('iptables',))
+        if not self.packager.install(
+            ('iptables-services',),
+            ignoreErrors=True,
+        ):
+            self.packager.install(('iptables',))
 
     @plugin.event(
         stage=plugin.Stages.STAGE_MISC,
