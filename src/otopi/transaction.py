@@ -37,10 +37,6 @@ class TransactionElement(base.Base):
         """Constructor."""
         super(TransactionElement, self).__init__()
 
-    def __del__(self):
-        """Destructor."""
-        self.abort()
-
     def __str__(self):
         """String representation."""
         return self.__name__
@@ -98,6 +94,10 @@ class Transaction(base.Base):
         self._prepared = []
         for element in elements:
             self.append(element)
+
+    def __del__(self):
+        """Destructor."""
+        self.abort()
 
     def __str__(self):
         return 'transaction'
