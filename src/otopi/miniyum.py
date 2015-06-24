@@ -421,14 +421,14 @@ class MiniYum(object):
                 self._sink.verbose('group %s queued' % group)
             except yum.Errors.YumBaseError as e:
                 ret = False
-                self._sink.error(
-                    _('Cannot queue group {group}: {error}').format(
-                        group=group,
-                        error=e
-                    )
+                msg = _('Cannot queue group {group}: {error}').format(
+                    group=group,
+                    error=e
                 )
-
-                if not ignoreErrors:
+                if ignoreErrors:
+                    self._sink.verbose(msg)
+                else:
+                    self._sink.error(msg)
                     raise
 
             except Exception as e:
@@ -530,14 +530,14 @@ class MiniYum(object):
 
                 except (RuntimeError, yum.Errors.YumBaseError) as e:
                     ret = False
-                    self._sink.error(
-                        _('Cannot queue package {package}: {error}').format(
-                            package=package,
-                            error=e
-                        )
+                    msg = _('Cannot queue package {package}: {error}').format(
+                        package=package,
+                        error=e
                     )
-
-                    if not ignoreErrors:
+                    if ignoreErrors:
+                        self._sink.verbose(msg)
+                    else:
+                        self._sink.error(msg)
                         raise
 
                 except Exception as e:
