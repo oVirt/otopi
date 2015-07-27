@@ -125,10 +125,18 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
         if len(stdout) == 1:
             name = stdout[0].split('=')[1].strip().replace('.service', '')
 
-        self._executeServiceCommand(
+        rc, stdout, stderr = self._executeServiceCommand(
             name,
-            'enable' if state else 'disable'
+            'enable' if state else 'disable',
+            raiseOnError=False,
         )
+        if rc != 0:
+            raise RuntimeError(
+                _("Failed to {do} service '{service}'").format(
+                    do=_('enable') if state else _('disable'),
+                    service=name,
+                )
+            )
 
     def state(self, name, state):
         self.logger.debug(
@@ -136,10 +144,18 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
             'starting' if state else 'stopping',
             name
         )
-        self._executeServiceCommand(
+        rc, stdout, stderr = self._executeServiceCommand(
             name,
-            'start' if state else 'stop'
+            'start' if state else 'stop',
+            raiseOnError=False,
         )
+        if rc != 0:
+            raise RuntimeError(
+                _("Failed to {do} service '{service}'").format(
+                    do=_('start') if state else _('stop'),
+                    service=name,
+                )
+            )
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

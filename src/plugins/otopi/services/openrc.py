@@ -113,10 +113,18 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
             'starting' if state else 'stopping',
             name
         )
-        self._executeServiceCommand(
+        rc, stdout, stderr = self._executeServiceCommand(
             name,
-            'start' if state else 'stop'
+            'start' if state else 'stop',
+            raiseOnError=False,
         )
+        if rc != 0:
+            raise RuntimeError(
+                _("Failed to {do} service '{service}'").format(
+                    do=_('start') if state else _('stop'),
+                    service=name,
+                )
+            )
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

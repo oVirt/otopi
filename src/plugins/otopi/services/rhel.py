@@ -160,13 +160,24 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
             #
             pass
         else:
-            self.execute(
+            rc, stdout, stderr = self.execute(
                 (
                     self.command.get('chkconfig'),
                     name,
                     'on' if state else 'off',
                 ),
+                raiseOnError=False,
             )
+            if rc != 0:
+                raise RuntimeError(
+                    _(
+                        "Failed to set boot startup {state} "
+                        "for service '{service}'"
+                    ).format(
+                        do=_('on') if state else _('off'),
+                        service=name,
+                    )
+                )
 
     def state(self, name, state):
         self.logger.debug(
@@ -180,15 +191,27 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
             # upstart fails when multiple
             # start/stop commands.
             #
-            if state != status:
-                self._executeInitctlCommand(
+            if state == status:
+                rc = 0
+            else:
+                rc, stdout, stderr = self._executeInitctlCommand(
                     name,
-                    'start' if state else 'stop'
+                    'start' if state else 'stop',
+                    raiseOnError=False,
                 )
         else:
-            self._executeServiceCommand(
+            rc, stdout, stderr = self._executeServiceCommand(
                 name,
-                'start' if state else 'stop'
+                'start' if state else 'stop',
+                raiseOnError=False,
+            )
+
+        if rc != 0:
+            raise RuntimeError(
+                _("Failed to {do} service '{service}'").format(
+                    do=_('start') if state else _('stop'),
+                    service=name,
+                )
             )
 
 
