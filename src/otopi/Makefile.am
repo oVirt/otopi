@@ -44,6 +44,7 @@ dist_otopilib_PYTHON = \
 	dialog.py \
 	filetransaction.py \
 	main.py \
+	minidnf.py \
 	miniyum.py \
 	packager.py \
 	plugin.py \

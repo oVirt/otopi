@@ -170,12 +170,16 @@ class NetEnv(object):
 @util.export
 @util.codegen
 class PackEnv(object):
+    KEEP_ALIVE_INTERVAL = 'PACKAGER/keepAliveInterval'
     YUMPACKAGER_ENABLED = 'PACKAGER/yumpackagerEnabled'
     YUMPACKAGER_EXPIRE_CACHE = 'PACKAGER/yumExpireCache'
-    KEEP_ALIVE_INTERVAL = 'PACKAGER/keepAliveInterval'
     YUM_DISABLED_PLUGINS = 'PACKAGER/yumDisabledPlugins'
     YUM_ENABLED_PLUGINS = 'PACKAGER/yumEnabledPlugins'
     YUM_ROLLBACK = 'PACKAGER/yumRollback'
+    DNFPACKAGER_ENABLED = 'PACKAGER/dnfpackagerEnabled'
+    DNFPACKAGER_EXPIRE_CACHE = 'PACKAGER/dnfExpireCache'
+    DNF_DISABLED_PLUGINS = 'PACKAGER/dnfDisabledPlugins'
+    DNF_ROLLBACK = 'PACKAGER/dnfRollback'
 
 
 @util.export

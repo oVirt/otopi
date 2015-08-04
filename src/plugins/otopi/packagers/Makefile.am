@@ -26,6 +26,7 @@ MAINTAINERCLEANFILES = \
 mydir=$(otopiplugindir)/otopi/packagers
 dist_my_PYTHON = \
 	__init__.py \
+	dnfpackager.py \
 	yumpackager.py \
 	$(NULL)
 

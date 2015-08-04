@@ -883,6 +883,22 @@ class MiniYum(object):
             **kwargs
         )
 
+    def installUpdate(self, packages, **kwargs):
+        """Install or update a packages.
+
+        Keyword arguments:
+        packages -- packages to install.
+        ignoreErrors - to ignore errors, will return False
+
+        """
+        return self._queue(
+            'install/update',
+            lambda h: h.available,
+            self._yb.install,   # install does both
+            packages,
+            **kwargs
+        )
+
     def remove(self, packages, **kwargs):
         """Remove packages.
 

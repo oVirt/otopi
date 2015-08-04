@@ -136,16 +136,7 @@ class PackagerBase(object):
         True -- success.
 
         """
-        return (
-            self.install(
-                packages=packages,
-                ignoreErrors=ignoreErrors,
-            ) or
-            self.update(
-                packages=packages,
-                ignoreErrors=ignoreErrors,
-            )
-        )
+        raise NotImplementedError(_('Packager update not implemented'))
 
     def remove(self, packages, ignoreErrors=False):
         """Remove packages.

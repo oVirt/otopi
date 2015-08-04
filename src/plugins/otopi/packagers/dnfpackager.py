@@ -18,7 +18,7 @@
 #
 
 
-"""yum packager provider."""
+"""dnf packager provider."""
 
 
 import gettext
@@ -39,21 +39,21 @@ def _(m):
 
 @util.export
 class Plugin(plugin.PluginBase, packager.PackagerBase):
-    """yum packager provider.
+    """dnf packager provider.
 
     Confirms:
         Confirms.GPG_KEY -- confirm use of gpg key.
 
     """
 
-    class YumTransaction(transaction.TransactionElement):
-        """yum transaction element."""
+    class DNFTransaction(transaction.TransactionElement):
+        """dnf transaction element."""
 
         def __init__(self, parent):
             self._parent = parent
 
         def __str__(self):
-            return _("Yum Transaction")
+            return _("DNF Transaction")
 
         def prepare(self):
             self._parent.beginTransaction()
@@ -61,47 +61,46 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         def abort(self):
             self._parent.endTransaction(
                 rollback=self._parent.environment[
-                    constants.PackEnv.YUM_ROLLBACK
+                    constants.PackEnv.DNF_ROLLBACK
                 ],
             )
 
         def commit(self):
             self._parent.endTransaction(rollback=False)
 
-    def _getMiniYum(
+    def _getMiniDNF(
         self,
         disabledPlugins=(),
-        enabledPlugins=(),
     ):
-        from otopi import miniyum
+        from otopi import minidnf
 
-        class _MyMiniYumSink(miniyum.MiniYumSinkBase):
-            """miniyum interaction."""
+        class _MyMiniDNFSink(minidnf.MiniDNFSinkBase):
+            """minidnf interaction."""
 
             def _touch(self):
                 self._last = time.time()
 
             def __init__(self, parent):
-                super(_MyMiniYumSink, self).__init__()
+                super(_MyMiniDNFSink, self).__init__()
                 self._parent = parent
                 self._touch()
 
             def verbose(self, msg):
-                super(_MyMiniYumSink, self).verbose(msg)
-                self._parent.logger.debug('Yum %s' % msg)
+                super(_MyMiniDNFSink, self).verbose(msg)
+                self._parent.logger.debug('DNF %s' % msg)
 
             def info(self, msg):
-                super(_MyMiniYumSink, self).info(msg)
-                self._parent.logger.info('Yum %s' % msg)
+                super(_MyMiniDNFSink, self).info(msg)
+                self._parent.logger.info('DNF %s' % msg)
                 self._touch()
 
             def error(self, msg):
-                super(_MyMiniYumSink, self).error(msg)
-                self._parent.logger.error('Yum %s' % msg)
+                super(_MyMiniDNFSink, self).error(msg)
+                self._parent.logger.error('DNF %s' % msg)
                 self._touch()
 
             def keepAlive(self, msg):
-                super(_MyMiniYumSink, self).keepAlive(msg)
+                super(_MyMiniDNFSink, self).keepAlive(msg)
                 if time.time() - self._last >= self._parent.environment[
                     constants.PackEnv.KEEP_ALIVE_INTERVAL
                 ]:
@@ -120,58 +119,31 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
                 )
 
             def reexec(self):
-                super(_MyMiniYumSink, self).reexec()
+                super(_MyMiniDNFSink, self).reexec()
                 self._parent.context.notify(self._parent.context.NOTIFY_REEXEC)
 
-        return miniyum.MiniYum(
-            sink=_MyMiniYumSink(parent=self),
-            blockStdHandles=False,
+        return minidnf.MiniDNF(
+            sink=_MyMiniDNFSink(parent=self),
             disabledPlugins=disabledPlugins,
-            enabledPlugins=enabledPlugins,
         )
-
-    def _refreshMiniyum(self):
-        #
-        # @WORKAROUND-BEGIN
-        # yum has long memory, especially
-        # the exclude/include added to the suck
-        # as we need to handle versionlock
-        # manipulation we need to reconstruct.
-        # I would have expected this information will be
-        # re-read at every new transaction... but apparently not.
-        if self._miniyum is not None:
-            del self._miniyum
-        self._miniyum = self._getMiniYum(
-            disabledPlugins=self.environment[
-                constants.PackEnv.YUM_DISABLED_PLUGINS
-            ],
-            enabledPlugins=self.environment[
-                constants.PackEnv.YUM_ENABLED_PLUGINS
-            ],
-        )
-        # @WORKAROUND-END
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
-        self._miniyum = None
+        self._minidnf = None
         self._enabled = False
 
     @plugin.event(
         stage=plugin.Stages.STAGE_BOOT,
-        priority=plugin.Stages.PRIORITY_LOW,
+        priority=plugin.Stages.PRIORITY_LOW+10,
     )
     def _boot(self):
         try:
             self.environment.setdefault(
-                constants.PackEnv.YUMPACKAGER_ENABLED,
+                constants.PackEnv.DNFPACKAGER_ENABLED,
                 True
             )
             self.environment.setdefault(
-                constants.PackEnv.YUM_DISABLED_PLUGINS,
-                []
-            )
-            self.environment.setdefault(
-                constants.PackEnv.YUM_ENABLED_PLUGINS,
+                constants.PackEnv.DNF_DISABLED_PLUGINS,
                 []
             )
             self.environment.setdefault(
@@ -179,24 +151,31 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
                 constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
             )
             self.environment.setdefault(
-                constants.PackEnv.YUMPACKAGER_EXPIRE_CACHE,
+                constants.PackEnv.DNFPACKAGER_EXPIRE_CACHE,
                 True
             )
             self.environment.setdefault(
-                constants.PackEnv.YUM_ROLLBACK,
+                constants.PackEnv.DNF_ROLLBACK,
                 True
             )
 
-            if self.environment[constants.PackEnv.YUMPACKAGER_ENABLED]:
-                self._refreshMiniyum()
+            if self.environment[constants.PackEnv.DNFPACKAGER_ENABLED]:
+                self._minidnf = self._getMiniDNF(
+                    disabledPlugins=self.environment[
+                        constants.PackEnv.DNF_DISABLED_PLUGINS
+                    ],
+                )
 
                 # the following will trigger the NOTIFY_REEXEC
                 # and then reexecute
                 if os.geteuid() == 0:
-                    self._miniyum.selinux_role()
+                    self._minidnf.selinux_role()
                     self._enabled = True
+                    self.environment[
+                        constants.PackEnv.YUMPACKAGER_ENABLED
+                    ] = False
         except ImportError:
-            self.logger.debug('Cannot import miniyumlocal', exc_info=True)
+            self.logger.debug('Cannot import minidnf', exc_info=True)
 
     @plugin.event(
         name=constants.Stages.PACKAGERS_DETECTION,
@@ -205,8 +184,8 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         condition=lambda self: self._enabled,
     )
     def _init(self):
-        if self.environment[constants.PackEnv.YUMPACKAGER_ENABLED]:
-            self.logger.debug('Registering yum packager')
+        if self.environment[constants.PackEnv.DNFPACKAGER_ENABLED]:
+            self.logger.debug('Registering dnf packager')
             self.context.registerPackager(packager=self)
         else:
             self._enabled = False
@@ -225,18 +204,18 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         condition=lambda self: self._enabled,
     )
     def _setup(self):
-        if self.environment[constants.PackEnv.YUMPACKAGER_EXPIRE_CACHE]:
-            with self._miniyum.transaction():
-                self._miniyum.clean(['expire-cache'])
+        if self.environment[constants.PackEnv.DNFPACKAGER_EXPIRE_CACHE]:
+            with self._minidnf.transaction():
+                self._minidnf.clean(['expire-cache'])
         self.environment[constants.CoreEnv.MAIN_TRANSACTION].append(
-            self.YumTransaction(
+            self.DNFTransaction(
                 parent=self,
             )
         )
         self.environment[
             constants.CoreEnv.INTERNAL_PACKAGES_TRANSACTION
         ].append(
-            self.YumTransaction(
+            self.DNFTransaction(
                 parent=self,
             )
         )
@@ -247,15 +226,15 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         condition=lambda self: self._enabled,
     )
     def _internal_packages_end(self):
-        if self._miniyum.buildTransaction():
+        if self._minidnf.buildTransaction():
             self.logger.debug("Transaction Summary:")
-            for p in self._miniyum.queryTransaction():
+            for p in self._minidnf.queryTransaction():
                 self.logger.debug(
                     "    %s - %s",
                     p['operation'],
                     p['display_name'],
                 )
-            self._miniyum.processTransaction()
+            self._minidnf.processTransaction()
 
     @plugin.event(
         stage=plugin.Stages.STAGE_PACKAGES,
@@ -263,76 +242,74 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         condition=lambda self: self._enabled,
     )
     def _packages(self):
-        if self._miniyum.buildTransaction():
+        if self._minidnf.buildTransaction():
             self.logger.debug("Transaction Summary:")
-            for p in self._miniyum.queryTransaction():
+            for p in self._minidnf.queryTransaction():
                 self.logger.debug(
                     "    %s - %s",
                     p['operation'],
                     p['display_name'],
                 )
-            self._miniyum.processTransaction()
+            self._minidnf.processTransaction()
 
     # PackagerBase
 
     def beginTransaction(self):
-        self._refreshMiniyum()
-        return self._miniyum.beginTransaction()
+        return self._minidnf.beginTransaction()
 
     def endTransaction(self, rollback=False):
-        ret = self._miniyum.endTransaction(rollback=rollback)
-        self._refreshMiniyum()
+        ret = self._minidnf.endTransaction(rollback=rollback)
         return ret
 
     def installGroup(self, group, ignoreErrors=False):
-        return self._miniyum.installGroup(
+        return self._minidnf.installGroup(
             group=group,
-            ignoreErrors=ignoreErrors
+            ignoreErrors=ignoreErrors,
         )
 
     def updateGroup(self, group, ignoreErrors=False):
-        return self._miniyum.updateGroup(
+        return self._minidnf.updateGroup(
             group=group,
-            ignoreErrors=ignoreErrors
+            ignoreErrors=ignoreErrors,
         )
 
     def removeGroup(self, group, ignoreErrors=False):
-        return self._miniyum.removeGroup(
+        return self._minidnf.removeGroup(
             group=group,
-            ignoreErrors=ignoreErrors
+            ignoreErrors=ignoreErrors,
         )
 
     def install(self, packages, ignoreErrors=False):
-        return self._miniyum.install(
+        return self._minidnf.install(
             packages=packages,
-            ignoreErrors=ignoreErrors
+            ignoreErrors=ignoreErrors,
         )
 
     def update(self, packages, ignoreErrors=False):
-        return self._miniyum.update(
+        return self._minidnf.update(
             packages=packages,
-            ignoreErrors=ignoreErrors
+            ignoreErrors=ignoreErrors,
         )
 
     def installUpdate(self, packages, ignoreErrors=False):
-        return self._miniyum.installUpdate(
+        return self._minidnf.installUpdate(
             packages=packages,
-            ignoreErrors=ignoreErrors
+            ignoreErrors=ignoreErrors,
         )
 
     def remove(self, packages, ignoreErrors=False):
-        return self._miniyum.remove(
+        return self._minidnf.remove(
             packages=packages,
-            ignoreErrors=ignoreErrors
+            ignoreErrors=ignoreErrors,
         )
 
     def queryGroups(self):
-        return self._miniyum.queryGroups()
+        return self._minidnf.queryGroups()
 
     def queryPackages(self, patterns=None, listAll=False):
-        return self._miniyum.queryPackages(
+        return self._minidnf.queryPackages(
             patterns=patterns,
-            showdups=listAll
+            showdups=listAll,
         )
 
 
