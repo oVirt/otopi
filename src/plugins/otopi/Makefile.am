@@ -24,8 +24,8 @@ MAINTAINERCLEANFILES = \
 SUBDIRS = \
 	core \
 	dialog \
-	system \
 	network \
-	services \
 	packagers \
+	services \
+	system \
 	$(NULL)

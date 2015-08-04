@@ -49,11 +49,11 @@ SUBDIRS = \
 	$(NULL)
 
 dist_noinst_DATA = \
-	README.environment \
-	README.dialog \
-	README.API \
-	README.localization \
 	MAINTAINERS \
+	README.API \
+	README.dialog \
+	README.environment \
+	README.localization \
 	otopi.spec \
 	$(NULL)
 

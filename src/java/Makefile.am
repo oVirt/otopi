@@ -37,11 +37,11 @@ EXTRA_DIST = \
 	$(NULL)
 
 dist_noinst_DATA = \
-	MANIFEST.MF \
 	Event.java \
-	SoftError.java \
+	MANIFEST.MF \
 	MachineDialogParser.java \
 	MachineDialogParserTest.java \
+	SoftError.java \
 	$(NULL)
 
 if JAVA_SDK
@@ -88,8 +88,8 @@ endif
 sources: \
 	tmp.generated \
 	src/main/java/org/ovirt/otopi/dialog/Event.java \
-	src/main/java/org/ovirt/otopi/dialog/SoftError.java \
 	src/main/java/org/ovirt/otopi/dialog/MachineDialogParser.java \
+	src/main/java/org/ovirt/otopi/dialog/SoftError.java \
 	src/test/java/org/ovirt/otopi/dialog/MachineDialogParserTest.java \
 	$(NULL)
 

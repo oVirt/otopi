@@ -26,10 +26,10 @@ MAINTAINERCLEANFILES = \
 mydir=$(otopiplugindir)/otopi/network
 dist_my_PYTHON = \
 	__init__.py \
-	hostname.py \
-	ssh.py \
-	iptables.py \
 	firewalld.py \
+	hostname.py \
+	iptables.py \
+	ssh.py \
 	$(NULL)
 
 clean-local: \

@@ -26,10 +26,10 @@ MAINTAINERCLEANFILES = \
 mydir=$(otopiplugindir)/otopi/system
 dist_my_PYTHON = \
 	__init__.py \
-	info.py \
-	command.py \
-	reboot.py \
 	clock.py \
+	command.py \
+	info.py \
+	reboot.py \
 	$(NULL)
 
 clean-local: \

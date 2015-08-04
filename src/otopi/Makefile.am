@@ -36,20 +36,20 @@ SUBDIRS = \
 dist_otopilib_PYTHON = \
 	__init__.py \
 	__main__.py \
-	main.py \
-	constants.py \
 	base.py \
-	util.py \
+	command.py \
 	common.py \
-	transaction.py \
-	filetransaction.py \
+	constants.py \
 	context.py \
 	dialog.py \
-	services.py \
-	packager.py \
-	command.py \
-	plugin.py \
+	filetransaction.py \
+	main.py \
 	miniyum.py \
+	packager.py \
+	plugin.py \
+	services.py \
+	transaction.py \
+	util.py \
 	$(NULL)
 otopilib_PYTHON = \
 	config.py \

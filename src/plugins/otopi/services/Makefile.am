@@ -26,9 +26,9 @@ MAINTAINERCLEANFILES = \
 mydir=$(otopiplugindir)/otopi/services
 dist_my_PYTHON = \
 	__init__.py \
-	systemd.py \
-	rhel.py \
 	openrc.py \
+	rhel.py \
+	systemd.py \
 	$(NULL)
 
 clean-local: \

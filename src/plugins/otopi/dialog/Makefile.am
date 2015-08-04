@@ -26,11 +26,11 @@ MAINTAINERCLEANFILES = \
 mydir=$(otopiplugindir)/otopi/dialog
 dist_my_PYTHON = \
 	__init__.py \
-	misc.py \
-	constants.py \
-	machine.py \
-	human.py \
 	cli.py \
+	constants.py \
+	human.py \
+	machine.py \
+	misc.py \
 	$(NULL)
 
 clean-local: \

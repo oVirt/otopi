@@ -26,9 +26,9 @@ MAINTAINERCLEANFILES = \
 mydir=$(otopiplugindir)/otopi/core
 dist_my_PYTHON = \
 	__init__.py \
+	config.py \
 	log.py \
 	misc.py \
-	config.py \
 	transaction.py \
 	$(NULL)
 
