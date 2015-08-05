@@ -605,7 +605,7 @@ class MiniDNF():
                     pass
                 elif result == 1:
                     def _askGPG(d):
-                        self._sink.askForGPGKeyImport(
+                        return self._sink.askForGPGKeyImport(
                             d['userid'],
                             d['hexkeyid'],
                         )
