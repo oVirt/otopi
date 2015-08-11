@@ -137,28 +137,28 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         priority=plugin.Stages.PRIORITY_LOW+10,
     )
     def _boot(self):
-        try:
-            self.environment.setdefault(
-                constants.PackEnv.DNFPACKAGER_ENABLED,
-                True
-            )
-            self.environment.setdefault(
-                constants.PackEnv.DNF_DISABLED_PLUGINS,
-                []
-            )
-            self.environment.setdefault(
-                constants.PackEnv.KEEP_ALIVE_INTERVAL,
-                constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
-            )
-            self.environment.setdefault(
-                constants.PackEnv.DNFPACKAGER_EXPIRE_CACHE,
-                True
-            )
-            self.environment.setdefault(
-                constants.PackEnv.DNF_ROLLBACK,
-                True
-            )
+        self.environment.setdefault(
+            constants.PackEnv.DNFPACKAGER_ENABLED,
+            True
+        )
+        self.environment.setdefault(
+            constants.PackEnv.DNF_DISABLED_PLUGINS,
+            []
+        )
+        self.environment.setdefault(
+            constants.PackEnv.KEEP_ALIVE_INTERVAL,
+            constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
+        )
+        self.environment.setdefault(
+            constants.PackEnv.DNFPACKAGER_EXPIRE_CACHE,
+            True
+        )
+        self.environment.setdefault(
+            constants.PackEnv.DNF_ROLLBACK,
+            True
+        )
 
+        try:
             if self.environment[constants.PackEnv.DNFPACKAGER_ENABLED]:
                 self._minidnf = self._getMiniDNF(
                     disabledPlugins=self.environment[
@@ -174,8 +174,8 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
                     self.environment[
                         constants.PackEnv.YUMPACKAGER_ENABLED
                     ] = False
-        except ImportError:
-            self.logger.debug('Cannot import minidnf', exc_info=True)
+        except Exception:
+            self.logger.debug('Cannot initialize minidnf', exc_info=True)
 
     @plugin.event(
         name=constants.Stages.PACKAGERS_DETECTION,

@@ -419,6 +419,9 @@ class MiniDNF():
         sink=None,
         disabledPlugins=None,
     ):
+        if int(dnf.__version__.split('.')[0]) != 1:
+            raise RuntimeError(_('Incompatible DNF'))
+
         self._sink = sink if sink else self._VoidSink()
         self._disabledPlugins = disabledPlugins if disabledPlugins else []
 

@@ -161,32 +161,32 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         priority=plugin.Stages.PRIORITY_LOW,
     )
     def _boot(self):
-        try:
-            self.environment.setdefault(
-                constants.PackEnv.YUMPACKAGER_ENABLED,
-                True
-            )
-            self.environment.setdefault(
-                constants.PackEnv.YUM_DISABLED_PLUGINS,
-                []
-            )
-            self.environment.setdefault(
-                constants.PackEnv.YUM_ENABLED_PLUGINS,
-                []
-            )
-            self.environment.setdefault(
-                constants.PackEnv.KEEP_ALIVE_INTERVAL,
-                constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
-            )
-            self.environment.setdefault(
-                constants.PackEnv.YUMPACKAGER_EXPIRE_CACHE,
-                True
-            )
-            self.environment.setdefault(
-                constants.PackEnv.YUM_ROLLBACK,
-                True
-            )
+        self.environment.setdefault(
+            constants.PackEnv.YUMPACKAGER_ENABLED,
+            True
+        )
+        self.environment.setdefault(
+            constants.PackEnv.YUM_DISABLED_PLUGINS,
+            []
+        )
+        self.environment.setdefault(
+            constants.PackEnv.YUM_ENABLED_PLUGINS,
+            []
+        )
+        self.environment.setdefault(
+            constants.PackEnv.KEEP_ALIVE_INTERVAL,
+            constants.Defaults.PACKAGER_KEEP_ALIVE_INTERVAL
+        )
+        self.environment.setdefault(
+            constants.PackEnv.YUMPACKAGER_EXPIRE_CACHE,
+            True
+        )
+        self.environment.setdefault(
+            constants.PackEnv.YUM_ROLLBACK,
+            True
+        )
 
+        try:
             if self.environment[constants.PackEnv.YUMPACKAGER_ENABLED]:
                 self._refreshMiniyum()
 
@@ -195,8 +195,8 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
                 if os.geteuid() == 0:
                     self._miniyum.selinux_role()
                     self._enabled = True
-        except ImportError:
-            self.logger.debug('Cannot import miniyumlocal', exc_info=True)
+        except Exception:
+            self.logger.debug('Cannot initialize miniyum', exc_info=True)
 
     @plugin.event(
         name=constants.Stages.PACKAGERS_DETECTION,
