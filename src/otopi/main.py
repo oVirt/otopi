@@ -28,6 +28,7 @@ import signal
 import sys
 
 
+from otopi import common
 from otopi import constants
 from otopi import context
 from otopi import util
@@ -158,7 +159,7 @@ class Otopi(object):
             util.raiseExceptionInformation(
                 info=(
                     PluginLoadException,
-                    PluginLoadException(str(e)),
+                    PluginLoadException(common.toStr(e)),
                     sys.exc_info()[2],
                 )
             )

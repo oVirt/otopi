@@ -78,4 +78,20 @@ def typeName(value):
     return ret
 
 
+@util.export
+def toStr(o):
+    if isinstance(o, str):
+        return o
+    elif isinstance(o, builtins.unicode):
+        return o.encode('utf-8')
+    elif hasattr(o, '__repr__'):
+        return toStr(o.__repr__())
+    elif hasattr(o, '__unicode__'):
+        return toStr(o.__unicode__())
+    elif hasattr(o, '__str__'):
+        return o.__str__()
+    else:
+        return o.__class__.__name__
+
+
 # vim: expandtab tabstop=4 shiftwidth=4

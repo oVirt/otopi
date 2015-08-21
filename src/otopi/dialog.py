@@ -32,6 +32,7 @@ import os
 import sys
 
 
+from . import common
 from . import constants
 from . import util
 
@@ -214,7 +215,7 @@ class DialogBaseImpl(DialogBase):
             pass
 
     def __logString(self, name, string):
-        for line in str(string).splitlines():
+        for line in string.splitlines():
             self.logger.debug('DIALOG:%-10s %s', name, line)
 
     def __notification(self, event):
@@ -270,8 +271,9 @@ class DialogBaseImpl(DialogBase):
         self.__flush(stream=self.__output)
 
     def _write(self, text, flush=True):
+        text = common.toStr(text)
         self.__logString('SEND', text)
-        self.__output.write(str(text))
+        self.__output.write(text)
         if flush:
             self.__flush(self.__output)
 

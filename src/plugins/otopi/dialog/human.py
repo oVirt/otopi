@@ -134,7 +134,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
 
         if text is None:
             text = '\n'
-        text = str(text)
+        text = common.toStr(text)
 
         lines = text.splitlines()
         if len(lines) > 0:
@@ -155,9 +155,9 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
     ):
         self.logger.debug('query %s', name)
         if default is not None:
-            default = str(default)
+            default = common.toStr(default)
         if validValues is not None:
-            validValues = [str(v) for v in validValues]
+            validValues = [common.toStr(v) for v in validValues]
         note = self._queryStringNote(
             name=name,
             note=note,

@@ -31,6 +31,7 @@ import subprocess
 import tempfile
 
 
+from . import common
 from . import transaction
 from . import util
 
@@ -159,7 +160,7 @@ class FileTransaction(transaction.TransactionElement):
                 if content:
                     self._content += '\n'
             else:
-                self._content = str(content)
+                self._content = common.toStr(content)
                 if not self._content.endswith('\n'):
                     self._content += '\n'
 

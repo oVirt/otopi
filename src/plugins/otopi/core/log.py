@@ -30,6 +30,7 @@ import tempfile
 import time
 
 
+from otopi import common
 from otopi import constants
 from otopi import plugin
 from otopi import util
@@ -204,7 +205,7 @@ class Plugin(plugin.PluginBase):
                 buffering=1,
             )
         except IOError as e:
-            self._logerror = str(e)
+            self._logerror = common.toStr(e)
             self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = open(
                 os.devnull,
                 mode='a',

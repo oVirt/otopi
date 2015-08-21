@@ -34,6 +34,7 @@ import time
 
 
 from . import base
+from . import common
 from . import util
 
 
@@ -664,7 +665,7 @@ class PluginBase(base.Base):
                 _("Command '{command}' failed to execute: {error}").format(
                     command=(
                         ' | '.join([
-                            ' '.join([str(a) for a in kw['args']])
+                            ' '.join([common.toStr(a) for a in kw['args']])
                             for kw in popenArgs
                         ])
                     ),

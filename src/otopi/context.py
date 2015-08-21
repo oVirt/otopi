@@ -32,6 +32,7 @@ import traceback
 
 from . import base
 from . import command
+from . import common
 from . import config
 from . import constants
 from . import dialog
@@ -435,7 +436,7 @@ class Context(base.Base):
                         not self.environment[constants.BaseEnv.ERROR]
                     ):
                         oldEnvironment = dict(
-                            (k, str(v))
+                            (k, common.toStr(v))
                             for k, v in self.environment.items()
                         )
                         self._executeMethod(self._currentStage, methodinfo)
@@ -488,11 +489,11 @@ class Context(base.Base):
         """Dump environment."""
         diff = False
         for key in sorted(self.environment.keys()):
-            value = str(self.environment[key])
+            value = common.toStr(self.environment[key])
 
             if (
                 old is None or
-                value != str(old.get(key))
+                value != common.toStr(old.get(key))
             ):
                 if not diff:
                     diff = True

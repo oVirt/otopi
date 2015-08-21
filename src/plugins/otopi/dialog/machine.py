@@ -118,7 +118,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
 
         if text is None:
             text = '\n'
-        text = str(text)
+        text = common.toStr(text)
 
         for line in text.splitlines():
             self._write(
@@ -141,9 +141,9 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         default=False,
     ):
         if default is not None:
-            default = str(default)
+            default = common.toStr(default)
         if validValues is not None:
-            validValues = [str(v) for v in validValues]
+            validValues = [common.toStr(v) for v in validValues]
         note = self._queryStringNote(
             name=name,
             note=note,
