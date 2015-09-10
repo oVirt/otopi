@@ -84,12 +84,12 @@ def toStr(o):
         return o
     elif isinstance(o, builtins.unicode):
         return o.encode('utf-8')
-    elif hasattr(o, '__repr__'):
-        return toStr(o.__repr__())
     elif hasattr(o, '__unicode__'):
         return toStr(o.__unicode__())
     elif hasattr(o, '__str__'):
         return o.__str__()
+    elif hasattr(o, '__repr__'):
+        return toStr(o.__repr__())
     else:
         return o.__class__.__name__
 
