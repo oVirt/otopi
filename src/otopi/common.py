@@ -82,16 +82,32 @@ def typeName(value):
 def toStr(o):
     if isinstance(o, str):
         return o
-    elif isinstance(o, builtins.unicode):
-        return o.encode('utf-8')
-    elif hasattr(o, '__unicode__'):
-        return toStr(o.__unicode__())
-    elif hasattr(o, '__str__'):
-        return o.__str__()
-    elif hasattr(o, '__repr__'):
-        return toStr(o.__repr__())
-    else:
-        return o.__class__.__name__
+
+    if isinstance(o, builtins.unicode):
+        try:
+            return o.encode('utf-8')
+        except Exception:
+            pass
+
+    if hasattr(o, '__unicode__'):
+        try:
+            return toStr(o.__unicode__())
+        except Exception:
+            pass
+
+    if hasattr(o, '__str__'):
+        try:
+            return o.__str__()
+        except Exception:
+            pass
+
+    if hasattr(o, '__repr__'):
+        try:
+            return toStr(o.__repr__())
+        except Exception:
+            pass
+
+    return o.__class__.__name__
 
 
 # vim: expandtab tabstop=4 shiftwidth=4
