@@ -64,8 +64,7 @@ public class MachineDialogParserTest {
 			"XXX\n"
 		);
 		MachineDialogParser parser = getParser(incoming, new ByteArrayOutputStream());
-		Event.Base bevent;
-		bevent = parser.nextEvent();
+		parser.nextEvent();
 	}
 
 	@Test(expected=RuntimeException.class)
@@ -74,8 +73,7 @@ public class MachineDialogParserTest {
 			"***Q:STRING1 str1\n"
 		);
 		MachineDialogParser parser = getParser(incoming, new ByteArrayOutputStream());
-		Event.Base bevent;
-		bevent = parser.nextEvent();
+		parser.nextEvent();
 	}
 
 	@Test(expected=RuntimeException.class)
@@ -84,8 +82,7 @@ public class MachineDialogParserTest {
 			"***Q:MUTLI-STRING str1\n"
 		);
 		MachineDialogParser parser = getParser(incoming, new ByteArrayOutputStream());
-		Event.Base bevent;
-		bevent = parser.nextEvent();
+		parser.nextEvent();
 	}
 
 	@Test
@@ -450,10 +447,12 @@ public class MachineDialogParserTest {
 			"***Q:VALUE key1\n" +
 			""
 		);
+		/*
 		String expected_outgoing = (
 			"env-query -k key1\n" +
 			""
 		);
+		*/
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		MachineDialogParser parser = getParser(incoming, bos);
 
@@ -474,10 +473,12 @@ public class MachineDialogParserTest {
 			"***Q:VALUE key1\n" +
 			""
 		);
+		/*
 		String expected_outgoing = (
 			"env-query -k key1\n" +
 			""
 		);
+		*/
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		MachineDialogParser parser = getParser(incoming, bos);
 

@@ -23,6 +23,9 @@ package org.ovirt.otopi.dialog;
  * context.
  */
 public class SoftError extends RuntimeException {
+
+	private static final long serialVersionUID = 3075919756796110432L;
+
 	public SoftError(String message) {
 		super(message);
 	}

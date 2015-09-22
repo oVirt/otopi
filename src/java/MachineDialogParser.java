@@ -163,8 +163,7 @@ public class MachineDialogParser {
 			event.description = s[2];
 		}
 		else if (request.equals(DialogMachineConst.TERMINATE)) {
-			Event.Terminate event;
-			bevent = event = new Event.Terminate();
+			bevent = new Event.Terminate();
 		}
 		else {
 			throw new RuntimeException(
@@ -380,7 +379,9 @@ public class MachineDialogParser {
 			}
 			catch (Exception e) {
 				log.error("Cannot parse input", e);
-				throw new IOException("Cannot parse input", e);
+				IOException eout = new IOException("Cannot parse input");
+				eout.initCause(e);
+				throw eout;
 			}
 		}
 
