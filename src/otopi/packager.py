@@ -136,7 +136,20 @@ class PackagerBase(object):
         True -- success.
 
         """
-        raise NotImplementedError(_('Packager update not implemented'))
+        # legacy note, this should not have been implemented
+        # however, offline packages expect it to be implemented.
+        # logic is incorrect, and packagers should reimplement it
+        # properly.
+        return (
+            self.install(
+                packages=packages,
+                ignoreErrors=ignoreErrors,
+            ) or
+            self.update(
+                packages=packages,
+                ignoreErrors=ignoreErrors,
+            )
+        )
 
     def remove(self, packages, ignoreErrors=False):
         """Remove packages.
