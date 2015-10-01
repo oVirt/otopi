@@ -10,6 +10,7 @@
 ./src/otopi/__init__.py
 ./src/otopi/__main__.py
 ./src/otopi/main.py
+./src/otopi/minidnf.py
 ./src/otopi/miniyum.py
 ./src/otopi/packager.py
 ./src/otopi/plugin.py
@@ -31,6 +32,7 @@
 ./src/plugins/otopi/network/__init__.py
 ./src/plugins/otopi/network/iptables.py
 ./src/plugins/otopi/network/ssh.py
+./src/plugins/otopi/packagers/dnfpackager.py
 ./src/plugins/otopi/packagers/__init__.py
 ./src/plugins/otopi/packagers/yumpackager.py
 ./src/plugins/otopi/services/__init__.py
