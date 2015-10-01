@@ -379,9 +379,7 @@ public class MachineDialogParser {
 			}
 			catch (Exception e) {
 				log.error("Cannot parse input", e);
-				IOException eout = new IOException("Cannot parse input");
-				eout.initCause(e);
-				throw eout;
+				throw (IOException) new IOException("Cannot parse input").initCause(e);
 			}
 		}
 
