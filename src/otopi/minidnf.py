@@ -521,6 +521,9 @@ class MiniDNF():
             self._base = self._createBase()
             self._baseTransaction = self._base.history.last().tid
         except Exception as e:
+            if self._base is not None:
+                self._base.close()
+                self._base = None
             self._sink.error(e)
             raise
 
