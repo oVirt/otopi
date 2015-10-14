@@ -158,7 +158,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_BOOT,
-        priority=plugin.Stages.PRIORITY_LOW,
+        priority=plugin.Stages.PRIORITY_LOW+1,
     )
     def _boot(self):
         self.environment.setdefault(
