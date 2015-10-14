@@ -5,9 +5,11 @@ import logging
 import os
 import sys
 import time
+import traceback
 
 import dnf
 import dnf.callback
+import dnf.logging
 import dnf.subject
 import dnf.yum.rpmtrans
 
@@ -87,12 +89,17 @@ class MiniDNF():
             self._sink = sink
 
         def emit(self, record):
-            if record.levelno == logging.DEBUG:
-                self._sink.verbose(record.getMessage())
-            elif record.levelno in (logging.INFO, logging.WARNING):
-                self._sink.info(record.getMessage())
-            else:
-                self._sink.error(record.getMessage())
+            if record.getMessage():
+                if record.levelno > logging.WARNING:
+                        self._sink.error(record.getMessage())
+                elif record.levelno > logging.DEBUG:
+                    self._sink.info(record.getMessage())
+                else:
+                    self._sink.verbose(record.getMessage())
+            if record.exc_info:
+                self._sink.verbose(
+                    ''.join(traceback.format_exception(*record.exc_info))
+                )
 
     class _MyDownloadProgress(dnf.callback.DownloadProgress):
 
@@ -840,6 +847,8 @@ class Example():
 
     @staticmethod
     def main():
+        logging.getLogger('dnf').setLevel(dnf.logging.SUBDEBUG)
+
         # BEGIN: PROCESS-INITIALIZATION
         minidnf = MiniDNF(sink=Example.MyDNFSink())
         minidnf.selinux_role()
