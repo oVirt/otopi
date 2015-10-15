@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # otopi -- plugable installer
 # Copyright (C) 2012-2013 Red Hat, Inc.
