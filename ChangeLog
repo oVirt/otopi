@@ -2,6 +2,8 @@ otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
 ????-??-?? - Version 1.4.1
 
+ * packagers: dnf: do not remove leftover packages when doing
+   a rollback, rhbz#1283267.
 
 2015-10-15 - Version 1.4.0
 

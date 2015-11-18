@@ -341,6 +341,11 @@ class MiniDNF():
         base = dnf.Base()
         if base.conf.plugins:
             base.plugins.load(base.conf.pluginpath, self._disabledPlugins)
+
+        # This avoid DNF trying to remove packages that were not touched by
+        # its own transaction when doing a rollback.
+        base.conf.clean_requirements_on_remove = False
+
         base.plugins.run_init(base, None)
         base.read_all_repos()
         base.repos.all().set_progress_bar(self._MyDownloadProgress(self._sink))
