@@ -1,5 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.4.2
+
+
 2016-02-09 - Version 1.4.1
 
  * packagers: dnf: do not remove leftover packages when doing
