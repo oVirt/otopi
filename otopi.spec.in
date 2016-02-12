@@ -1,6 +1,6 @@
 #
 # otopi -- plugable installer
-# Copyright (C) 2012-2013 Red Hat, Inc.
+# Copyright (C) 2012-2016 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -20,18 +20,6 @@
 %global		package_version @PACKAGE_VERSION@
 %global		package_maven_version @PACKAGE_MAVEN_VERSION@
 
-%if 0%{?fedora:1}
-%global _use_maven 1
-%endif
-%if 0%{?rhel:1}
-%if %{rhel} >= 7
-%global _use_maven 1
-%else
-%global _use_maven 0
-%global _use_repolib 1
-%global maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
-%endif
-%endif
 
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
 Name:		@PACKAGE_NAME@
@@ -42,7 +30,6 @@ URL:		http://www.ovirt.org
 Source:		http://resources.ovirt.org/pub/src/%{name}/%{name}-%{package_version}.tar.gz
 Group:		Development/Libraries
 
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch
 
 Requires:	python
@@ -50,7 +37,6 @@ BuildRequires:	gettext
 BuildRequires:	python2-devel
 BuildRequires:	java-devel
 
-%if %{_use_maven}
 BuildRequires:	apache-commons-logging
 BuildRequires:	junit
 BuildRequires:	maven-compiler-plugin
@@ -61,11 +47,6 @@ BuildRequires:	maven-javadoc-plugin
 BuildRequires:	maven-source-plugin
 BuildRequires:	maven-surefire-provider-junit
 BuildRequires:	maven-local
-%else
-BuildRequires:	jpackage-utils
-BuildRequires:	jakarta-commons-logging
-BuildRequires:	junit4
-%endif
 
 %description
 Standalone plugin based installation framework to be used to setup
@@ -77,22 +58,16 @@ and transaction management.
 Summary:	%{name} java support
 Requires:	%{name} = %{version}-%{release}
 Requires:	java
-%if %{_use_maven}
 Requires:	apache-commons-logging
-%else
-Requires:	jakarta-commons-logging
-%endif
 %description java
 java libraries.
 
-%if %{_use_maven}
 %package javadoc
 Summary:	Javadocs for %{name}
 Group:		Documentation
 
 %description javadoc
 This package contains the API documentation for %{name}.
-%endif
 
 %package devtools
 Summary:	%{name} development tools
@@ -102,57 +77,26 @@ Provides:	%{name}-devel = %{version}-%{release}
 %description devtools
 Development tools for %{name}.
 
-%if 0%{?_use_repolib:1}
-%package repolib
-Summary:	%{name} maven repo
-%description repolib
-%{name} maven repo
-%endif
-
 %prep
 %setup -q -n %{name}-%{package_version}
 
 %build
-%if %{_use_maven}
-%global conf --disable-java-sdk-compile
-%else
-%global conf COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
-%endif
 %configure \
 	--docdir="%{_docdir}/%{name}-%{version}" \
 	--disable-python-syntax-check \
 	--enable-java-sdk \
 	--with-local-version="%{name}-%{version}-%{release}" \
-	%{?conf}
+	--disable-java-sdk-compile
 make %{?_smp_mflags}
-
-%if %{_use_maven}
 cd src/java
 %mvn_build
 cd ../..
-%endif
 
 %install
-rm -rf "%{buildroot}"
 make %{?_smp_mflags} install DESTDIR="%{buildroot}"
-
-%if %{_use_maven}
 cd src/java
 %mvn_install
 cd ../..
-%else
-install -d "%{buildroot}%{_javadir}/%{name}"
-install target/%{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}"
-ln -s %{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}/%{name}.jar"
-cat > src/java/.mfiles << __EOF__
-%{_javadir}/%{name}/
-__EOF__
-
-install -d "%{buildroot}%{maven2brewrepodir}"
-cp "%{buildroot}%{_javadir}/%{name}/%{name}.jar" "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.jar"
-cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.pom"
-%endif
-
 install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 
 %files
@@ -160,7 +104,7 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %dir %{_datadir}/%{name}/plugins
 %dir %{_sysconfdir}/%{name}.conf.d
 %doc AUTHORS
-%doc COPYING
+%license COPYING
 %doc README
 %doc README.API
 %doc README.dialog
@@ -172,18 +116,11 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 
 %files java -f src/java/.mfiles
 
-%if %{_use_maven}
 %files javadoc -f src/java/.mfiles-javadoc
-%endif
 
 %files devtools
 %{_datadir}/%{name}/%{name}-bundle
 %{python_sitelib}/%{name}/codegen/
-
-%if 0%{?_use_repolib:1}
-%files repolib
-%{maven2brewrepodir}/
-%endif
 
 %changelog
 * Tue Feb 9 2016 Yedidyah Bar David <didi@redhat.com> - 1.4.1-1
