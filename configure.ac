@@ -1,6 +1,6 @@
 dnl
 dnl otopi -- plugable installer
-dnl Copyright (C) 2012-2013 Red Hat, Inc.
+dnl Copyright (C) 2012-2016 Red Hat, Inc.
 dnl
 dnl This library is free software; you can redistribute it and/or
 dnl modify it under the terms of the GNU Lesser General Public
@@ -20,8 +20,8 @@ dnl
 AC_PREREQ(2.60)
 
 define([VERSION_MAJOR], [1])
-define([VERSION_MINOR], [4])
-define([VERSION_FIX], [2])
+define([VERSION_MINOR], [5])
+define([VERSION_FIX], [0])
 define([VERSION_NUMBER], VERSION_MAJOR[.]VERSION_MINOR[.]VERSION_FIX)
 define([VERSION_SUFFIX], [_master])
 
