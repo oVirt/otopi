@@ -163,10 +163,10 @@ class MiniDNF():
                 _('Downloaded {payload}{status}{message}').format(
                     payload=payload,
                     status=(
-                        (_(' ') + self._STATUS_2_STR.get(status, _('Unknown')))
+                        (' ' + self._STATUS_2_STR.get(status, _('Unknown')))
                         if status else ''
                     ),
-                    message=(_(' ') + msg) if msg else '',
+                    message=(' ' + msg) if msg else '',
                 )
             )
 
