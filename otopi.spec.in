@@ -131,8 +131,9 @@ cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_ve
 %endif
 
 install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
+%find_lang %{name}
 
-%files
+%files -f %{name}.lang
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/plugins
 %dir %{_sysconfdir}/%{name}.conf.d
