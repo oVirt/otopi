@@ -156,7 +156,7 @@ class FileTransaction(transaction.TransactionElement):
             self._content = content
         else:
             if isinstance(content, list) or isinstance(content, tuple):
-                self._content = '\n'.join(content)
+                self._content = '\n'.join([common.toStr(i) for i in content])
                 if content:
                     self._content += '\n'
             else:
