@@ -146,6 +146,7 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %exclude %{python_sitelib}/%{name}/codegen/
 %{_datadir}/%{name}/plugins/%{name}/
 %{_sbindir}/%{name}
+%{_bindir}/%{name}-config-query
 %{python_sitelib}/%{name}/
 
 %files java -f src/java/.mfiles
