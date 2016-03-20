@@ -49,6 +49,7 @@ def _init_plugin():
 # the core/config.py plugin.
 _init_plugin()
 
+
 @util.export
 class Plugin(plugin.PluginBase):
     """ Force failure plugin."""
