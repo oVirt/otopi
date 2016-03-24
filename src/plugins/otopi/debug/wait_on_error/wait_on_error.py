@@ -15,7 +15,8 @@ from otopi import util
 from otopi import plugin
 
 
-def _(m): gettext.dgettext(message=m, domain='ovirt-engine-setup')
+def _(m):
+    gettext.dgettext(message=m, domain='ovirt-engine-setup')
 
 
 class WOEHandler(logging.Handler):
