@@ -21,6 +21,10 @@
 ./src/plugins/otopi/core/log.py
 ./src/plugins/otopi/core/misc.py
 ./src/plugins/otopi/core/transaction.py
+./src/plugins/otopi/debug/force_fail/force_fail.py
+./src/plugins/otopi/debug/force_fail/__init__.py
+./src/plugins/otopi/debug/wait_on_error/__init__.py
+./src/plugins/otopi/debug/wait_on_error/wait_on_error.py
 ./src/plugins/otopi/dialog/cli.py
 ./src/plugins/otopi/dialog/constants.py
 ./src/plugins/otopi/dialog/human.py

@@ -27,6 +27,7 @@ tmp.*
 .bundeled
 build/otopi-bundle
 build/otopi-bundle.in
+intl
 src/otopi/config.py
 src/otopi/config.py.in
 target

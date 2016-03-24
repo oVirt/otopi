@@ -24,7 +24,7 @@ Requires:	python
 BuildRequires:	apache-commons-logging
 BuildRequires:	java-devel
 BuildRequires:	junit
-BuildRequires:	gettext
+BuildRequires:	gettext >= 0.18.2
 BuildRequires:	python2-devel
 
 %if %{_use_maven}
