@@ -67,8 +67,6 @@ This package contains the API documentation for %{name}.
 %package devtools
 Summary:	%{name} development tools
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	%{name}-devel < 1.2.0
-Provides:	%{name}-devel = %{version}-%{release}
 
 %description devtools
 Development tools for %{name}.
