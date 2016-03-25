@@ -1,0 +1,11 @@
+apache-commons-logging
+autoconf
+automake
+java-devel
+javapackages-tools
+junit
+gettext-devel
+make
+pyflakes
+python-pep8
+python2-devel
