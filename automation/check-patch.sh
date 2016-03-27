@@ -11,4 +11,4 @@ rpmbuild \
     -ta otopi-*.tar.gz
 
 yum install -y $(find "$PWD/tmp.repos" -iname \*noarch\*.rpm)
-otopi
+OTOPI_DEBUG=1 otopi
