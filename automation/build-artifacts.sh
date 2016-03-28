@@ -21,3 +21,5 @@ find \
     "$PWD/tmp.repos" \
     -iname \*.rpm \
     -exec mv {} exported-artifacts/ \;
+
+createrepo exported-artifacts
