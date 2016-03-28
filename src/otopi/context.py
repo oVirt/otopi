@@ -216,7 +216,10 @@ class Context(base.Base):
                 )
             ),
             constants.BaseEnv.RANDOMIZE_EVENTS: False,
-            constants.BaseEnv.FAIL_ON_PRIO_OVERRIDE: False,
+            constants.BaseEnv.FAIL_ON_PRIO_OVERRIDE: not os.environ.get(
+                constants.SystemEnvironment.ALLOW_PRIORITY_OVERRIDE,
+                False
+            )
         }
         self.registerDialog(dialog.DialogBase())
         self.registerServices(services.ServicesBase())
