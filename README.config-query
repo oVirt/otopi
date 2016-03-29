@@ -32,7 +32,7 @@ The tool will return the following return codes:
   - 0, if user-provided value matches with value found in configuration
     file.
   - 1, if key exists in configuration file, but user-provided value does
-    not matche with value found in configuration file.
+    not match with value found in configuration file.
   - 2, if requested key/section does not exists in configuration file, or
     if no configuration file was found.
 

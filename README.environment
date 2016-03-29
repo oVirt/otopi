@@ -43,11 +43,11 @@ BASE/error(bool)
     Error during sequence.
 
 BASE/executionDirectory(str)
-    Directory where instaler was executed.
+    Directory where installer was executed.
     Installer changes to '/' to avoid errors during program execution.
 
 BASE/exitCode(list)
-    List of dictionary entires, keys are priority, code.
+    List of dictionary entries, keys are priority, code.
     Highest priority wins.
     Keys should be based on Stages.PRIORITY_*.
 
@@ -64,7 +64,7 @@ CORE/logFileName(str)
     Log file name.
 
 CORE/configFileName(str) [/etc/otopi.conf]
-    Configration file names. ':' separated.
+    Configuration file names. ':' separated.
 
 CORE/configFileAppend(str)
     Extra configuration to load.

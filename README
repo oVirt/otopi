@@ -35,7 +35,7 @@ otopi [variables]
 variables ::= name=type:value variables | APPEND:name=type:value | ''
 type ::= none | bool | int | str | multi-str
 
-APPEND: prefix appends as collon list string.
+APPEND: prefix appends as colon list string.
 
 CUSTOMIZATION
 -------------
@@ -96,7 +96,7 @@ Refer to README.environment
 UNPRIVILEDGE EXECUTION
 ----------------------
 
-Using sudo it is possible to escelate priviledge. Use the following
+Using sudo it is possible to escalate privilege. Use the following
 configuration:
 
 /etc/sudoers.d/50-otopi.conf

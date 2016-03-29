@@ -128,7 +128,7 @@ located at the datadir of the package.
 Usage:
  otopi-bundle gettext_domains target [root]
 
-After doing so symlink any of the requried plugins, and add
+After doing so symlink any of the required plugins, and add
 installation script such as the following:
 
  #!/bin/sh

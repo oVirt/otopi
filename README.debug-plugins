@@ -8,7 +8,7 @@ wait_on_error
 -------------
 Activated by setting in the system environment OTOPI_WAIT_ON_ERROR=1.
 
-If activated, each occurence of an [ERROR] message triggers a prompt:
+If activated, each occurrence of an [ERROR] message triggers a prompt:
 
     Press Enter to continue.
 
