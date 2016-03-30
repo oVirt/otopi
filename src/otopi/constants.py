@@ -128,6 +128,7 @@ class DialogEnv(object):
     CUSTOMIZATION = 'DIALOG/customization'
     BOUNDARY = 'DIALOG/boundary'
     CLI_VERSION = 'DIALOG/cliVersion'
+    AUTO_ACCEPT_DEFAULT = 'DIALOG/autoAcceptDefault'
 
 
 @util.export

@@ -85,6 +85,10 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         self._open(logFormatter=self._MyFormatter(parent=self))
         self._enabled = True
         self.context.registerDialog(self)
+        self.environment.setdefault(
+            constants.DialogEnv.AUTO_ACCEPT_DEFAULT,
+            False
+        )
 
     @plugin.event(
         stage=plugin.Stages.STAGE_TERMINATE,
@@ -154,6 +158,20 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             validValues = [v.lower() for v in validValues]
 
         accepted = False
+
+        if (
+            self.environment[constants.DialogEnv.AUTO_ACCEPT_DEFAULT] and
+            default is not None
+        ):
+            tempval = default if caseSensitive else default.lower()
+            if (
+                validValues is None or
+                tempval in validValues
+            ):
+                self.dialog.note(text=note, prompt=False)
+                value = tempval
+                accepted = True
+
         while not accepted:
             self.dialog.note(text=note, prompt=prompt)
             value = self._readline(hidden=hidden)
