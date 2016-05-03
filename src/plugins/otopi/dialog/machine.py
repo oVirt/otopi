@@ -115,6 +115,24 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             )
         self._flush()
 
+    def _writeQueryStart(self, name):
+        self._write(
+            text='%s%s %s\n' % (
+                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
+                dialogcons.DialogMachineConst.QUERY_START,
+                name,
+            )
+        )
+
+    def _writeQueryEnd(self, name):
+        self._write(
+            text='%s%s %s\n' % (
+                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
+                dialogcons.DialogMachineConst.QUERY_END,
+                name,
+            )
+        )
+
     def queryString(
         self,
         name,
@@ -136,8 +154,39 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             default=default,
         )
 
-        if not caseSensitive and validValues is not None:
-            validValues = [v.lower() for v in validValues]
+        self._writeQueryStart(name)
+        self.dialog.note(text=note, prompt=prompt)
+        if default:
+            self._write(
+                text='%s%s %s\n' % (
+                    dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
+                    dialogcons.DialogMachineConst.QUERY_DEFAULT_VALUE,
+                    default,
+                )
+            )
+        if validValues:
+            self._write(
+                text='%s%s %s\n' % (
+                    dialogcons.DialogMachineConst.REQUEST_PREFIX,
+                    dialogcons.DialogMachineConst.QUERY_VALID_VALUES,
+                    '|'.join(
+                        [
+                            x.replace('\\', '\\\\').replace('|', '\|')
+                            for x in validValues
+                        ]
+                    ),
+                )
+            )
+        self._write(
+            text='%s%s %s\n' % (
+                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
+                dialogcons.DialogMachineConst.QUERY_HIDDEN,
+                (
+                    dialogcons.DialogMachineConst.QUERY_HIDDEN_TRUE if hidden
+                    else dialogcons.DialogMachineConst.QUERY_HIDDEN_FALSE
+                )
+            )
+        )
 
         self._write(
             text='%s%s %s\n' % (
@@ -146,7 +195,9 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 name,
             )
         )
-        self.dialog.note(text=note, prompt=prompt)
+        self._writeQueryEnd(name)
+        if not caseSensitive and validValues is not None:
+            validValues = [v.lower() for v in validValues]
         value = self._readline()
         if not value and default is not None:
             value = default
@@ -168,15 +219,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             note = _("\nPlease specify multiple strings for '{name}':").format(
                 name=name
             )
-        self._write(
-            text='%s%s %s %s %s\n' % (
-                dialogcons.DialogMachineConst.REQUEST_PREFIX,
-                dialogcons.DialogMachineConst.QUERY_MULTI_STRING,
-                name,
-                self.BOUNDARY,
-                self.ABORT_BOUNDARY,
-            )
-        )
+        self._writeQueryStart(name)
         self.dialog.note(text=note)
         self.dialog.note(
             text=_(
@@ -187,6 +230,16 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 abortboundary=self.ABORT_BOUNDARY,
             )
         )
+        self._write(
+            text='%s%s %s %s %s\n' % (
+                dialogcons.DialogMachineConst.REQUEST_PREFIX,
+                dialogcons.DialogMachineConst.QUERY_MULTI_STRING,
+                name,
+                self.BOUNDARY,
+                self.ABORT_BOUNDARY,
+            )
+        )
+        self._writeQueryEnd(name)
         value = []
         while True:
             v = self._readline()
@@ -203,13 +256,8 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             note = _("\nPlease specify value for '{name}':").format(
                 name=name
             )
-        self._write(
-            text='%s%s %s\n' % (
-                dialogcons.DialogMachineConst.REQUEST_PREFIX,
-                dialogcons.DialogMachineConst.QUERY_VALUE,
-                name,
-            )
-        )
+
+        self._writeQueryStart(name)
         self.dialog.note(text=note)
         self.dialog.note(
             text=_(
@@ -219,6 +267,14 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 name=name,
             ),
         )
+        self._write(
+            text='%s%s %s\n' % (
+                dialogcons.DialogMachineConst.REQUEST_PREFIX,
+                dialogcons.DialogMachineConst.QUERY_VALUE,
+                name,
+            )
+        )
+        self._writeQueryEnd(name)
 
         opcode, variable = self._readline().split(' ', 1)
         variable = variable.split('=', 1)

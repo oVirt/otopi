@@ -102,25 +102,46 @@ Terminate dialog.
 
 Log
 
-^***L:INFO (.*)\n$
-^***L:WARNING (.*)\n$
-^***L:ERROR (.*)\n$
+^\*\*\*L:INFO (.*)\n$
+^\*\*\*L:WARNING (.*)\n$
+^\*\*\*L:ERROR (.*)\n$
     Group1 - message.
 
 Query
 
-^***Q:STRING (.*)\n$
+Each query is framed between
+^\*\*\%QStart: (?P<NAME>.*)\n
+and
+^\*\*\%QEnd: (?P<NAME>.*)\n
+
+The query frame will always include:
+^\*\*\*Q:(?P<TYPE>STRING|MULTI-STRING|VALUE) (?P=NAME)\s?(?P<BOUNDARY>.*)\s?(?P<ABOUNDARY>.*)\n$
+    NAME: Variable name
+    TYPE: Query type
+
+The query frame can contain additional query options like:
+^\*\*\%QDefault: (?P<DValue>.*)\n$
+    DValue: default value as string
+
+^\*\*\%QValidValues: (?P<ValidValues>.*)\n$
+    ValidValues: valid value list. '\\' in each value is replaced with '\\\\',
+                 '|' is replaced with '\\|', and values are separated with '|'.
+
+^\*\*\%QHidden: (?P<Hidden>.*)\n$
+    Hidden: TRUE or FALSE. If TRUE, the reply should be hidden.
+
+^\*\*\*Q:STRING (.*)\n$
     Group1: variable name.
     Single line response.
 
-^***Q:MULTI-STRING (.*) (.*) (.*)\n$
+^\*\*\*Q:MULTI-STRING (.*) (.*) (.*)\n$
     Group1: variable name.
     Group2: boundary.
     Group3: abort boundary.
     Multiple line response.
     Boundary at own line marks end.
 
-^***Q:VALUE (.*)\n$
+^\*\*\*Q:VALUE (.*)\n$
     Group1: variable name.
     Response:
         ^VALUE (.*)=(.*):(.*)\n$
@@ -131,9 +152,13 @@ Query
         ^ABORT (.*)\n$
         Group1: variable name.
 
+The query frame may include other output, including a note to the user.
+In practice, relevant notes to the user may also be output prior to the
+query frame.
+
 Confirm
 
-^***CONFIRM (.*) (.*)$
+^\*\*\*CONFIRM (.*) (.*)$
     Group1: id.
     Group2: description.
     Response:
@@ -146,12 +171,12 @@ Confirm
 
 Display
 
-^***D:VALUE (.*)=(.*):(.*)\n$
+^\*\*\*D:VALUE (.*)=(.*):(.*)\n$
     Group1: variable name.
     Group2: type.
     Group3: value.
 
-^***D:MULTI-STRING (.*) (.*)\n$
+^\*\*\*D:MULTI-STRING (.*) (.*)\n$
 (^.*\n$)*
 ^(.*)\n$
     Group1: variable name.

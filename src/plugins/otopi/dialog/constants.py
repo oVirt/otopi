@@ -32,6 +32,18 @@ class DialogMachineConst(object):
     QUERY_VALUE_RESPONSE_ABORT = 'ABORT'
     QUERY_VALUE_RESPONSE_VALUE = 'VALUE'
 
+    QUERY_EXTRA_PREFIX = '**%'
+    # Prefix for extra info for queries added by otopi 1.5.
+    # Clients should ignore lines with this prefix if they can't parse them.
+    QUERY_START = 'QStart:'
+    QUERY_DEFAULT_VALUE = 'QDefault:'
+    QUERY_VALID_VALUES = 'QValidValues:'
+    QUERY_HIDDEN = 'QHidden:'
+    QUERY_END = 'QEnd:'
+
+    QUERY_HIDDEN_TRUE = 'TRUE'
+    QUERY_HIDDEN_FALSE = 'FALSE'
+
     DISPLAY_PREFIX = 'D:'
     DISPLAY_MULTI_STRING = DISPLAY_PREFIX + 'MULTI-STRING'
     DISPLAY_VALUE = DISPLAY_PREFIX + 'VALUE'

@@ -350,6 +350,10 @@ public class MachineDialogParser {
 						out
 					);
 				}
+				else if (line.startsWith(DialogMachineConst.QUERY_EXTRA_PREFIX)) {
+					// TODO add new otopi 1.5 extra options parsing.
+					// Currently not needed for ovirt-host-deploy.
+				}
 				else {
 					throw new RuntimeException("Invalid data recieved during bootstrap");
 				}
