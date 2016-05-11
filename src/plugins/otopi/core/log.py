@@ -10,6 +10,7 @@ import gettext
 import logging
 import os
 import random
+import re
 import string
 import tempfile
 import time
@@ -63,14 +64,17 @@ class Plugin(plugin.PluginBase):
         def environment(self):
             return self._environment
 
-        def _filter(self, content, tokens):
+        def _filter(self, content, tokens, regexps):
             """
             Filter overlapping tokens within content.
+            regexps is a list of regexp objects, each having a group named
+            'filter'. The content of this group will be filtered.
 
             Examples:
             content=abcabca, tokens=('abca')
             content=aaabbbccc, tokens=('bbb', 'abbba')
             content=aaaababbbb, tokens=('aaab', 'aaa', 'bbb')
+            content=a BS some secret ES b, regexps=('BS (?P<filter>.*) ES')
             """
 
             def _insertFilter(content, begin, end):
@@ -86,6 +90,16 @@ class Plugin(plugin.PluginBase):
                         if index == -1:
                             break
                         tofilter.append((index, index + len(token)))
+
+            for reobj in regexps:
+                if reobj is not None:
+                    index = -1
+                    while True:
+                        matchobj = reobj.search(content, index)
+                        if matchobj is None:
+                            break
+                        index = matchobj.start('filter')
+                        tofilter.append((index, matchobj.end('filter')))
 
             tofilter = sorted(tofilter, key=lambda e: e[1], reverse=True)
             begin = None
@@ -115,14 +129,15 @@ class Plugin(plugin.PluginBase):
 
         def format(self, record):
             return self._filter(
-                logging.Formatter.format(self, record),
-                (
+                content=logging.Formatter.format(self, record),
+                tokens=(
                     self.environment[constants.CoreEnv.LOG_FILTER]._list +
                     [
                         self.environment.get(k, None) for k in
                         self.environment[constants.CoreEnv.LOG_FILTER_KEYS]
                     ]
                 ),
+                regexps=self.environment[constants.CoreEnv.LOG_FILTER_RE],
             )
 
     def __init__(self, context):
@@ -133,6 +148,19 @@ class Plugin(plugin.PluginBase):
     def _setupLogging(self):
         self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = None
         self.environment[constants.CoreEnv.LOG_FILTER] = self._MyLoggerFilter()
+        self.environment[constants.CoreEnv.LOG_FILTER_RE] = []
+        self.environment[
+            constants.CoreEnv.LOG_FILTER_RE
+        ].append(
+            re.compile(
+                flags=re.VERBOSE | re.DOTALL,
+                pattern=r"""
+                    BEGIN\ PRIVATE\ KEY
+                    (?P<filter>.*)
+                    END\ PRIVATE\ KEY
+                """,
+            )
+        )
         self.environment[constants.CoreEnv.LOG_FILTER_KEYS] = []
         self.environment.setdefault(
             constants.CoreEnv.LOG_FILE_NAME_PREFIX,
