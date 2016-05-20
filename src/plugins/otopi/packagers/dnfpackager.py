@@ -223,15 +223,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         condition=lambda self: self._enabled,
     )
     def _internal_packages_end(self):
-        if self._minidnf.buildTransaction():
-            self.logger.debug("Transaction Summary:")
-            for p in self._minidnf.queryTransaction():
-                self.logger.debug(
-                    "    %s - %s",
-                    p['operation'],
-                    p['display_name'],
-                )
-            self._minidnf.processTransaction()
+        self.processTransaction()
 
     @plugin.event(
         stage=plugin.Stages.STAGE_PACKAGES,
@@ -239,15 +231,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         condition=lambda self: self._enabled,
     )
     def _packages(self):
-        if self._minidnf.buildTransaction():
-            self.logger.debug("Transaction Summary:")
-            for p in self._minidnf.queryTransaction():
-                self.logger.debug(
-                    "    %s - %s",
-                    p['operation'],
-                    p['display_name'],
-                )
-            self._minidnf.processTransaction()
+        self.processTransaction()
 
     # PackagerBase
 
@@ -257,6 +241,17 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
     def endTransaction(self, rollback=False):
         ret = self._minidnf.endTransaction(rollback=rollback)
         return ret
+
+    def processTransaction(self):
+        if self._minidnf.buildTransaction():
+            self.logger.debug("Transaction Summary:")
+            for p in self._minidnf.queryTransaction():
+                self.logger.debug(
+                    "    %s - %s",
+                    p['operation'],
+                    p['display_name'],
+                )
+            self._minidnf.processTransaction()
 
     def installGroup(self, group, ignoreErrors=False):
         return self._minidnf.installGroup(

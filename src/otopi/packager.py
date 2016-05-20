@@ -45,6 +45,10 @@ class PackagerBase(object):
         """
         pass
 
+    def processTransaction(self):
+        """Process transaction."""
+        pass
+
     def installGroup(self, group, ignoreErrors=False):
         """Install a group.
 
