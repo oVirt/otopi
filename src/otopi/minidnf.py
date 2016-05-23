@@ -245,7 +245,7 @@ class MiniDNF():
             if msgs:
                 self._sink.verbose(
                     _('Script out: {messages}').format(
-                        massages=msgs,
+                        messages=msgs,
                     )
                 )
 
