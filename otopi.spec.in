@@ -166,6 +166,9 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %endif
 
 %changelog
+* Mon May 30 2016 Yedidyah Bar David <didi@redhat.com> - 1.5.0-1
+- Release.
+
 * Tue Feb 9 2016 Yedidyah Bar David <didi@redhat.com> - 1.4.1-1
 - Release.
 

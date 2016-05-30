@@ -1,7 +1,14 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.4.2
-
+2016-05-30 - Version 1.5.0
+ * filetransaction: Better handle utf-8 in some cases
+ * debug plugins: Introduced
+ * localization: Translation to pt_BR added
+ * query-tool: Added, to allow quering configuration files
+ * human dialect: Allow automatically accepting defaults
+ * core: rewrite buildSequence using toposort
+ * core: log: Support filtering regular expressions
+ * machine dialect: provide some metadata for queryString
 
 2016-02-09 - Version 1.4.1
 
