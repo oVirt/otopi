@@ -2,18 +2,20 @@
 [[ -d exported-artifacts ]] \
 || mkdir -p exported-artifacts
 
-SUFFIX=".$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)"
-
 autoreconf -ivf
 ./configure --enable-java-sdk COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
 make distcheck
+
+SUFFIX=
+. automation/config.sh
+[ -n "${RELEASE_SUFFIX}" ] && SUFFIX=".$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)"
 
 [[ -d tmp.repos ]] \
 || mkdir -p tmp.repos
 yum-builddep otopi.spec
 rpmbuild \
     -D "_topdir $PWD/tmp.repos" \
-    -D "release_suffix ${SUFFIX}" \
+    ${SUFFIX:+-D "release_suffix ${SUFFIX}"} \
     -ta otopi-*.tar.gz
 
 mv *.tar.gz exported-artifacts
