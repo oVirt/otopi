@@ -623,19 +623,7 @@ class MiniDNF():
                 base.transaction.install_set,
                 progress=self._MyDownloadProgress(self._sink),
             )
-            for po in base.transaction.install_set:
-                result, errmsg = base.sigCheckPkg(po)
-                if result == 0:
-                    pass
-                elif result == 1:
-                    def _askGPG(d):
-                        return self._sink.askForGPGKeyImport(
-                            d['userid'],
-                            d['hexkeyid'],
-                        )
-                    base.getKeyForPackage(po, fullaskcb=_askGPG)
-                else:
-                    raise RuntimeError(errmsg)
+            # TODO add package checking once dnf exports this in API
 
             base.do_transaction(display=self._MyTransactionDisplay(self._sink))
         except Exception as e:
