@@ -141,7 +141,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         caseSensitive=True,
         hidden=False,
         prompt=False,
-        default=False,
+        default=None,
     ):
         if default is not None:
             default = common.toStr(default)
