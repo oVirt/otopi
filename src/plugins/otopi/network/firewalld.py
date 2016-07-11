@@ -100,13 +100,13 @@ class Plugin(plugin.PluginBase):
 
         if self.services.exists('firewalld'):
             try:
-                from firewall import client
+                from firewall import config
 
-                self.logger.debug('firewalld version: %s', client.VERSION)
+                self.logger.debug('firewalld version: %s', config.VERSION)
                 version = int(
                     '%02x%02x%02x' % tuple([
                         int(x)
-                        for x in client.VERSION.split('.')[:3]
+                        for x in config.VERSION.split('.')[:3]
                     ]),
                     16
                 )
