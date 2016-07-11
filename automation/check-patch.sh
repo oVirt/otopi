@@ -13,7 +13,6 @@ make distcheck
 yum-builddep otopi.spec
 rpmbuild \
     -D "_topdir $PWD/tmp.repos" \
-    -D "release_suffix ${SUFFIX}" \
     -ta otopi-*.tar.gz
 
 mv *.tar.gz exported-artifacts

@@ -1,6 +1,9 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.5.1
+2016-07-11 - Version 1.5.1
+ * packagers: dnf: Do not check signature
+ * machine dialect: Do not show Default if none is supplied
+ * network: firewalld: Correct version check
 
 2016-05-30 - Version 1.5.0
  * filetransaction: Better handle utf-8 in some cases
