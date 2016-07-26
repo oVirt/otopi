@@ -355,7 +355,7 @@ public class MachineDialogParser {
 					// Currently not needed for ovirt-host-deploy.
 				}
 				else {
-					throw new RuntimeException("Invalid data recieved during bootstrap");
+					throw new RuntimeException("Invalid data received during bootstrap");
 				}
 			}
 			catch (IOException e) {
