@@ -527,7 +527,6 @@ class MiniDNF():
             if 'expire-cache' in what or 'all' in what:
                 for repo in self._base.repos.iter_enabled():
                     repo.md_expire_cache()
-            self._base.fill_sack()
         except Exception as e:
             self._sink.error(e)
             raise
