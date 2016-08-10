@@ -536,7 +536,7 @@ class Context(base.Base):
                         )
                     )
                 if (
-                    m['stage'] == method['stage'] and
+                    methods[i]['stage'] == method['stage'] and
                     method['priority'] < methods[i]['priority']
                 ):
                     self._earlyDebug(
