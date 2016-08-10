@@ -29,15 +29,15 @@ def _init_plugin():
     _stage = os.environ.get(
         constants.SystemEnvironment.FORCE_FAIL_STAGE,
     )
-    _prio = os.environ.get(
-        constants.SystemEnvironment.FORCE_FAIL_PRIORITY,
-    )
     if _stage is None:
         _stage = plugin.Stages.STAGE_INIT
     else:
         _enabled = True
         if _stage is not None and hasattr(plugin.Stages, _stage):
             _stage = getattr(plugin.Stages, _stage)
+        _prio = os.environ.get(
+            constants.SystemEnvironment.FORCE_FAIL_PRIORITY,
+        )
         if _prio is not None and hasattr(plugin.Stages, _prio):
             _prio = getattr(plugin.Stages, _prio)
         if _prio is None:
