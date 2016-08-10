@@ -143,6 +143,7 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.environment
 %exclude %{python_sitelib}/%{name}/codegen/
 %{_datadir}/%{name}/plugins/%{name}/
+%exclude %{_datadir}/%{name}/plugins/%{name}/debug/
 %{_sbindir}/%{name}
 %{_bindir}/%{name}-config-query
 %{python_sitelib}/%{name}/
