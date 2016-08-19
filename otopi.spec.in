@@ -26,6 +26,7 @@ BuildRequires:	java-devel
 BuildRequires:	junit
 BuildRequires:	gettext >= 0.18.2
 BuildRequires:	python2-devel
+BuildRequires:	javapackages-tools
 
 %if %{_use_maven}
 BuildRequires:	maven-compiler-plugin
@@ -36,8 +37,7 @@ BuildRequires:	maven-javadoc-plugin
 BuildRequires:	maven-source-plugin
 BuildRequires:	maven-surefire-provider-junit
 BuildRequires:	maven-local
-%else
-BuildRequires:	javapackages-tools
+BuildRequires:	sonatype-oss-parent
 %endif
 
 %description
