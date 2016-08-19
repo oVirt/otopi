@@ -11,6 +11,9 @@ OTOPI_CONFIG
     Configuration file.
     Overrides CORE/configFileName.
 
+OTOPI_COVERAGE
+    If not 0 enable coverage features
+
 OTOPI_DEBUG
     If not 0 enable debug features
     Overrides BASE/debug.

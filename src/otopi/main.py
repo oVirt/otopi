@@ -19,6 +19,11 @@ from otopi import context
 from otopi import util
 
 
+if int(os.environ.get(constants.SystemEnvironment.COVERAGE, 0)):
+    import coverage
+    coverage.process_startup()
+
+
 def _(m):
     return gettext.dgettext(message=m, domain='otopi')
 
