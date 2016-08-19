@@ -198,7 +198,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         self._writeQueryEnd(name)
         if not caseSensitive and validValues is not None:
             validValues = [v.lower() for v in validValues]
-        value = self._readline()
+        value = self._readline(hidden)
         if not value and default is not None:
             value = default
         if not caseSensitive:
