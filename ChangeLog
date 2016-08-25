@@ -1,6 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.5.2
+2016-08-25 - Version 1.5.2
+ * machine dialect: fixed typo in error message, rhbz1350869
+ * machine dialect: filtering hidden responses, rhbz1369099
 
 2016-07-11 - Version 1.5.1
  * packagers: dnf: Do not check signature

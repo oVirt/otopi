@@ -117,7 +117,7 @@ cd src/java
 cd ../..
 %else
 install -d "%{buildroot}%{_javadir}/%{name}"
-install target/%{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}"
+install -m 644 target/%{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}"
 ln -s %{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}/%{name}.jar"
 cat > src/java/.mfiles << __EOF__
 %{_javadir}/%{name}/
@@ -166,6 +166,9 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %endif
 
 %changelog
+* Thu Aug 25 2016 Sandro Bonazzola <sbonazzo@redhat.com> - 1.5.2-1
+- Release.
+
 * Mon Jul 11 2016 Yedidyah Bar David <didi@redhat.com> - 1.5.1-1
 - Release.
 
