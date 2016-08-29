@@ -167,7 +167,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         if validValues:
             self._write(
                 text='%s%s %s\n' % (
-                    dialogcons.DialogMachineConst.REQUEST_PREFIX,
+                    dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
                     dialogcons.DialogMachineConst.QUERY_VALID_VALUES,
                     '|'.join(
                         [
