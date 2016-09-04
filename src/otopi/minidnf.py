@@ -473,20 +473,32 @@ class MiniDNF():
         try:
             import selinux
         except ImportError:
-            with self.transaction():
-                self.install(['libselinux-python'])
-                if self.buildTransaction():
-                    self.processTransaction()
-            #
-            # on fedora-18 for example
-            # the selinux core is updated
-            # so we fail resolving symbols
-            # solution is re-execute the process
-            # after installation.
-            #
-            self._sink.reexec()
-            os.execv(sys.executable, [sys.executable] + sys.argv)
-            os._exit(1)
+            package_name = None
+            if sys.version_info.major == 2:
+                package_name = 'libselinux-python'
+            elif sys.version_info.major == 3:
+                package_name = 'libselinux-python3'
+            else:
+                # Unknown python version, do nothing for now
+                pass
+            if package_name is not None:
+                package_installed = False
+                with self.transaction():
+                    self.install([package_name])
+                    if self.buildTransaction():
+                        self.processTransaction()
+                        package_installed = True
+                #
+                # on fedora-18 for example
+                # the selinux core is updated
+                # so we fail resolving symbols
+                # solution is re-execute the process
+                # after installation.
+                #
+                if package_installed:
+                    self._sink.reexec()
+                    os.execv(sys.executable, [sys.executable] + sys.argv)
+                    os._exit(1)
 
         if selinux.is_selinux_enabled():
             rc, ctx = selinux.getcon()
