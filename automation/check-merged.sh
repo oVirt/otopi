@@ -11,6 +11,6 @@ rpmbuild \
     -ta otopi-*.tar.gz
 
 yum install -y $(find "$PWD/tmp.repos" -iname \*noarch\*.rpm)
-OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="automation/coverage.rc" otopi
+OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" otopi
 coverage html -d exported-artifacts/coverage_html_report
 cp automation/index.html exported-artifacts/

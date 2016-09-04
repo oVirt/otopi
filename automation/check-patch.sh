@@ -24,7 +24,7 @@ find \
     -exec mv {} exported-artifacts/ \;
 
 yum install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
-OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="automation/coverage.rc" otopi
+OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" otopi
 coverage html -d exported-artifacts/coverage_html_report
 cp automation/index.html exported-artifacts/
 
