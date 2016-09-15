@@ -9,6 +9,20 @@
 %global _use_repolib 0
 %global maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
 
+%if 0%{?fedora} && 0%{?fedora} >= 23
+%global with_python3 1
+%endif
+
+%if 0%{?with_python3}
+%global python python3
+%global python_devel python3-devel
+%global my_python_sitelib %{python3_sitelib}
+%else
+%global python python
+%global python_devel python2-devel
+%global my_python_sitelib %{python2_sitelib}
+%endif
+
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
 Name:		@PACKAGE_NAME@
 Version:	@PACKAGE_RPM_VERSION@
@@ -20,12 +34,12 @@ Group:		Development/Libraries
 
 BuildArch:	noarch
 
-Requires:	python
+Requires:	%{python}
 BuildRequires:	apache-commons-logging
 BuildRequires:	java-devel
 BuildRequires:	junit
 BuildRequires:	gettext >= 0.18.2
-BuildRequires:	python2-devel
+BuildRequires:	%{python_devel}
 BuildRequires:	javapackages-tools
 
 %if %{_use_maven}
@@ -94,12 +108,14 @@ Summary:	%{name} maven repo
 %else
 %global conf COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
 %endif
+
 %configure \
 	--docdir="%{_docdir}/%{name}-%{version}" \
 	--disable-python-syntax-check \
 	--enable-java-sdk \
 	--with-local-version="%{name}-%{version}-%{release}" \
-	%{?conf}
+	%{?conf} \
+	PYTHON="%{python}"
 make %{?_smp_mflags}
 
 %if %{_use_maven}
@@ -141,12 +157,12 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.API
 %doc README.dialog
 %doc README.environment
-%exclude %{python_sitelib}/%{name}/codegen/
+%exclude %{my_python_sitelib}/%{name}/codegen/
 %{_datadir}/%{name}/plugins/%{name}/
 %exclude %{_datadir}/%{name}/plugins/%{name}/debug/
 %{_sbindir}/%{name}
 %{_bindir}/%{name}-config-query
-%{python_sitelib}/%{name}/
+%{my_python_sitelib}/%{name}/
 
 %files java -f src/java/.mfiles
 
@@ -156,7 +172,7 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 
 %files devtools
 %{_datadir}/%{name}/%{name}-bundle
-%{python_sitelib}/%{name}/codegen/
+%{my_python_sitelib}/%{name}/codegen/
 
 %files debug-plugins
 %{_datadir}/%{name}/plugins/%{name}/debug/

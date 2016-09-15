@@ -10,6 +10,5 @@ git
 make
 pyflakes
 python-pep8
-python2-devel
 rpm-build
 yum-utils
