@@ -1,1 +1,16 @@
-build-artifacts.packages
+apache-commons-logging
+autoconf
+automake
+git
+java-devel
+javapackages-tools
+junit
+gettext-devel
+libselinux-python
+make
+python-coverage
+pyflakes
+python-pep8
+python2-devel
+rpm-build
+yum-utils

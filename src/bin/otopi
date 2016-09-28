@@ -58,13 +58,7 @@ if [ -f "${scriptdir}/.bundled" ]; then
 	extraenv="\"BASE/pluginPath=str:${scriptdir}/otopi-plugins\""
 fi
 
-# On fedora 23 and up, we want to use python3, as by default dnf is python3 and we want to be able to use it.
-distribution_name="$(python -c "import platform; print(platform.linux_distribution(full_distribution_name=0)[0])")"
-distribution_version="$(python -c "import platform; print(platform.linux_distribution(full_distribution_name=0)[1])")"
-[ "${distribution_name}" == "fedora" -a "${distribution_version}" -ge 23 ] && OTOPI_PYTHON="${OTOPI_PYTHON:-$(find_util python3)}"
-
 OTOPI_PYTHON="${OTOPI_PYTHON:-$(find_util python)}"
-
 [ -z "${OTOPI_PYTHON}" ] && die "Python is required but missing"
 
 pythonver() {
