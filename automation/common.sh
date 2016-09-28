@@ -49,16 +49,3 @@ find \
 
 sed "s;@WORKDIR@;$PWD;" < automation/coverage.rc.in > automation/coverage.rc
 
-for f in /etc/yum.conf /etc/yum/yum.conf /etc/dnf/dnf.conf; do
-	echo "**** Checking file $f ****"
-	echo ls -l $f
-	ls -l $f || true
-	echo cat $f
-	cat $f || true
-	echo "**** Finished file $f ****"
-done
-
-echo "**** Clearing /etc/dnf/dnf.conf"
-:>/etc/dnf/dnf.conf || true
-echo "**** Cleared /etc/dnf/dnf.conf"
-
