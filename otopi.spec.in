@@ -117,7 +117,7 @@ cd src/java
 cd ../..
 %else
 install -d "%{buildroot}%{_javadir}/%{name}"
-install target/%{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}"
+install -m 644 target/%{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}"
 ln -s %{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}/%{name}.jar"
 cat > src/java/.mfiles << __EOF__
 %{_javadir}/%{name}/
