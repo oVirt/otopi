@@ -65,7 +65,7 @@ pythonver() {
 	local v="$1"
 	echo "$(($v/1000)).$(($v%1000))"
 }
-PYTHON_VERSION_MIN="2006"
+PYTHON_VERSION_MIN="2007"
 PYTHON_VERSION="$("${OTOPI_PYTHON}" -c "import sys; print(sys.version_info[0]*1000 + sys.version_info[1])")" || \
 	die "Cannot query python version"
 [ "${PYTHON_VERSION}" -ge "${PYTHON_VERSION_MIN}" ] || \
