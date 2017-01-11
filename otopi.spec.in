@@ -21,6 +21,7 @@ Group:		Development/Libraries
 BuildArch:	noarch
 
 Requires:	python
+Requires:	python-dateutil
 BuildRequires:	apache-commons-logging
 BuildRequires:	java-devel
 BuildRequires:	junit
