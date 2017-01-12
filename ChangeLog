@@ -1,7 +1,27 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.6.0
-
+2017-01-12 - Version 1.6.0
+ * automation: export built packages
+ * packagers: dnf: Do not check signature, as it was unexposed in dnf.
+ * machine dialect: Only send QDefault if a default was provided
+ * network: firewalld: Fix version check, needed by a recent update
+ * java: fix typo recieved -> received
+ * packagers: dnf: drop fill_sack on clean, to prevent SIGABRT
+ * packaging: spec: explicit implicit deps, prepare for next fedora
+ * testing: add coverage reports
+ * machine dialect: Filter hidden responses
+ * automation: Add build-artifacts-manual.sh
+ * otopi-config-query: fix interpreter
+ * machine dialect: Fix prefix for valid values
+ * packaging: spec: exclude debug plugins
+ * plugins: force_fail: set _prio only if stage is set
+ * core: Fix uninitialized (in python 3) variable m
+ * testing: Pass full path of coverage.rc
+ * packagers: minidnf: Install correct libselinux python package also in
+   python 3
+ * packaging: spec: harden permission on jar
+ * core: Require python 2.7
+ * packaging: drop date and git hash from releases
 
 2016-05-30 - Version 1.5.0
  * filetransaction: Better handle utf-8 in some cases
