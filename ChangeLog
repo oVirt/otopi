@@ -1,5 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.6.1
+
+
 2017-01-12 - Version 1.6.0
  * automation: export built packages
  * packagers: dnf: Do not check signature, as it was unexposed in dnf.
