@@ -64,7 +64,11 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 level=record.levelname
             )
 
-            return logging.Formatter.format(self, record).replace('\n', ' ')
+            return logging.Formatter.format(self, record).replace(
+                '\n',
+                '\n' + ' ' * 9
+                # so same width as above '[{level:^7}]'
+            )
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
