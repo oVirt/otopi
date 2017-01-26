@@ -1124,8 +1124,8 @@ class Example(object):
         with miniyum.transaction():
             miniyum.remove(('cman',), ignoreErrors=True)
             miniyum.install(('qemu-kvm-tools',))
-            miniyum.install(('vdsm',))
-            miniyum.update(('vdsm',))
+            miniyum.install(('vdsm', 'vdsm-client'))
+            miniyum.update(('vdsm', 'vdsm-client'))
             if miniyum.buildTransaction():
                 miniyumsink.info('Transaction Summary:')
                 for p in miniyum.queryTransaction():
