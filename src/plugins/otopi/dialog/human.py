@@ -64,7 +64,11 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 level=record.levelname
             )
 
-            return logging.Formatter.format(self, record).replace(
+            formatted = logging.Formatter.format(self, record)
+            if '\n' in formatted:
+                self._parent.logger.debug('newline sent to logger')
+
+            return formatted.replace(
                 '\n',
                 '\n' + ' ' * 9
                 # so same width as above '[{level:^7}]'
