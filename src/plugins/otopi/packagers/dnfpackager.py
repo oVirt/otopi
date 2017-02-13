@@ -160,7 +160,10 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
                         constants.PackEnv.YUMPACKAGER_ENABLED
                     ] = False
         except Exception:
-            self.logger.debug('Cannot initialize minidnf', exc_info=True)
+            # not calling with exc_info=True, because we always try to
+            # load DNF support first, polluting the logs with misleading
+            # tracebacks when running on yum-based operating systems
+            self.logger.debug('Cannot initialize minidnf')
 
     @plugin.event(
         before=(
