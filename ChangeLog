@@ -1,7 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.6.1
-
+2017-03-05 - Version 1.6.1
+ * packagers: dnf: do not print traceback when fail to import dnf
 
 2017-01-12 - Version 1.6.0
  * automation: export built packages
