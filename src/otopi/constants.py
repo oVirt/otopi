@@ -41,6 +41,7 @@ class Stages(object):
     FIREWALLD_VALIDATION = 'otopi.network.firewalld.validation'
     IPTABLES_VALIDATION = 'otopi.network.iptables.validation'
     TRANSACTIONS_INIT = 'otopi.core.transactions.init'
+    ANSWER_FILE_GENERATED = 'otopi.core.answer.file.generated'
 
 
 @util.export
@@ -130,6 +131,7 @@ class CoreEnv(object):
     CONFIG_FILE_NAME = 'CORE/configFileName'
     CONFIG_FILE_APPEND = 'CORE/configFileAppend'
     VALIDATE_KEYS_FILTERED_EARLY = 'CORE/validateKeysFilteredEarly'
+    QUESTION_PREFIX = 'QUESTION/'
 
 
 @util.export
@@ -140,6 +142,8 @@ class DialogEnv(object):
     BOUNDARY = 'DIALOG/boundary'
     CLI_VERSION = 'DIALOG/cliVersion'
     AUTO_ACCEPT_DEFAULT = 'DIALOG/autoAcceptDefault'
+    ANSWER_FILE = 'DIALOG/answerFile'
+    ANSWER_FILE_CONTENT = 'DIALOG/answerFileContent'
 
 
 @util.export
