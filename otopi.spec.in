@@ -49,7 +49,7 @@ and transaction management.
 %package java
 Summary:	%{name} java support
 Requires:	%{name} = %{version}-%{release}
-Requires:	java
+Requires:	java-headless
 Requires:	apache-commons-logging
 
 %description java
