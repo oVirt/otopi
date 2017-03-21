@@ -48,18 +48,20 @@ class Plugin(plugin.PluginBase):
         self.command.detect('ip')
 
     @plugin.event(
-        stage=plugin.Stages.STAGE_INTERNAL_PACKAGES,
-    )
-    def _internal_packages(self):
-        self.packager.install(packages=('iproute',))
-
-    @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,
     )
     def _validation(self):
         myname = socket.gethostname()
         self.logger.debug('my name: %s', myname)
         try:
+            ip_cmd = self.command.get('ip', optional=True)
+            if not ip_cmd:
+                self.logger.warning(
+                    self.MSG_PREFIX.format(
+                        reason=_("Command 'ip' not found")
+                    )
+                )
+                return
             myaddresses = [
                 address[0] for __, __, __, __, address in
                 socket.getaddrinfo(
@@ -70,7 +72,7 @@ class Plugin(plugin.PluginBase):
 
             (rc, stdout, stderr) = self.execute(
                 (
-                    self.command.get('ip'),
+                    ip_cmd,
                     'addr',
                     'show'
                 ),
