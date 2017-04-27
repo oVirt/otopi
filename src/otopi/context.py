@@ -428,18 +428,18 @@ class Context(base.Base):
             allvalues |= v
         extra_items_in_deps = allvalues - set(data.keys())
         # Add empty dependences where needed.
-        # warning: python-2.6 does not have dict comprehension
-        data.update({item: set() for item in extra_items_in_deps})
+        for item in extra_items_in_deps:
+            data[item] = set()
         while True:
             ordered = set(item for item, dep in data.items() if len(dep) == 0)
             if not ordered:
                 break
             yield ordered
-            data = {
-                item: (dep - ordered)
-                for item, dep in data.items()
-                if item not in ordered
-            }
+            newdata = {}
+            for item, dep in data.items():
+                if item not in ordered:
+                    newdata[item] = (dep - ordered)
+            data = newdata
         if len(data) != 0:
             raise Context.ToposortCycleException(data)
 
