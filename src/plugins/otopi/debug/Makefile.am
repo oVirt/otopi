@@ -8,5 +8,6 @@ MAINTAINERCLEANFILES = \
 
 SUBDIRS = \
 	force_fail \
+	packages \
 	wait_on_error \
 	$(NULL)

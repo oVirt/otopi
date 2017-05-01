@@ -193,6 +193,8 @@ class Confirms(object):
 @util.codegen
 class DebugEnv(object):
     WAIT_ON_ERROR = 'ODEBUG/WaitOnError'
+    PACKAGES_ACTION = 'ODEBUG/packagesAction'
+    PACKAGES = 'ODEBUG/packages'
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

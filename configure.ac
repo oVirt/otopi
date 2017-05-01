@@ -151,6 +151,7 @@ AC_CONFIG_FILES([
 	src/plugins/otopi/debug/Makefile
 	src/plugins/otopi/debug/force_fail/Makefile
 	src/plugins/otopi/debug/wait_on_error/Makefile
+	src/plugins/otopi/debug/packages/Makefile
 	src/java/Makefile
 	src/java/pom.xml
 	automation/config.sh
