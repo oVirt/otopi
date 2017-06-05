@@ -123,7 +123,9 @@ ln -s %{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}/%{na
 cat > src/java/.mfiles << __EOF__
 %{_javadir}/%{name}/
 __EOF__
+%endif
 
+%if %{_use_repolib}
 install -d "%{buildroot}%{maven2brewrepodir}"
 cp "%{buildroot}%{_javadir}/%{name}/%{name}.jar" "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.jar"
 cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.pom"
