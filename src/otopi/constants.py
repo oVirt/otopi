@@ -125,6 +125,7 @@ class CoreEnv(object):
     LOG_REMOVE_AT_EXIT = 'CORE/logRemoveAtExit'
     CONFIG_FILE_NAME = 'CORE/configFileName'
     CONFIG_FILE_APPEND = 'CORE/configFileAppend'
+    VALIDATE_KEYS_FILTERED_EARLY = 'CORE/validateKeysFilteredEarly'
 
 
 @util.export

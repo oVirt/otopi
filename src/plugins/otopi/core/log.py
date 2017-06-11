@@ -203,6 +203,7 @@ class Plugin(plugin.PluginBase):
         self._handler = None
         self._logerror = None
         self.environment[constants.CoreEnv.LOG_FILTER_KEYS] = []
+        self._filtered_keys_at_setup = []
 
     def _setupLogging(self):
         self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = None
@@ -299,6 +300,9 @@ class Plugin(plugin.PluginBase):
         )
         l = logging.getLogger("otopi")
         l.addHandler(self._handler)
+        self._filtered_keys_at_setup = self.environment[
+            constants.CoreEnv.LOG_FILTER_KEYS
+        ][:]
 
     def _closeLogging(self):
         if self._handler is not None:
@@ -371,6 +375,30 @@ class Plugin(plugin.PluginBase):
                     ],
                 )
             )
+
+    @plugin.event(
+        stage=plugin.Stages.STAGE_VALIDATION,
+    )
+    def _validation(self):
+        self.logger.debug(
+            "_filtered_keys_at_setup: %s" % self._filtered_keys_at_setup
+        )
+        self.logger.debug(
+            "LOG_FILTER_KEYS: %s" % self.environment[
+                constants.CoreEnv.LOG_FILTER_KEYS
+            ]
+        )
+        if (
+            self.environment.get(
+                constants.CoreEnv.VALIDATE_KEYS_FILTERED_EARLY
+            ) and self._filtered_keys_at_setup != self.environment[
+                constants.CoreEnv.LOG_FILTER_KEYS
+            ]
+        ):
+            raise RuntimeError(_(
+                "Keys to filter were changed after log file was set up. "
+                "Please check log for details"
+            ))
 
     @plugin.event(
         stage=plugin.Stages.STAGE_TERMINATE,
