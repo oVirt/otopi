@@ -13,6 +13,7 @@ import socket
 import sys
 
 
+from otopi import constants
 from otopi import plugin
 from otopi import util
 
@@ -30,7 +31,9 @@ class Plugin(plugin.PluginBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_BOOT,
-        priority=plugin.Stages.PRIORITY_LOW,
+        after=(
+            constants.Stages.CORE_LOG_INIT,
+        ),
     )
     def _init(self):
         self.logger.debug('SYSTEM INFORMATION - BEGIN')

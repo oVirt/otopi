@@ -202,6 +202,7 @@ class Plugin(plugin.PluginBase):
         super(Plugin, self).__init__(context=context)
         self._handler = None
         self._logerror = None
+        self.environment[constants.CoreEnv.LOG_FILTER_KEYS] = []
 
     def _setupLogging(self):
         self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = None
@@ -219,7 +220,6 @@ class Plugin(plugin.PluginBase):
                 """,
             )
         )
-        self.environment[constants.CoreEnv.LOG_FILTER_KEYS] = []
         self.environment.setdefault(
             constants.CoreEnv.LOG_FILE_NAME_PREFIX,
             constants.Defaults.LOG_FILE_PREFIX
@@ -338,7 +338,6 @@ class Plugin(plugin.PluginBase):
     @plugin.event(
         name=constants.Stages.CORE_LOG_INIT,
         stage=plugin.Stages.STAGE_BOOT,
-        priority=plugin.Stages.PRIORITY_HIGH,
     )
     def _init(self):
         self._setupLogging()

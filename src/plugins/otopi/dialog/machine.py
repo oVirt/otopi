@@ -64,7 +64,9 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_BOOT,
-        priority=plugin.Stages.PRIORITY_MEDIUM,
+        after=(
+            constants.Stages.DIALOG_MISC_BOOT,
+        ),
         condition=(
             lambda self: self.environment[
                 constants.DialogEnv.DIALECT

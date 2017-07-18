@@ -119,7 +119,11 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_BOOT,
-        priority=plugin.Stages.PRIORITY_LOW,
+        before=(
+            constants.Stages.YUM_PACKAGER_BOOT,
+            # Run before yum, because if we have both, we want dnf to be used
+            # and not yum.
+        ),
     )
     def _boot(self):
         self.environment.setdefault(

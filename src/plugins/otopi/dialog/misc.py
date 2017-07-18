@@ -24,7 +24,10 @@ class Plugin(plugin.PluginBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_BOOT,
-        priority=plugin.Stages.PRIORITY_HIGH,
+        name=constants.Stages.DIALOG_MISC_BOOT,
+        after=(
+            constants.Stages.CORE_LOG_INIT,
+        ),
     )
     def _init(self):
         self.environment.setdefault(
