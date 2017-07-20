@@ -1,5 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.7.1
+
+
 2017-07-20 - Version 1.7.0
  * core: Dump env keys when added even if None
  * core: Validate that keys are filtered before log creation
