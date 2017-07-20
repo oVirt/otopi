@@ -35,5 +35,12 @@ class Plugin(plugin.PluginBase):
             constants.Const.DIALOG_DIALECT_HUMAN,
         )
 
+    @plugin.event(
+        stage=plugin.Stages.STAGE_BOOT,
+        name=constants.Stages.DIALOG_BOOT_DONE,
+    )
+    def _boot_misc_done(self):
+        pass
+
 
 # vim: expandtab tabstop=4 shiftwidth=4

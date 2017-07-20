@@ -144,6 +144,9 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
     @plugin.event(
         stage=plugin.Stages.STAGE_BOOT,
         name=constants.Stages.YUM_PACKAGER_BOOT,
+        after=(
+            constants.Stages.DIALOG_BOOT_DONE,
+        ),
     )
     def _boot(self):
         self.environment.setdefault(

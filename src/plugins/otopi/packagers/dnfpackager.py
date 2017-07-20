@@ -124,6 +124,9 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
             # Run before yum, because if we have both, we want dnf to be used
             # and not yum.
         ),
+        after=(
+            constants.Stages.DIALOG_BOOT_DONE,
+        ),
     )
     def _boot(self):
         self.environment.setdefault(

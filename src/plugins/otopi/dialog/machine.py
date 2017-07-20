@@ -67,6 +67,9 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         after=(
             constants.Stages.DIALOG_MISC_BOOT,
         ),
+        before=(
+            constants.Stages.DIALOG_BOOT_DONE,
+        ),
         condition=(
             lambda self: self.environment[
                 constants.DialogEnv.DIALECT

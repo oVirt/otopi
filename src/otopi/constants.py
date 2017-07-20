@@ -30,6 +30,7 @@ class Defaults(object):
 class Stages(object):
     YUM_PACKAGER_BOOT = 'otopi.packagers.yum.boot'
     DIALOG_MISC_BOOT = 'otopi.dialog.misc.boot'
+    DIALOG_BOOT_DONE = 'otopi.dialog.boot.done'
     CORE_LOG_INIT = 'otopi.core.log.init'
     CORE_CONFIG_INIT = 'otopi.core.config.init'
     DIALOG_CLI_CUSTOMIZATION = 'otopi.dialog.cli.customization'
