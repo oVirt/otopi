@@ -753,6 +753,7 @@ class Context(base.Base):
 
             if (
                 old is None or
+                key not in old or  # Dump if added, even if None
                 value != common.toStr(old.get(key))
             ):
                 if not diff:
