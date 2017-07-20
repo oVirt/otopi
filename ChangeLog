@@ -1,7 +1,20 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.7.0
-
+2017-07-20 - Version 1.7.0
+ * core: Dump env keys when added even if None
+ * core: Validate that keys are filtered before log creation
+ * Use before/after in STAGE_BOOT
+ * packaging: spec: fix repolib handling
+ * plugins: debug: Add packages plugin
+ * core: Restore python 2.6 support
+ * plugins: hostname.py: Do not install/update iproute
+ * core: log: Add time zone to log records
+ * packaging: spec: move to headless java
+ * dnfpackager: do not print traceback when fail to import dnf
+ * dialog: human: help debug newlines sent to logger
+ * dialog: human: Allow newline (\n) in logger
+ * packaging: Install vdsm-client instead of vdsm-cli
+ * packaging: avoid installing vdsm-cli
 
 2017-01-12 - Version 1.6.0
  * automation: export built packages
