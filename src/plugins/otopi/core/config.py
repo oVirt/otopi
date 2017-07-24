@@ -74,6 +74,11 @@ class Plugin(plugin.PluginBase):
     @plugin.event(
         name=constants.Stages.CORE_CONFIG_INIT,
         stage=plugin.Stages.STAGE_INIT,
+        priority=plugin.Stages.PRIORITY_HIGH - 10,
+        # TODO
+        # 1. Change all plugins that set CONFIG_FILE_NAME
+        # to run before CORE_CONFIG_INIT
+        # 2. Move current event to STAGE_BOOT and default priority.
     )
     def _init(self):
         self.environment.setdefault(
