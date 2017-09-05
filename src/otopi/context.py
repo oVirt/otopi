@@ -127,6 +127,7 @@ class Context(base.Base):
                 plugin.Stages.stage_id(stage),
                 self.methodName(method),
             )
+        self._callPreEventCallbacks(stage, method)
         try:
             if method['condition']():
                 method['method']()
@@ -152,6 +153,7 @@ class Context(base.Base):
                     )
                 )
             self.notify(event=self.NOTIFY_ERROR)
+        self._callPostEventCallbacks(stage, method)
 
     (
         NOTIFY_ERROR,   # error occurred.
@@ -194,6 +196,8 @@ class Context(base.Base):
         self._sequence = {}
         self._plugins = []
         self._notifications = []
+        self._pre_event_callbacks = []
+        self._post_event_callbacks = []
         self._environment = {
             constants.BaseEnv.ERROR: False,
             constants.BaseEnv.ABORTED: False,
@@ -272,6 +276,50 @@ class Context(base.Base):
     def registerCommand(self, command):
         """Register command provider."""
         self._command = command
+
+    def _callForEachEventCallbacks(self, callbacks, debugmsg, stage, method):
+        for c in callbacks:
+            try:
+                c(stage=stage, method=method)
+            except:
+                self.environment[constants.BaseEnv.ERROR] = True
+                self.logger.debug(debugmsg, exc_info=True)
+                self.logger.error(_('Unexpected exception'))
+                raise
+
+    def _callPreEventCallbacks(self, stage, method):
+        self._callForEachEventCallbacks(
+            callbacks=self._pre_event_callbacks,
+            debugmsg='Unexpected exception from pre-event callback',
+            stage=stage,
+            method=method,
+        )
+
+    def _callPostEventCallbacks(self, stage, method):
+        self._callForEachEventCallbacks(
+            callbacks=self._post_event_callbacks,
+            debugmsg='Unexpected exception from pre-event callback',
+            stage=stage,
+            method=method,
+        )
+
+    def registerPreEventCallback(self, callback):
+        """Register a callable that will be called before each event.
+
+        arguments to the callback:
+        stage -- A stage constant
+        method -- A methodinfo dictionary
+        """
+        self._pre_event_callbacks.append(callback)
+
+    def registerPostEventCallback(self, callback):
+        """Register a callable that will be called after each event.
+
+        arguments to the callback:
+        stage -- A stage constant
+        method -- A methodinfo dictionary
+        """
+        self._post_event_callbacks.append(callback)
 
     def _castlingBuildSequence(self):
         # Enforce before/after by replacing locations of offending events
@@ -744,6 +792,18 @@ class Context(base.Base):
                     methodinfo['name'],
                 )
         self.logger.debug('SEQUENCE DUMP - END')
+
+    def getSequence(self):
+        """Get sequence."""
+        return [
+            (
+                stage,
+                self.methodName(methodinfo),
+                methodinfo['name'],
+            )
+            for stage, methodinfos in self._sequence.items()
+            for methodinfo in methodinfos
+        ]
 
     def dumpEnvironment(self, old=None):
         """Dump environment."""

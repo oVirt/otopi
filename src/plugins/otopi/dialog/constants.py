@@ -41,6 +41,21 @@ class DialogMachineConst(object):
     QUERY_HIDDEN = 'QHidden:'
     QUERY_END = 'QEnd:'
 
+    # Reusing QUERY_EXTRA_PREFIX for these too, even though they are unrelated
+    # to queries. In practice QUERY_EXTRA_PREFIX is going to be used for all
+    # new additions to the machine dialog protocol, at least until some future
+    # version that can break compatibility with MachineDialogParser.java.
+
+    # Events sequence stuff, used in the sequence dump we do in the beginning
+    EVENTS_LIST_START = 'EventsListStart'
+    EVENTS_LIST_ENTRY = 'EventsListEntry'
+    EVENTS_LIST_END = 'EventsListEnd'
+
+    # Actual events that run
+    EVENT_START = 'EventStart'
+    EVENT_CONDITION = 'EventCondition'  # bool, will use one of QUERY_HIDDEN*
+    EVENT_END = 'EventEnd'
+
     QUERY_HIDDEN_TRUE = 'TRUE'
     QUERY_HIDDEN_FALSE = 'FALSE'
 

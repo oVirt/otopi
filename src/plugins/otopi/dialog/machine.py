@@ -82,6 +82,68 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         self._enabled = True
         self.context.registerDialog(self)
 
+    def _machine_dialog_event_callback(self, prefix, stage, method):
+        self._write(
+            text='{prefix} STAGE {stage} METHOD {name} ({givenname})\n'.format(
+                prefix=prefix,
+                stage=plugin.Stages.stage_id(stage),
+                name=self.context.methodName(method),
+                givenname=method['name'],
+            )
+        )
+
+    @plugin.event(
+        stage=plugin.Stages.STAGE_INIT,
+        condition=lambda self: self._enabled,
+    )
+    def _init_machine_events_stuff(self):
+        def _pre(stage, method):
+            self._machine_dialog_event_callback(
+                prefix='%s%s\n' % (
+                    dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
+                    dialogcons.DialogMachineConst.EVENT_START,
+                ),
+                stage=stage,
+                method=method,
+            )
+        self.context.registerPreEventCallback(_pre)
+
+        def _post(stage, method):
+            self._machine_dialog_event_callback(
+                prefix='%s%s\n' % (
+                    dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
+                    dialogcons.DialogMachineConst.EVENT_END,
+                ),
+                stage=stage,
+                method=method,
+            )
+        self.context.registerPostEventCallback(_post)
+
+        self._write(
+            text='%s%s\n' % (
+                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
+                dialogcons.DialogMachineConst.EVENTS_LIST_START,
+            )
+        )
+        for stage, name, givenname in self.context.getSequence():
+            self._write(
+                text='{p} STAGE {stage} METHOD {name} ({givenname})\n'.format(
+                    p='%s%s' % (
+                        dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
+                        dialogcons.DialogMachineConst.EVENTS_LIST_ENTRY,
+                    ),
+                    stage=plugin.Stages.stage_id(stage),
+                    name=name,
+                    givenname=givenname,
+                )
+            )
+        self._write(
+            text='%s%s\n' % (
+                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
+                dialogcons.DialogMachineConst.EVENTS_LIST_END,
+            )
+        )
+
     @plugin.event(
         stage=plugin.Stages.STAGE_TERMINATE,
         priority=plugin.Stages.PRIORITY_LAST + 10,
