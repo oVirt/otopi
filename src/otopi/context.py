@@ -112,7 +112,7 @@ class Context(base.Base):
                     loadedgroups.append(groupname)
                     self._loadPlugins(path, path, groupname)
 
-    def _methodName(self, methodinfo):
+    def methodName(self, methodinfo):
         method = methodinfo['method']
         return "%s.%s.%s" % (
             method.__self__.__class__.__module__,
@@ -125,7 +125,7 @@ class Context(base.Base):
             self.logger.debug(
                 'Stage %s METHOD %s',
                 plugin.Stages.stage_id(stage),
-                self._methodName(method),
+                self.methodName(method),
             )
         try:
             if method['condition']():
@@ -297,7 +297,7 @@ class Context(base.Base):
         if self.environment[constants.BaseEnv.RANDOMIZE_EVENTS]:
             random.shuffle(tmplist)
         else:
-            tmplist.sort(key=self._methodName)
+            tmplist.sort(key=self.methodName)
 
         #
         # sort based on priority
@@ -468,7 +468,7 @@ class Context(base.Base):
             self._earlyDebug(
                 '  method %s %s %s' % (
                     index,
-                    self._methodName(method),
+                    self.methodName(method),
                     method
                 )
             )
@@ -477,8 +477,8 @@ class Context(base.Base):
                     self._earlyDebug(
                         '    error: duplicate name: %s %s %s' % (
                             method['name'],
-                            self._methodName(method),
-                            self._methodName(method_by_name[method['name']]),
+                            self.methodName(method),
+                            self.methodName(method_by_name[method['name']]),
                         )
                     )
                     had_errors = True
@@ -520,8 +520,8 @@ class Context(base.Base):
                             'error: method {m} is in a later stage '
                             'than method {method} although it depends on it'
                         ).format(
-                            method=self._methodName(method),
-                            m=self._methodName(methods[i]),
+                            method=self.methodName(method),
+                            m=self.methodName(methods[i]),
                         )
                     )
                     had_errors = True
@@ -531,8 +531,8 @@ class Context(base.Base):
                             'warning: method {m} is in an earlier stage '
                             'than method {method} and also has before/after it'
                         ).format(
-                            method=self._methodName(method),
-                            m=self._methodName(methods[i]),
+                            method=self.methodName(method),
+                            m=self.methodName(methods[i]),
                         )
                     )
                 if (
@@ -545,8 +545,8 @@ class Context(base.Base):
                             'than method {m} '
                             'although dependencies require opposite order'
                         ).format(
-                            method=self._methodName(method),
-                            m=self._methodName(methods[i]),
+                            method=self.methodName(method),
+                            m=self.methodName(methods[i]),
                         )
                     )
                     had_errors = True
@@ -581,13 +581,13 @@ class Context(base.Base):
                 if self.environment[constants.BaseEnv.RANDOMIZE_EVENTS]:
                     random.shuffle(l)
                 else:
-                    l.sort(key=lambda i: self._methodName(methods[i]))
+                    l.sort(key=lambda i: self.methodName(methods[i]))
                 self._earlyDebug('toposort group:')
                 for i in l:
                     self._earlyDebug(
                         '  %s %s %s' % (
                             i,
-                            self._methodName(methods[i]),
+                            self.methodName(methods[i]),
                             methods[i]['name']
                         )
                     )
@@ -606,12 +606,12 @@ class Context(base.Base):
                             'after:\n\n{deps}'
                         ).format(
                             i=i,
-                            methodName=self._methodName(methods[i]),
+                            methodName=self.methodName(methods[i]),
                             name=methods[i]['name'],
                             deps='\n'.join(
                                 '    method {di} {dmethodName} {dname}'.format(
                                     di=di,
-                                    dmethodName=self._methodName(methods[di]),
+                                    dmethodName=self.methodName(methods[di]),
                                     dname=methods[di]['name'],
                                 )
                                 for di in list(s)
@@ -740,7 +740,7 @@ class Context(base.Base):
             for methodinfo in methodinfos:
                 self.logger.debug(
                     '    METHOD %s (%s)',
-                    self._methodName(methodinfo),
+                    self.methodName(methodinfo),
                     methodinfo['name'],
                 )
         self.logger.debug('SEQUENCE DUMP - END')
