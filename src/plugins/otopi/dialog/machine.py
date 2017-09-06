@@ -29,6 +29,10 @@ def _(m):
     return gettext.dgettext(message=m, domain='otopi')
 
 
+def _qep(s):
+    return '%s%s' % (dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX, s)
+
+
 @util.export
 class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
     """Machine dialog protocol provider.
@@ -99,10 +103,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
     def _init_machine_events_stuff(self):
         def _pre(stage, method):
             self._machine_dialog_event_callback(
-                prefix='%s%s\n' % (
-                    dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                    dialogcons.DialogMachineConst.EVENT_START,
-                ),
+                prefix=_qep(dialogcons.DialogMachineConst.EVENT_START),
                 stage=stage,
                 method=method,
             )
@@ -110,38 +111,26 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
 
         def _post(stage, method):
             self._machine_dialog_event_callback(
-                prefix='%s%s\n' % (
-                    dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                    dialogcons.DialogMachineConst.EVENT_END,
-                ),
+                prefix=_qep(dialogcons.DialogMachineConst.EVENT_END),
                 stage=stage,
                 method=method,
             )
         self.context.registerPostEventCallback(_post)
 
         self._write(
-            text='%s%s\n' % (
-                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                dialogcons.DialogMachineConst.EVENTS_LIST_START,
-            )
+            text='%s\n' % _qep(dialogcons.DialogMachineConst.EVENTS_LIST_START)
         )
         for stage, name, givenname in self.context.getSequence():
             self._write(
                 text='{p} STAGE {stage} METHOD {name} ({givenname})\n'.format(
-                    p='%s%s' % (
-                        dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                        dialogcons.DialogMachineConst.EVENTS_LIST_ENTRY,
-                    ),
+                    p=_qep(dialogcons.DialogMachineConst.EVENTS_LIST_ENTRY),
                     stage=plugin.Stages.stage_id(stage),
                     name=name,
                     givenname=givenname,
                 )
             )
         self._write(
-            text='%s%s\n' % (
-                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                dialogcons.DialogMachineConst.EVENTS_LIST_END,
-            )
+            text='%s\n' % _qep(dialogcons.DialogMachineConst.EVENTS_LIST_END)
         )
 
     @plugin.event(
@@ -184,18 +173,16 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
 
     def _writeQueryStart(self, name):
         self._write(
-            text='%s%s %s\n' % (
-                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                dialogcons.DialogMachineConst.QUERY_START,
+            text='%s %s\n' % (
+                _qep(dialogcons.DialogMachineConst.QUERY_START),
                 name,
             )
         )
 
     def _writeQueryEnd(self, name):
         self._write(
-            text='%s%s %s\n' % (
-                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                dialogcons.DialogMachineConst.QUERY_END,
+            text='%s %s\n' % (
+                _qep(dialogcons.DialogMachineConst.QUERY_END),
                 name,
             )
         )
@@ -225,17 +212,15 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         self.dialog.note(text=note, prompt=prompt)
         if default:
             self._write(
-                text='%s%s %s\n' % (
-                    dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                    dialogcons.DialogMachineConst.QUERY_DEFAULT_VALUE,
+                text='%s %s\n' % (
+                    _qep(dialogcons.DialogMachineConst.QUERY_DEFAULT_VALUE),
                     default,
                 )
             )
         if validValues:
             self._write(
-                text='%s%s %s\n' % (
-                    dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                    dialogcons.DialogMachineConst.QUERY_VALID_VALUES,
+                text='%s %s\n' % (
+                    _qep(dialogcons.DialogMachineConst.QUERY_VALID_VALUES),
                     '|'.join(
                         [
                             x.replace('\\', '\\\\').replace('|', '\|')
@@ -245,9 +230,8 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 )
             )
         self._write(
-            text='%s%s %s\n' % (
-                dialogcons.DialogMachineConst.QUERY_EXTRA_PREFIX,
-                dialogcons.DialogMachineConst.QUERY_HIDDEN,
+            text='%s %s\n' % (
+                _qep(dialogcons.DialogMachineConst.QUERY_HIDDEN),
                 (
                     dialogcons.DialogMachineConst.QUERY_HIDDEN_TRUE if hidden
                     else dialogcons.DialogMachineConst.QUERY_HIDDEN_FALSE
