@@ -26,16 +26,35 @@ class Plugin(plugin.PluginBase, command.CommandBase):
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
 
+    def _search_one_cmd(self, cmd, searchPath=None):
+        if searchPath is None:
+            searchPath = self.environment[
+                constants.SysEnv.COMMAND_PATH
+            ].split(':')
+        if self.command.get(command=cmd, optional=True) is None:
+            for path in searchPath:
+                cmdPath = os.path.join(path, cmd)
+                if os.path.exists(cmdPath):
+                    self.command.set(command=cmd, path=cmdPath)
+
     def _search(self):
         searchPath = self.environment[
             constants.SysEnv.COMMAND_PATH
         ].split(':')
         for cmd in self.command.enum():
-            if self.command.get(command=cmd, optional=True) is None:
-                for path in searchPath:
-                    cmdPath = os.path.join(path, cmd)
-                    if os.path.exists(cmdPath):
-                        self.command.set(command=cmd, path=cmdPath)
+            self._search_one_cmd(cmd, searchPath)
+
+    def get(self, command, optional=False):
+        res = super(Plugin, self).get(command, optional=True)
+        if not res and not optional:
+            # Try harder.
+            self.logger.debug(
+                'command %s not detected yet, searching',
+                command
+            )
+            self._search_one_cmd(command)
+            res = super(Plugin, self).get(command, optional)
+        return res
 
     @plugin.event(
         stage=plugin.Stages.STAGE_INIT,
