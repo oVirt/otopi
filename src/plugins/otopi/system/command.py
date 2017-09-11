@@ -36,6 +36,7 @@ class Plugin(plugin.PluginBase, command.CommandBase):
                 cmdPath = os.path.join(path, cmd)
                 if os.path.exists(cmdPath):
                     self.command.set(command=cmd, path=cmdPath)
+                    break
 
     def _search(self):
         searchPath = self.environment[
@@ -63,7 +64,10 @@ class Plugin(plugin.PluginBase, command.CommandBase):
     def _init(self):
         self.environment.setdefault(
             constants.SysEnv.COMMAND_PATH,
-            constants.Defaults.COMMAND_SEARCH_PATH
+            (
+                os.environ.get(constants.SystemEnvironment.SYS_PATH) or
+                constants.Defaults.COMMAND_SEARCH_PATH
+            )
         )
         self.context.registerCommand(command=self)
 
