@@ -24,6 +24,12 @@ same class.
 
 If activated, causes a RuntimeError at the specified stage and priority.
 
+test_command
+------------
+Activated by setting in the system environment OTOPI_TEST_COMMAND=1.
+Activates some code to test the 'command' module. The log will have
+some results of the tests, around lines containing 'test_command'.
+
 Examples
 ========
 

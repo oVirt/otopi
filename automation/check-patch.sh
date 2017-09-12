@@ -26,12 +26,24 @@ find \
     -exec mv {} exported-artifacts/ \;
 
 yum install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
-otopi ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
-OTOPI_DEBUG=1 otopi DIALOG/dialect=str:machine
-OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" otopi
+
+cov_otopi() {
+	OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" COVERAGE_FILE=$(mktemp -p $PWD .coverage.XXXXXX) otopi "$@"
+}
+
+# Test packager
+cov_otopi ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
+
+# Test command
+PATH="${PWD}/automation/testbin:$PATH" OTOPI_TEST_COMMAND=1 cov_otopi
+
+# Test machine dialog
+cov_otopi DIALOG/dialect=str:machine
+
 mkdir -p exported-artifacts/logs
 cp -p /tmp/otopi-*.log exported-artifacts/logs
 
+coverage combine
 coverage html -d exported-artifacts/coverage_html_report
 cp automation/index.html exported-artifacts/
 
