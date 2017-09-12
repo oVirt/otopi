@@ -27,6 +27,7 @@ find \
 
 yum install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
 otopi ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
+OTOPI_DEBUG=1 otopi DIALOG/dialect=str:machine
 OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" otopi
 coverage html -d exported-artifacts/coverage_html_report
 cp automation/index.html exported-artifacts/
