@@ -21,3 +21,10 @@ exclude_lines =
     if __name__ == .__main__.:
 
 ignore_errors = True
+
+omit =
+    /usr/lib/python2.7/site-packages/dateutil/*
+    /usr/lib/python2.7/site-packages/iniparse/*
+    /usr/lib/python2.7/site-packages/rpmUtils/*
+    /usr/lib/python2.7/site-packages/urlgrabber/*
+    /usr/lib/python2.7/site-packages/yum/*
