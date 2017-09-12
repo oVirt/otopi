@@ -256,11 +256,14 @@ class DialogBaseImpl(DialogBase):
         self.__flush(stream=self.__output)
 
     def _write(self, text, flush=True):
-        text = common.toStr(text)
-        self.__logString('SEND', text)
-        self.__output.write(text)
-        if flush:
-            self.__flush(self.__output)
+        if self.__output is None:
+            self.__logString('Not SENDING, output is closed: %s', text)
+        else:
+            text = common.toStr(text)
+            self.__logString('SEND', text)
+            self.__output.write(text)
+            if flush:
+                self.__flush(self.__output)
 
     def _queryStringNote(
         self,
