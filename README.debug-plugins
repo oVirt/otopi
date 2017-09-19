@@ -30,7 +30,48 @@ Activated by setting in the system environment OTOPI_TEST_COMMAND=1.
 Activates some code to test the 'command' module. The log will have
 some results of the tests, around lines containing 'test_command'.
 
+packages
+--------
+Activated by passing in otopi's environment:
+
+ODEBUG/packagesAction=str:@action@
+ODEBUG/packages=str:@packages@
+
+Valid options for @action@:
+
+These do not need params, and ignore ODEBUG/packages:
+
+queryGroups
+
+These take a single param, passed as @packages@:
+
+installGroup
+updateGroup
+removeGroup
+
+These take a comma-separated list of params, passed as @packages@:
+
+install
+update
+installUpdate
+remove
+queryPackages
+
 Examples
 ========
 
+- Fail at STAGE_SETUP, prompt before exiting:
+
 OTOPI_WAIT_ON_ERROR=1 OTOPI_FORCE_FAIL_STAGE=STAGE_SETUP engine-setup
+
+- Query available yum/dnf groups:
+
+otopi ODEBUG/packagesAction=str:queryGroups
+
+- Install a yum/dnf group:
+
+otopi ODEBUG/packagesAction=str:installGroup ODEBUG/packages=str:compat-libraries
+
+- Install some packages using yum/dnf:
+
+otopi ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
