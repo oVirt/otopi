@@ -577,6 +577,7 @@ class MiniYum(object):
                     self._yb.preconf.disabled_plugins = disabledPlugins
                 if enabledPlugins is not None:
                     self._yb.preconf.enabled_plugins = enabledPlugins
+                self._yb.conf.rpmverbosity = "debug"
 
                 #
                 # DO NOT use async which is the
