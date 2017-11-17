@@ -1,7 +1,13 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.7.2
-
+2017-11-17 - Version 1.7.2
+ * miniyum: set rpmverbosity to "debug"
+ * plugins: command: obey env var $PATH
+ * plugins: command: if command.get did not find a command, search again.
+ * core: do not write after output is closed
+ * core: context: expose methodName for debugging purpose
+ * machine_dialog: shorten QUERY_EXTRA_PREFIX
+ * machine_dialog: add events data
 
 2017-07-25 - Version 1.7.1
  * core: Read config files early
