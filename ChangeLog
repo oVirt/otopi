@@ -1,6 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.7.3
+2017-11-17 - Version 1.7.3
+ * bump maven version to 1.7.3
 
 2017-11-17 - Version 1.7.2
  * miniyum: set rpmverbosity to "debug"
