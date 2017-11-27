@@ -40,6 +40,9 @@ PATH="${PWD}/automation/testbin:$PATH" OTOPI_TEST_COMMAND=1 cov_otopi
 # Test machine dialog
 cov_otopi DIALOG/dialect=str:machine
 
+# Test failures
+OTOPI_FORCE_FAIL_STAGE=STAGE_MISC cov_otopi || echo "Otopi was forced to fail, this is ok"
+
 mkdir -p exported-artifacts/logs
 cp -p /tmp/otopi-*.log exported-artifacts/logs
 
