@@ -57,6 +57,10 @@ installUpdate
 remove
 queryPackages
 
+test_failure
+------------
+Always active, if installed. Runs some commands to help debug failures.
+
 Examples
 ========
 
