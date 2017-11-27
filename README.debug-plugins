@@ -24,6 +24,10 @@ same class.
 
 If activated, causes a RuntimeError at the specified stage and priority.
 
+test_failure
+------------
+Always active, if installed. Runs some commands to help debug failures.
+
 Examples
 ========
 

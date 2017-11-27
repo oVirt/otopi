@@ -149,6 +149,7 @@ AC_CONFIG_FILES([
 	src/plugins/otopi/services/Makefile
 	src/plugins/otopi/packagers/Makefile
 	src/plugins/otopi/debug/Makefile
+	src/plugins/otopi/debug/debug_failure/Makefile
 	src/plugins/otopi/debug/force_fail/Makefile
 	src/plugins/otopi/debug/wait_on_error/Makefile
 	src/java/Makefile

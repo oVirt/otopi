@@ -7,6 +7,7 @@ MAINTAINERCLEANFILES = \
 	$(NULL)
 
 SUBDIRS = \
+	debug_failure \
 	force_fail \
 	wait_on_error \
 	$(NULL)
