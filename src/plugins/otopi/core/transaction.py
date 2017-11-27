@@ -44,6 +44,7 @@ class Plugin(plugin.PluginBase):
 
     @plugin.event(
         stage=plugin.Stages.STAGE_INIT,
+        name=constants.Stages.TRANSACTIONS_INIT,
     )
     def _init(self):
         self._internalPackageTransaction = transaction.Transaction()

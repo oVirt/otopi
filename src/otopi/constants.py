@@ -37,6 +37,7 @@ class Stages(object):
     PACKAGERS_DETECTION = 'otopi.packagers.detection'
     FIREWALLD_VALIDATION = 'otopi.network.firewalld.validation'
     IPTABLES_VALIDATION = 'otopi.network.iptables.validation'
+    TRANSACTIONS_INIT = 'otopi.core.transactions.init'
 
 
 @util.export
