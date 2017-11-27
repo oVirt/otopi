@@ -27,6 +27,13 @@ find \
 
 yum install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
 OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" otopi
+
+# Test failures
+OTOPI_FORCE_FAIL_STAGE=STAGE_MISC OTOPI_DEBUG=1 otopi || echo "Otopi was forced to fail, this is ok"
+
+mkdir -p exported-artifacts/logs
+cp -p /tmp/otopi-*.log exported-artifacts/logs
+
 coverage html -d exported-artifacts/coverage_html_report
 cp automation/index.html exported-artifacts/
 
