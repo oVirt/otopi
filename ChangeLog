@@ -1,6 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.7.4
+2017-11-29 - Version 1.7.4
+ * packagers: expose processTransaction method in PackagerBase
+ * plugins: debug: Add debug_failure
 
 2017-11-17 - Version 1.7.3
  * bump maven version to 1.7.3
