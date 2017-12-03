@@ -75,7 +75,6 @@ Development tools for %{name}.
 %package debug-plugins
 Summary:	%{name} debug plugins
 Requires:	%{name} = %{version}-%{release}
-Requires:	iproute
 
 %description debug-plugins
 Debug plugins for %{name}.
