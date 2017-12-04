@@ -140,8 +140,11 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %dir %{_sysconfdir}/%{name}.conf.d
 %doc AUTHORS
 %license COPYING
+%license LICENSE
 %doc README
 %doc README.API
+%doc README.config-query
+%doc README.debug-plugins
 %doc README.dialog
 %doc README.environment
 %exclude %{python_sitelib}/%{name}/codegen/

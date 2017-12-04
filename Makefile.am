@@ -36,9 +36,12 @@ SUBDIRS = \
 dist_noinst_DATA = \
 	MAINTAINERS \
 	README.API \
+	README.config-query \
+	README.debug-plugins \
 	README.dialog \
 	README.environment \
 	README.localization \
+	LICENSE \
 	otopi.spec \
 	$(NULL)
 
