@@ -772,6 +772,8 @@ class Context(base.Base):
             return None
         elif os.path.isabs(file):
             return file
+        elif file.startswith('~/'):
+            return os.path.expanduser(file)
         else:
             return os.path.join(
                 self.environment[
