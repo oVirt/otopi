@@ -1,7 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.6.3
- *
+2018-01-09 - Version 1.6.3
+ * miniyum: Set rpmverbosity to "debug"
+ * plugins: debug: Add debug_failure
 
 2017-04-21 - Version 1.6.2
  * network: do not install/update iproute anymore
