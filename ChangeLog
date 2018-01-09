@@ -1,6 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.7.6
+2018-01-09 - Version 1.7.6
+ * dialog: Add answer file support
+ * src: resolve file path that start with ~
 
 2017-11-30 - Version 1.7.5
  * plugins: debug: Fix debug_failure out of transaction
