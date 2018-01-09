@@ -11,6 +11,7 @@ MAINTAINERCLEANFILES = \
 mydir=$(otopiplugindir)/otopi/dialog
 dist_my_PYTHON = \
 	__init__.py \
+	answer_file.py \
 	cli.py \
 	constants.py \
 	human.py \

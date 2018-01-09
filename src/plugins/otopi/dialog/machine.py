@@ -65,6 +65,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
         super(Plugin, self).__init__(context=context)
         dialog.DialogBaseImpl.__init__(self)    # python super is no good
         self._enabled = False
+        self._question_occurrences = {}
 
     @plugin.event(
         stage=plugin.Stages.STAGE_BOOT,
@@ -208,61 +209,91 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             default=default,
         )
 
-        self._writeQueryStart(name)
-        self.dialog.note(text=note, prompt=prompt)
-        if default:
-            self._write(
-                text='%s %s\n' % (
-                    _qep(dialogcons.DialogMachineConst.QUERY_DEFAULT_VALUE),
-                    default,
-                )
-            )
-        if validValues:
-            self._write(
-                text='%s %s\n' % (
-                    _qep(dialogcons.DialogMachineConst.QUERY_VALID_VALUES),
-                    '|'.join(
-                        [
-                            x.replace('\\', '\\\\').replace('|', '\|')
-                            for x in validValues
-                        ]
-                    ),
-                )
-            )
-        self._write(
-            text='%s %s\n' % (
-                _qep(dialogcons.DialogMachineConst.QUERY_HIDDEN),
-                (
-                    dialogcons.DialogMachineConst.QUERY_HIDDEN_TRUE if hidden
-                    else dialogcons.DialogMachineConst.QUERY_HIDDEN_FALSE
-                )
-            )
+        occurrence = self._question_occurrences.get(name, 1)
+        envkey = '{prefix}{occurrence}/{name}'.format(
+            prefix=constants.CoreEnv.QUESTION_PREFIX,
+            occurrence=str(occurrence),
+            name=name,
         )
+        self._question_occurrences[name] = occurrence+1
+        if envkey in self.environment:
+            # Answer provided in answerfile. No need to prompt or
+            # anything. TODO Consider formalizing this in the machine
+            # dialog protocol so that the client knows that we were
+            # supposed to ask something but already got an answer.
+            # For now just output this as a note, just like the
+            # human dialect.
+            answer = self.environment[envkey]
+            self.dialog.note(text=note, prompt=False)
+            self.dialog.note(
+                _(
+                    'provided answer: {answer}'
+                ).format(
+                    answer=_('(hidden)') if hidden else answer,
+                )
+            )
+            value = answer
+        else:
+            self._writeQueryStart(name)
+            self.dialog.note(text=note, prompt=prompt)
+            if default:
+                self._write(
+                    text='%s %s\n' % (
+                        _qep(
+                            dialogcons.DialogMachineConst.QUERY_DEFAULT_VALUE
+                        ),
+                        default,
+                    )
+                )
+            if validValues:
+                self._write(
+                    text='%s %s\n' % (
+                        _qep(dialogcons.DialogMachineConst.QUERY_VALID_VALUES),
+                        '|'.join(
+                            [
+                                x.replace('\\', '\\\\').replace('|', '\|')
+                                for x in validValues
+                            ]
+                        ),
+                    )
+                )
+            self._write(
+                text='%s %s\n' % (
+                    _qep(dialogcons.DialogMachineConst.QUERY_HIDDEN),
+                    (
+                        dialogcons.DialogMachineConst.QUERY_HIDDEN_TRUE
+                        if hidden
+                        else dialogcons.DialogMachineConst.QUERY_HIDDEN_FALSE
+                    )
+                )
+            )
 
-        self._write(
-            text='%s%s %s\n' % (
-                dialogcons.DialogMachineConst.REQUEST_PREFIX,
-                dialogcons.DialogMachineConst.QUERY_STRING,
-                name,
-            )
-        )
-        self._writeQueryEnd(name)
-        if not caseSensitive and validValues is not None:
-            validValues = [v.lower() for v in validValues]
-        value = self._readline(hidden)
-        if not value and default is not None:
-            value = default
-        if not caseSensitive:
-            value = value.lower()
-        if (
-            (validValues is not None and value not in validValues) or
-            (not value and value != default)
-        ):
-            raise RuntimeError(
-                _("Invalid value provided to '{name}'").format(
-                    name=name
+            self._write(
+                text='%s%s %s\n' % (
+                    dialogcons.DialogMachineConst.REQUEST_PREFIX,
+                    dialogcons.DialogMachineConst.QUERY_STRING,
+                    name,
                 )
             )
+            self._writeQueryEnd(name)
+            if not caseSensitive and validValues is not None:
+                validValues = [v.lower() for v in validValues]
+            value = self._readline(hidden)
+            if not value and default is not None:
+                value = default
+            if not caseSensitive:
+                value = value.lower()
+            if (
+                (validValues is not None and value not in validValues) or
+                (not value and value != default)
+            ):
+                raise RuntimeError(
+                    _("Invalid value provided to '{name}'").format(
+                        name=name
+                    )
+                )
+            self.environment[envkey] = value
+
         return value
 
     def queryMultiString(self, name, note=None):
