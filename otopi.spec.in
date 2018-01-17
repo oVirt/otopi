@@ -8,6 +8,22 @@
 %global _use_maven 1
 %global _use_repolib 0
 %global maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
+%global binfiles %{_sbindir}/%{name} %{_bindir}/%{name}-config-query %{_datadir}/%{name}/%{name}-bundle
+%global _configure ../configure
+
+%if 0%{?fedora} || 0%{?rhel} >= 8
+%global with_python3 1
+%global src_java_dir py3/src/java
+%else
+%global with_python3 0
+%endif
+
+%if 0%{?rhel} >= 8
+%global with_python2 0
+%else
+%global with_python2 1
+%global src_java_dir py2/src/java
+%endif
 
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
 Name:		@PACKAGE_NAME@
@@ -20,14 +36,19 @@ Group:		Development/Libraries
 
 BuildArch:	noarch
 
-Requires:	python
-Requires:	python-dateutil
 BuildRequires:	apache-commons-logging
 BuildRequires:	java-devel
 BuildRequires:	junit
 BuildRequires:	gettext >= 0.18.2
-BuildRequires:	python2-devel
 BuildRequires:	javapackages-tools
+
+%if 0%{?with_python2}
+BuildRequires:	python2-devel
+%endif
+
+%if 0%{?with_python3}
+BuildRequires:	python%{python3_pkgversion}-devel
+%endif
 
 %if %{_use_maven}
 BuildRequires:	maven-compiler-plugin
@@ -47,6 +68,60 @@ system components. The plugin nature provides simplicity to
 add new installation functionality without the complexity of the state
 and transaction management.
 
+%if 0%{?with_python2}
+%package -n python2-%{name}
+Summary:	%{summary}
+%{?python_provide:%python_provide python2-%{name}}
+Requires:	python
+Requires:	python-dateutil
+Requires:	%{name}-common = %{version}-%{release}
+Provides:	%{name} = %{version}-%{release}
+Obsoletes:	%{name} < %{version}-%{release}
+
+%description -n python2-%{name}
+%{summary}.
+
+Python 2 version.
+
+%package -n python2-otopi-devtools
+Summary:	%{name} development tools
+Requires:	python2-%{name} = %{version}-%{release}
+
+%description -n python2-otopi-devtools
+Development tools for %{name}.
+
+Python 2 version.
+%endif # with_python2
+
+%if 0%{?with_python3}
+%package -n python%{python3_pkgversion}-%{name}
+Summary:	%{summary}
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{name}}
+Requires:	python%{python3_pkgversion}
+Requires:	python%{python3_pkgversion}-dateutil
+Requires:	%{name}-common = %{version}-%{release}
+
+%description -n python%{python3_pkgversion}-%{name}
+%{summary}.
+
+Python %{python3_pkgversion} version.
+
+%package -n python%{python3_pkgversion}-otopi-devtools
+Summary:	%{name} development tools
+Requires:	python%{python3_pkgversion}-%{name} = %{version}-%{release}
+
+%description -n python%{python3_pkgversion}-otopi-devtools
+Development tools for %{name}.
+
+Python %{python3_pkgversion} version.
+%endif # with_python3
+
+%package common
+Summary:	Commong files for %{name}
+
+%description common
+%{summary}
+
 %package java
 Summary:	%{name} java support
 Requires:	%{name} = %{version}-%{release}
@@ -65,13 +140,6 @@ Group:		Documentation
 This package contains the API documentation for %{name}.
 %endif
 
-%package devtools
-Summary:	%{name} development tools
-Requires:	%{name} = %{version}-%{release}
-
-%description devtools
-Development tools for %{name}.
-
 %package debug-plugins
 Summary:	%{name} debug plugins
 Requires:	%{name} = %{version}-%{release}
@@ -88,6 +156,7 @@ Summary:	%{name} maven repo
 
 %prep
 %setup -q -n %{name}-%{package_version}
+mkdir py2 py3
 
 %build
 %if %{_use_maven}
@@ -95,32 +164,71 @@ Summary:	%{name} maven repo
 %else
 %global conf COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
 %endif
-%configure \
+
+%if 0%{?with_python2}
+pushd py2
+%configure PYTHON="%{__python2}" \
 	--docdir="%{_docdir}/%{name}-%{version}" \
 	--disable-python-syntax-check \
 	--enable-java-sdk \
 	--with-local-version="%{name}-%{version}-%{release}" \
 	%{?conf}
 make %{?_smp_mflags}
+popd
+%endif # with_python2
+
+%if 0%{?with_python3}
+pushd py3
+%configure PYTHON="%{__python3}" \
+	--docdir="%{_docdir}/%{name}-%{version}" \
+	--disable-python-syntax-check \
+	--enable-java-sdk \
+	--with-local-version="%{name}-%{version}-%{release}" \
+	%{?conf}
+make %{?_smp_mflags}
+popd
+%endif # with_python3
 
 %if %{_use_maven}
-cd src/java
+pushd %{src_java_dir}
 %mvn_build
-cd ../..
+popd
 %endif
 
+
 %install
-make %{?_smp_mflags} install DESTDIR="%{buildroot}"
+%if 0%{?with_python2}
+make -C py2 %{?_smp_mflags} install DESTDIR="%{buildroot}"
+for bf in %{binfiles}
+do
+	sed "s#%{__python}#%{__python2}#" %{buildroot}/$bf > %{buildroot}/$bf-%{python2_version}
+	chmod 755 %{buildroot}/$bf-%{python2_version}
+	ln -sf $(basename $bf)-%{python2_version} %{buildroot}/$bf-2
+	ln -sf $(basename $bf)-2 %{buildroot}/$bf
+done
+sed -i "s/\<python\>/python2/" %{buildroot}/%{_sbindir}/%{name}-%{python2_version}
+%endif # with_python2
+
+%if 0%{?with_python3}
+make -C py3 %{?_smp_mflags} install DESTDIR="%{buildroot}"
+for bf in %{binfiles}
+do
+	sed "s#%{__python}#%{__python3}#" %{buildroot}/$bf > %{buildroot}/$bf-%{python3_version}
+	chmod 755 %{buildroot}/$bf-%{python3_version}
+	ln -sf $(basename $bf)-%{python3_version} %{buildroot}/$bf-3
+done
+sed -i "s/\<python\>/python3/" %{buildroot}/%{_sbindir}/%{name}-%{python3_version}
+%endif # with_python3
 
 %if %{_use_maven}
-cd src/java
+pushd %{src_java_dir}
 %mvn_install
-cd ../..
+popd
 %else
 install -d "%{buildroot}%{_javadir}/%{name}"
 install -m 644 target/%{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}"
 ln -s %{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}/%{name}.jar"
-cat > src/java/.mfiles << __EOF__
+cat > %{src_java_dir}/.mfiles << __EOF__
 %{_javadir}/%{name}/
 __EOF__
 %endif
@@ -128,16 +236,15 @@ __EOF__
 %if %{_use_repolib}
 install -d "%{buildroot}%{maven2brewrepodir}"
 cp "%{buildroot}%{_javadir}/%{name}/%{name}.jar" "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.jar"
-cp src/java/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.pom"
+cp %{src_java_dir}/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.pom"
 %endif
 
 install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %find_lang %{name}
 
-%files -f %{name}.lang
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/plugins
-%dir %{_sysconfdir}/%{name}.conf.d
+
+%if 0%{?with_python2}
+%files -n python2-%{name}
 %doc AUTHORS
 %license COPYING
 %license LICENSE
@@ -148,21 +255,61 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.dialog
 %doc README.environment
 %exclude %{python_sitelib}/%{name}/codegen/
+%{_sbindir}/%{name}
+%{_sbindir}/%{name}-2
+%{_sbindir}/%{name}-%{python2_version}
+%{_bindir}/%{name}-config-query
+%{_bindir}/%{name}-config-query-2
+%{_bindir}/%{name}-config-query-%{python2_version}
+%{python_sitelib}/%{name}/
+%endif # with_python2
+
+%if 0%{?with_python3}
+%files -n python%{python3_pkgversion}-%{name}
+%doc AUTHORS
+%license COPYING
+%license LICENSE
+%doc README
+%doc README.API
+%doc README.config-query
+%doc README.debug-plugins
+%doc README.dialog
+%doc README.environment
+%exclude %{python_sitelib}/%{name}/codegen/
+%{_sbindir}/%{name}-3
+%{_sbindir}/%{name}-%{python3_version}
+%{_bindir}/%{name}-config-query-3
+%{_bindir}/%{name}-config-query-%{python3_version}
+%{python3_sitelib}/%{name}/
+%endif # with_python3
+
+%files common -f %{name}.lang
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/plugins
+%dir %{_sysconfdir}/%{name}.conf.d
 %{_datadir}/%{name}/plugins/%{name}/
 %exclude %{_datadir}/%{name}/plugins/%{name}/debug/
-%{_sbindir}/%{name}
-%{_bindir}/%{name}-config-query
-%{python_sitelib}/%{name}/
 
-%files java -f src/java/.mfiles
+%files java -f %{src_java_dir}/.mfiles
 
 %if %{_use_maven}
-%files javadoc -f src/java/.mfiles-javadoc
+%files javadoc -f %{src_java_dir}/.mfiles-javadoc
 %endif
 
-%files devtools
+%if 0%{?with_python2}
+%files -n python2-otopi-devtools
 %{_datadir}/%{name}/%{name}-bundle
+%{_datadir}/%{name}/%{name}-bundle-2
+%{_datadir}/%{name}/%{name}-bundle-%{python2_version}
 %{python_sitelib}/%{name}/codegen/
+%endif # with_python2
+
+%if 0%{?with_python3}
+%files -n python%{python3_pkgversion}-otopi-devtools
+%{_datadir}/%{name}/%{name}-bundle-3
+%{_datadir}/%{name}/%{name}-bundle-%{python3_version}
+%{python3_sitelib}/%{name}/codegen/
+%endif # with_python3
 
 %files debug-plugins
 %{_datadir}/%{name}/plugins/%{name}/debug/
