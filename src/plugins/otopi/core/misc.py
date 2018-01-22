@@ -58,6 +58,7 @@ class Plugin(plugin.PluginBase):
                 local_version=config.LOCAL_VERSION,
             )
         )
+        self.context.checkSequence()
 
     @plugin.event(
         stage=plugin.Stages.STAGE_VALIDATION,

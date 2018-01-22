@@ -807,6 +807,36 @@ class Context(base.Base):
             for methodinfo in methodinfos
         ]
 
+    def checkSequence(self):
+        """Check Sequence"""
+        ok = True
+        for stage, methodinfos in self._sequence.items():
+            for methodinfo in methodinfos:
+
+                def check(which, methodinfo):
+                    ok = True
+                    if isinstance(methodinfo[which], str):
+                        ok = False
+                        self.logger.error(
+                            _(
+                                '"{which}" parameter of method {name} is a '
+                                'string, should probably be a tuple. Perhaps '
+                                'a missing comma?'
+                            ).format(
+                                which=which,
+                                name=self.methodName(methodinfo),
+                            ),
+                        )
+                        self.dialog.note('methodinfo: %s' % methodinfo)
+                    return ok
+
+                if not check('before', methodinfo):
+                    ok = False
+                if not check('after', methodinfo):
+                    ok = False
+        if not ok:
+            raise RuntimeError(_('Found bad "before" or "after" parameters'))
+
     def dumpEnvironment(self, old=None):
         """Dump environment."""
         diff = False
