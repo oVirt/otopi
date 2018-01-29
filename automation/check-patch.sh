@@ -41,7 +41,17 @@ PATH="${PWD}/automation/testbin:$PATH" OTOPI_TEST_COMMAND=1 cov_otopi
 cov_otopi DIALOG/dialect=str:machine
 
 # Test failures
-OTOPI_FORCE_FAIL_STAGE=STAGE_MISC cov_otopi || echo "Otopi was forced to fail, this is ok"
+cov_failing_otopi() {
+	if cov_otopi "$@"; then
+		echo otopi was supposed to fail but did not
+		exit 1
+	else
+		echo otopi failed and this is ok
+	fi
+}
+
+OTOPI_FORCE_FAIL_STAGE=STAGE_MISC cov_failing_otopi
+cov_failing_otopi "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:bad_plugin1"
 
 mkdir -p exported-artifacts/logs
 cp -p /tmp/otopi-*.log exported-artifacts/logs
