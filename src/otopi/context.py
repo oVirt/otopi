@@ -719,6 +719,12 @@ class Context(base.Base):
                 raise
             self._sequence = self._castlingBuildSequence()
 
+    def _typed_value_str(self, value):
+        return '%s:%s' % (
+            common.typeName(value),
+            common.toStr(value)
+        )
+
     def runSequence(self):
         """Run sequence."""
         for self._currentStage in sorted(self._sequence.keys()):
@@ -744,7 +750,7 @@ class Context(base.Base):
                         not self.environment[constants.BaseEnv.ERROR]
                     ):
                         oldEnvironment = dict(
-                            (k, common.toStr(v))
+                            (k, self._typed_value_str(v))
                             for k, v in self.environment.items()
                         )
                         self._executeMethod(self._currentStage, methodinfo)
@@ -841,12 +847,12 @@ class Context(base.Base):
         """Dump environment."""
         diff = False
         for key in sorted(self.environment.keys()):
-            value = common.toStr(self.environment[key])
+            value = self.environment[key]
 
             if (
                 old is None or
                 key not in old or  # Dump if added, even if None
-                value != common.toStr(old.get(key))
+                self._typed_value_str(value) != old[key]
             ):
                 if not diff:
                     diff = True
