@@ -40,6 +40,8 @@ PATH="${PWD}/automation/testbin:$PATH" OTOPI_TEST_COMMAND=1 cov_otopi
 # Test machine dialog
 cov_otopi DIALOG/dialect=str:machine
 
+cov_otopi "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:change_env_type"
+
 # Test failures
 cov_failing_otopi() {
 	if cov_otopi "$@"; then
