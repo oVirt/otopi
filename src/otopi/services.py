@@ -42,5 +42,11 @@ class ServicesBase(object):
         """Sets service state"""
         pass
 
+    def restart(self, name):
+        """Restart service"""
+        if self.exists(name):
+            self.state(name, False)
+            self.state(name, True)
+
 
 # vim: expandtab tabstop=4 shiftwidth=4

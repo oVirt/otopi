@@ -142,5 +142,22 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
                 )
             )
 
+    def restart(self, name):
+        self.logger.debug(
+            'restarting service %s',
+            name
+        )
+        rc, stdout, stderr = self._executeServiceCommand(
+            name,
+            'restart',
+            raiseOnError=False,
+        )
+        if rc != 0:
+            raise RuntimeError(
+                _("Failed to restart service '{service}'").format(
+                    service=name,
+                )
+            )
+
 
 # vim: expandtab tabstop=4 shiftwidth=4
