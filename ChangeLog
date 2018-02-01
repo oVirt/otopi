@@ -1,6 +1,11 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.7.7
+2018-02-01 - Version 1.7.7
+ * services: Add restart action
+ * core: dump env keys also if only type changed
+ * automation: Test a plugin that changes an env key type
+ * automation: Test bad plugin with missing comma in after=
+ * core: Check Sequence before/after
 
 2018-01-09 - Version 1.7.6
  * dialog: Add answer file support

@@ -173,6 +173,9 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %endif
 
 %changelog
+* Thu Feb 01 2018 - Yedidyah Bar David <didi@redhat.com> - 1.7.7-1
+- Release.
+
 * Tue Jan 09 2018 - Yedidyah Bar David <didi@redhat.com> - 1.7.6-1
 - Release.
 
