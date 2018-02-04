@@ -324,14 +324,13 @@ class MiniDNF():
 
     def _createBase(self, offline=False):
         base = dnf.Base()
-        if base.conf.plugins:
-            base.plugins.load(base.conf.pluginpath, self._disabledPlugins)
 
         # This avoid DNF trying to remove packages that were not touched by
         # its own transaction when doing a rollback.
         base.conf.clean_requirements_on_remove = False
 
-        base.plugins.run_init(base, None)
+        base.init_plugins(disabled_glob=self._disabledPlugins)
+
         base.read_all_repos()
         base.repos.all().set_progress_bar(self._MyDownloadProgress(self._sink))
 
@@ -346,7 +345,7 @@ class MiniDNF():
 
     def _destroyBase(self, base):
         if base is not None:
-            base.plugins.unload()
+            base._plugins._unload()
             base.close()
 
     def _queuePackages(
@@ -403,14 +402,14 @@ class MiniDNF():
                     action=action,
                 )
             )
-            g = self._base.comps.group_by_id(group)
+            g = self._base.comps._group_by_id(group)
             if g is None:
                 raise dnf.exceptions.Error(
                     _('Group {group} cannot be resolved').format(
                         group=group,
                     )
                 )
-            call(g)
+            call(g.id)
             return True
         except dnf.exceptions.Error as e:
             msg = _("Cannot queue group '{group}': {error}").format(
@@ -437,14 +436,14 @@ class MiniDNF():
         sink=None,
         disabledPlugins=None,
     ):
-        if int(dnf.__version__.split('.')[0]) != 1:
+        self._base = None
+        self._baseTransaction = None
+
+        if int(dnf.__version__.split('.')[0]) != 2:
             raise RuntimeError(_('Incompatible DNF'))
 
         self._sink = sink if sink else self._VoidSink()
         self._disabledPlugins = disabledPlugins if disabledPlugins else []
-
-        self._base = None
-        self._baseTransaction = None
 
         self._handler = self._MyHandler(self._sink)
 
@@ -538,7 +537,7 @@ class MiniDNF():
             )
             if 'expire-cache' in what or 'all' in what:
                 for repo in self._base.repos.iter_enabled():
-                    repo.md_expire_cache()
+                    repo.metadata_expire = 0
         except Exception as e:
             self._sink.error(e)
             raise
@@ -586,7 +585,11 @@ class MiniDNF():
                             currentTransaction + 1,
                         ):
                             operations += history.transaction_nevra_ops(id_)
-                        base.history_undo_operations(operations)
+                        base._history_undo_operations(
+                            operations,
+                            self._baseTransaction + 1,
+                            True
+                        )
                         self._processTransaction(base=base)
                 finally:
                     self._destroyBase(base)
@@ -803,7 +806,7 @@ class MiniDNF():
             return [
                 {
                     'operation': (
-                        'installed' if base.group_persistor.group(
+                        'installed' if base._group_persistor.group(
                             group.id
                         ).installed
                         else 'available'
