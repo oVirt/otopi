@@ -27,6 +27,14 @@ find \
 
 yum install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
 
+mkdir -p exported-artifacts/logs
+
+cleanup() {
+	cp -p /tmp/otopi-*.log exported-artifacts/logs
+}
+
+trap cleanup EXIT
+
 cov_otopi() {
 	OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" COVERAGE_FILE=$(mktemp -p $PWD .coverage.XXXXXX) otopi "$@"
 }
@@ -54,9 +62,6 @@ cov_failing_otopi() {
 
 OTOPI_FORCE_FAIL_STAGE=STAGE_MISC cov_failing_otopi
 cov_failing_otopi "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:bad_plugin1"
-
-mkdir -p exported-artifacts/logs
-cp -p /tmp/otopi-*.log exported-artifacts/logs
 
 coverage combine
 coverage html -d exported-artifacts/coverage_html_report
