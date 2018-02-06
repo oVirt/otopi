@@ -206,7 +206,6 @@ do
 	sed "s#%{__python}#%{__python2}#" %{buildroot}/$bf > %{buildroot}/$bf-%{python2_version}
 	chmod 755 %{buildroot}/$bf-%{python2_version}
 	ln -sf $(basename $bf)-%{python2_version} %{buildroot}/$bf-2
-	ln -sf $(basename $bf)-2 %{buildroot}/$bf
 done
 sed -i "s/\<python\>/python2/" %{buildroot}/%{_sbindir}/%{name}-%{python2_version}
 %endif # with_python2
@@ -221,6 +220,14 @@ do
 done
 sed -i "s/\<python\>/python3/" %{buildroot}/%{_sbindir}/%{name}-%{python3_version}
 %endif # with_python3
+
+# Point to otopi2 binaries by default
+%if 0%{?with_python2}
+for bf in %{binfiles}
+do
+    ln -sf $(basename $bf)-2 %{buildroot}/$bf
+done
+%endif # with_python2
 
 %if %{_use_maven}
 pushd %{src_java_dir}
