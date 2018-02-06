@@ -38,6 +38,7 @@ class Plugin(plugin.PluginBase):
     def _init(self):
         self.logger.debug('SYSTEM INFORMATION - BEGIN')
         self.logger.debug('executable %s', sys.executable)
+        self.logger.debug('python version %s', sys.version)
         self.logger.debug('python %s', sys.executable)
         self.logger.debug('platform %s', sys.platform)
         self.logger.debug('distribution %s', platform.linux_distribution())
