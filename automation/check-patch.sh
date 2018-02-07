@@ -36,19 +36,22 @@ cleanup() {
 trap cleanup EXIT
 
 cov_otopi() {
-	OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" COVERAGE_FILE=$(mktemp -p $PWD .coverage.XXXXXX) otopi "$@"
+	otopi="$1"
+	name="$2"
+	shift 2
+	OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" COVERAGE_FILE=$(mktemp -p $PWD .coverage.XXXXXX) "${otopi}" CORE/logFileNamePrefix="str:${otopi}-${name}" "$@"
 }
 
 # Test packager
-cov_otopi ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
+cov_otopi otopi packager ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
 
 # Test command
-PATH="${PWD}/automation/testbin:$PATH" OTOPI_TEST_COMMAND=1 cov_otopi
+PATH="${PWD}/automation/testbin:$PATH" OTOPI_TEST_COMMAND=1 cov_otopi otopi command
 
 # Test machine dialog
-cov_otopi DIALOG/dialect=str:machine
+cov_otopi otopi machine DIALOG/dialect=str:machine
 
-cov_otopi "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:change_env_type"
+cov_otopi otopi change_env_type "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:change_env_type"
 
 # Test failures
 cov_failing_otopi() {
@@ -60,8 +63,8 @@ cov_failing_otopi() {
 	fi
 }
 
-OTOPI_FORCE_FAIL_STAGE=STAGE_MISC cov_failing_otopi
-cov_failing_otopi "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:bad_plugin1"
+OTOPI_FORCE_FAIL_STAGE=STAGE_MISC cov_failing_otopi otopi force_fail
+cov_failing_otopi otopi bad_before_after "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:bad_plugin1"
 
 coverage combine
 coverage html -d exported-artifacts/coverage_html_report
