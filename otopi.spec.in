@@ -86,6 +86,8 @@ Python 2 version.
 %package -n python2-otopi-devtools
 Summary:	%{name} development tools
 Requires:	python2-%{name} = %{version}-%{release}
+Provides:	%{name}-devtools = %{version}-%{release}
+Obsoletes:	%{name}-devtools < %{version}-%{release}
 
 %description -n python2-otopi-devtools
 Development tools for %{name}.
