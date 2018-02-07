@@ -24,7 +24,10 @@ ignore_errors = True
 
 omit =
     /usr/lib/python2.7/site-packages/dateutil/*
+    /usr/lib/python3.6/site-packages/dateutil/
     /usr/lib/python2.7/site-packages/iniparse/*
+    /usr/lib/python3.6/site-packages/iniparse/*
     /usr/lib/python2.7/site-packages/rpmUtils/*
     /usr/lib/python2.7/site-packages/urlgrabber/*
     /usr/lib/python2.7/site-packages/yum/*
+    /usr/lib/python3.6/site-packages/dnf/*

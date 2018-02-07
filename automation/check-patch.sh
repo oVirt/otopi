@@ -66,6 +66,15 @@ cov_failing_otopi() {
 OTOPI_FORCE_FAIL_STAGE=STAGE_MISC cov_failing_otopi otopi force_fail
 cov_failing_otopi otopi bad_before_after "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:bad_plugin1"
 
+# Do some minimal testing for python3. This probably applies to no supported
+# distros currently, because we only build python3-otopi for fedora (not for
+# el7), and there the default "python" is already python-3, so already tested
+# above by running 'otopi'. Still might be useful if/when we support otopi-3
+# also on el7 one day.
+if command -v otopi-3 >/dev/null 2>&1; then
+	cov_otopi otopi-3 packager ODEBUG/packagesAction=str:install ODEBUG/packages=str:yelp-tools
+fi
+
 coverage combine
 coverage html -d exported-artifacts/coverage_html_report
 cp automation/index.html exported-artifacts/
