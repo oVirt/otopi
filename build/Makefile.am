@@ -10,11 +10,15 @@ MAINTAINERCLEANFILES = \
 CLEANFILES = \
 	otopi-bundle \
 	$(NULL)
+EXTRA_DIST = \
+	otopi-functions \
+	$(NULL)
 
 SUFFIXES = .in
 
 pkgdata_SCRIPTS = \
 	otopi-bundle \
+	otopi-functions \
 	$(NULL)
 
 otopi-bundle: \

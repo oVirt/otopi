@@ -16,3 +16,4 @@ python2-devel
 rpm-build
 dnf-utils
 python2-dnf
+makeself

@@ -3,41 +3,10 @@
 # otopi -- plugable installer
 #
 
-die() {
-	local m="$1"
-	echo "***L:ERROR: ${m}"
-	exit 1
-}
-
-find_util() {
-	local util="$1"
-	for candidate in \
-		"/bin/${util}" \
-		"/usr/bin/${util}" \
-		"/usr/local/bin/${util}";
-	do
-		if [ -x "${candidate}" ]; then
-			echo "${candidate}"
-			break
-		fi
-	done
-}
-
 ENV="/etc/otopi.env.d"
 for f in $([ -d "${ENV}" ] && find "${ENV}" -name '*.env' | sort); do
 	[ -r "${f}" ] && . "${f}"
 done
-
-script="$0"
-
-if [ -z "${OTOPI_NONROOT}" -a "$(id -u)" != 0 ]; then
-	sudo="$(find_util sudo)"
-	[ -z "${sudo}" ] && die "Non root execution and no sudo"
-	exec "${sudo}" -n \
-		/bin/sh -c \
-		"'$0' '$*'"
-	die "Internal error (sudo)"
-fi
 
 script="$0"
 scriptdir="$(dirname "${script}")"
@@ -49,6 +18,7 @@ if [ -f "${scriptdir}/.source" ]; then
 	# make sure we are first
 	export PYTHONPATH="$(cd "${scriptdir}" && pwd)/..:${PYTHONPATH}"
 	extraenv="\"BASE/pluginPath=str:${scriptdir}/../plugins\""
+	. ${scriptdir}/../../build/otopi-functions
 fi
 
 if [ -f "${scriptdir}/.bundled" ]; then
@@ -56,9 +26,24 @@ if [ -f "${scriptdir}/.bundled" ]; then
 	# make sure we are first
 	export PYTHONPATH="${scriptdir}/pythonlib:${PYTHONPATH}"
 	extraenv="\"BASE/pluginPath=str:${scriptdir}/otopi-plugins\""
+	. ${scriptdir}/otopi-functions
 fi
 
-OTOPI_PYTHON="${OTOPI_PYTHON:-$(find_util python)}"
+if [ -z "${OTOPI_BUNDLED}" -a -z "${OTOPI_INSOURCETREE}" ]; then
+	. /usr/share/otopi/otopi-functions
+fi
+
+if [ -z "${OTOPI_NONROOT}" -a "$(id -u)" != 0 ]; then
+	sudo="$(find_util sudo)"
+	[ -z "${sudo}" ] && die "Non root execution and no sudo"
+	exec "${sudo}" -n \
+		/bin/sh -c \
+		"'$0' '$*'"
+	die "Internal error (sudo)"
+fi
+
+OTOPI_PYTHON="${OTOPI_PYTHON:-$(get_otopi_python)}"
+
 [ -z "${OTOPI_PYTHON}" ] && die "Python is required but missing"
 
 pythonver() {

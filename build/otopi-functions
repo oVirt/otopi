@@ -1,0 +1,49 @@
+# -*-Shell-script-*-
+#
+# This file is not a stand-alone shell script; it provides helper functions for
+# otopi and otopi-bundle
+
+die() {
+	local m="$1"
+	echo "***L:ERROR: ${m}"
+	exit 1
+}
+
+find_util() {
+	local util="$1"
+	for candidate in \
+		"/bin/${util}" \
+		"/usr/bin/${util}" \
+		"/usr/local/bin/${util}";
+	do
+		if [ -x "${candidate}" ]; then
+			echo "${candidate}"
+			break
+		fi
+	done
+}
+
+find_otopi() {
+	local pybin=$(find_util "$1")
+	if [ -n "${pybin}" ]; then
+		${pybin} -c "import pkgutil; print('${pybin}' if pkgutil.find_loader('otopi') else '')"
+	fi
+}
+
+get_otopi_python() {
+	for p in "python3" "python"
+	do
+		pyexec=$(find_otopi ${p})
+		if [ -n "${pyexec}" ]; then
+			echo "${pyexec}"
+			break
+		fi
+	done
+}
+
+get_otopi_pythonlib() {
+	local pybin=$(get_otopi_python)
+	if [ -n "${pybin}" ]; then
+		${pybin} -c "import otopi; print(otopi.__path__[0])"
+	fi
+}

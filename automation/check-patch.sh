@@ -66,3 +66,15 @@ coverage combine
 coverage html -d exported-artifacts/coverage_html_report
 cp automation/index.html exported-artifacts/
 
+# Validate a bundle on a system without otopi installed
+bundle_exec="/usr/share/otopi/otopi-bundle"
+bundle_dir="$(mktemp -d)"
+selfinst="$(mktemp /tmp/otopi-installer-XXXXX.sh)"
+
+if [ -x ${bundle_exec} ]; then
+    ${bundle_exec} --target="${bundle_dir}"
+    makeself --follow "${bundle_dir}" "${selfinst}" "Test ${name}" ./otopi packager ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
+fi
+
+${installer} remove "*otopi*" zziplib zsh
+${selfinst}

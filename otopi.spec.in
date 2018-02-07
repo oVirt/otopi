@@ -8,7 +8,7 @@
 %global _use_maven 1
 %global _use_repolib 0
 %global maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
-%global binfiles %{_sbindir}/%{name} %{_bindir}/%{name}-config-query %{_datadir}/%{name}/%{name}-bundle
+%global binfiles %{_bindir}/%{name}-config-query
 %global _configure ../configure
 
 %if 0%{?fedora} || 0%{?rhel} >= 8
@@ -207,7 +207,6 @@ do
 	chmod 755 %{buildroot}/$bf-%{python2_version}
 	ln -sf $(basename $bf)-%{python2_version} %{buildroot}/$bf-2
 done
-sed -i "s/\<python\>/python2/" %{buildroot}/%{_sbindir}/%{name}-%{python2_version}
 %endif # with_python2
 
 %if 0%{?with_python3}
@@ -218,7 +217,6 @@ do
 	chmod 755 %{buildroot}/$bf-%{python3_version}
 	ln -sf $(basename $bf)-%{python3_version} %{buildroot}/$bf-3
 done
-sed -i "s/\<python\>/python3/" %{buildroot}/%{_sbindir}/%{name}-%{python3_version}
 %endif # with_python3
 
 # Point to otopi2 binaries by default
@@ -264,9 +262,6 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.dialog
 %doc README.environment
 %exclude %{python_sitelib}/%{name}/codegen/
-%{_sbindir}/%{name}
-%{_sbindir}/%{name}-2
-%{_sbindir}/%{name}-%{python2_version}
 %{_bindir}/%{name}-config-query
 %{_bindir}/%{name}-config-query-2
 %{_bindir}/%{name}-config-query-%{python2_version}
@@ -285,8 +280,6 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.dialog
 %doc README.environment
 %exclude %{python_sitelib}/%{name}/codegen/
-%{_sbindir}/%{name}-3
-%{_sbindir}/%{name}-%{python3_version}
 %{_bindir}/%{name}-config-query-3
 %{_bindir}/%{name}-config-query-%{python3_version}
 %{python3_sitelib}/%{name}/
@@ -296,7 +289,10 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/plugins
 %dir %{_sysconfdir}/%{name}.conf.d
+%{_sbindir}/%{name}
 %{_datadir}/%{name}/plugins/%{name}/
+%{_datadir}/%{name}/%{name}-bundle
+%{_datadir}/%{name}/%{name}-functions
 %exclude %{_datadir}/%{name}/plugins/%{name}/debug/
 
 %files java -f %{src_java_dir}/.mfiles
@@ -307,16 +303,11 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 
 %if 0%{?with_python2}
 %files -n python2-otopi-devtools
-%{_datadir}/%{name}/%{name}-bundle
-%{_datadir}/%{name}/%{name}-bundle-2
-%{_datadir}/%{name}/%{name}-bundle-%{python2_version}
 %{python_sitelib}/%{name}/codegen/
 %endif # with_python2
 
 %if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-otopi-devtools
-%{_datadir}/%{name}/%{name}-bundle-3
-%{_datadir}/%{name}/%{name}-bundle-%{python3_version}
 %{python3_sitelib}/%{name}/codegen/
 %endif # with_python3
 

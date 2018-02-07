@@ -2,18 +2,15 @@
 # otopi -- plugable installer
 #
 
+scriptdir="$(dirname $0)"
+. ${scriptdir}/otopi-functions
+
+otopilibdir="$(get_otopi_pythonlib)"
 otopiplugindir='@otopiplugindir_POST@'
-otopilibdir='@otopilibdir_POST@'
 localedir='@localedir_POST@'
 sbindir='@sbindir_POST@'
 HAVE_LN_SR='@HAVE_LN_SR@'
 GETTEXT_DOMAINS='@GETTEXT_DOMAINS@'
-
-die() {
-	local m="$1"
-	echo "FATAL: ${m}" >&2
-	exit 1
-}
 
 if [ "${HAVE_LN_SR}" = 1 ]; then
 	ln_srf() {
@@ -48,6 +45,7 @@ main() {
 	touch "${TARGET}/.bundled"
 	if [ -z "${OTOPI_SOURCES}" ]; then
 		ln_srf "${ROOT}${sbindir}/otopi" "${TARGET}/otopi" || die "Cannot create otopi"
+		ln_srf "${ROOT}${scriptdir}/otopi-functions" "${TARGET}/otopi-functions" || die "Cannot create otopi-functions"
 		ln_srf "${ROOT}${otopilibdir}" "${TARGET}/pythonlib/otopi" || die "Cannot create pythonlib/otopi"
 		mkdir -p "${TARGET}/otopi-plugins"
 		ln_srf "${ROOT}${otopiplugindir}/otopi" "${TARGET}/otopi-plugins/otopi" || die "Cannot create otopi-plugins/otopi"
