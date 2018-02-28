@@ -219,8 +219,8 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 self.logger.error(_('Please specify value'))
             else:
                 accepted = True
-                self.environment[envkey] = value
 
+        self.environment[envkey] = value
         return value
 
     def queryMultiString(self, name, note=None):
