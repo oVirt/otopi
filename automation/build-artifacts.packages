@@ -1,7 +1,6 @@
 apache-commons-logging
 autoconf
 automake
-createrepo
 java-devel
 javapackages-tools
 junit
@@ -12,4 +11,4 @@ pyflakes
 python-pep8
 python2-devel
 rpm-build
-yum-utils
+dnf-utils

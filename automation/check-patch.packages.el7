@@ -9,9 +9,10 @@ gettext-devel
 libselinux-python
 make
 python-coverage
+python3-coverage
 pyflakes
 python-pep8
 python2-devel
 rpm-build
-dnf-utils
+yum-utils
 python2-dnf
