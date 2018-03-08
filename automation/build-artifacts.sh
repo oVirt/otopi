@@ -13,7 +13,13 @@ SUFFIX=
 [ -n "${RELEASE_SUFFIX}" ] && SUFFIX=".$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)"
 
 make dist
-yum-builddep otopi.spec
+
+if [ -e /etc/fedora-release ]; then
+	dnf builddep --spec otopi.spec
+else
+	yum-builddep otopi.spec
+fi
+
 rpmbuild \
     -D "_topdir $PWD/tmp.repos" \
     ${SUFFIX:+-D "release_suffix ${SUFFIX}"} \
@@ -24,5 +30,3 @@ find \
     "$PWD/tmp.repos" \
     -iname \*.rpm \
     -exec mv {} exported-artifacts/ \;
-
-createrepo exported-artifacts

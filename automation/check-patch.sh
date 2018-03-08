@@ -1,31 +1,18 @@
 #!/bin/bash -ex
-[[ -d exported-artifacts ]] \
-|| mkdir -p exported-artifacts
-
 autoreconf -ivf
 ./configure --enable-java-sdk COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
 make distcheck
 
-SUFFIX=
-. automation/config.sh
-[ -n "${RELEASE_SUFFIX}" ] && SUFFIX=".$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)"
+automation/build-artifacts.sh
 
-[[ -d tmp.repos ]] \
-|| mkdir -p tmp.repos
-yum-builddep otopi.spec
-rpmbuild \
-    -D "_topdir $PWD/tmp.repos" \
-    ${SUFFIX:+-D "release_suffix ${SUFFIX}"} \
-    -ta otopi-*.tar.gz
-
-mv *.tar.gz exported-artifacts
-
-find \
-    "$PWD/tmp.repos" \
-    -iname \*.rpm \
-    -exec mv {} exported-artifacts/ \;
-
-yum install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
+DISTVER="$(rpm --eval "%dist"|cut -c2-3)"
+installer=""
+if [[ "${DISTVER}" == "el" ]]; then
+    installer=yum
+else
+    installer=dnf
+fi
+${installer} install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
 
 mkdir -p exported-artifacts/logs
 

@@ -5,9 +5,8 @@ java-devel
 javapackages-tools
 junit
 gettext-devel
-libselinux-python
+git
 make
-python-coverage
 pyflakes
 python-pep8
 python2-devel
