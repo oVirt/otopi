@@ -78,3 +78,5 @@ fi
 
 ${installer} remove "*otopi*" zziplib zsh
 ${selfinst}
+
+cp ${selfinst} exported-artifacts/
