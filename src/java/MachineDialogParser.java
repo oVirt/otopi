@@ -355,6 +355,20 @@ public class MachineDialogParser {
 					// Currently not needed for ovirt-host-deploy.
 				}
 				else {
+					log.error(String.format("Invalid data: '%1$s'", line));
+					// Log some more lines, it might help understand why we failed.
+					// Recent ovirt-host-deploy with recent otopi currently outputs
+					// 4 lines, then waits for the first answer. So if we wait for
+					// 4 lines, or more, we'll cause deploy to fail only after a
+					// timeout (5 minutes). So get only two more.
+					int lines_left = 2;
+					while (
+						lines_left > 0 &&
+						(line = _incoming.readLine()) != null
+					) {
+						log.error(String.format("Invalid data: '%1$s'", line));
+						lines_left--;
+					}
 					throw new RuntimeException("Invalid data received during bootstrap");
 				}
 			}
