@@ -100,24 +100,32 @@ class Plugin(plugin.PluginBase):
 
         if self.services.exists('firewalld'):
             try:
-                from firewall import config
-
-                self.logger.debug('firewalld version: %s', config.VERSION)
+                try:
+                    from firewall import config
+                    versionOutput = config.VERSION
+                except ImportError:
+                    rc, stdout, stderr = self.execute(
+                        (
+                            self.command.get('python3'),
+                            '-c',
+                            'from firewall import config;'
+                            'print(config.VERSION)',
+                        )
+                    )
+                    versionOutput = stdout[0]
+                self.logger.debug('firewalld version: %s', versionOutput)
                 version = int(
                     '%02x%02x%02x' % tuple([
                         int(x)
-                        for x in config.VERSION.split('.')[:3]
+                        for x in versionOutput.split('.')[:3]
                     ]),
                     16
                 )
-            except ImportError:
-                self.logger.debug('No firewalld python module')
-            except:
+            except Exception as e:
                 self.logger.debug(
-                    'Exception during firewalld dection',
+                    'Exception during firewalld detection %s', e,
                     exc_info=True,
                 )
-
         return version
 
     def _get_active_zones(self):
@@ -209,6 +217,7 @@ class Plugin(plugin.PluginBase):
     )
     def _setup(self):
         self.command.detect(command='firewall-cmd')
+        self.command.detect(command='python3')
 
     @plugin.event(
         stage=plugin.Stages.STAGE_CUSTOMIZATION,
