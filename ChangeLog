@@ -1,6 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.7.8
+2018-05-24 - Version 1.7.8
+ * java: Log invalid data as error
 
 2018-02-01 - Version 1.7.7
  * services: Add restart action
