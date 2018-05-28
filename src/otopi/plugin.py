@@ -111,7 +111,7 @@ class Stages(object):
             # Late setup actions.
             #
             'id': 'late_setup',
-            'description': _("Environment setup"),
+            'description': _("Environment setup (late)"),
             'if-success': True,
         },
         STAGE_CUSTOMIZATION: {
@@ -144,7 +144,7 @@ class Stages(object):
             # Misc actions before package update.
             #
             'id': 'early_misc',
-            'description': _("Misc configuration"),
+            'description': _("Misc configuration (early)"),
             'if-success': True,
         },
         STAGE_PACKAGES: {
