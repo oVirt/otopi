@@ -221,6 +221,8 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                 accepted = True
 
         self.environment[envkey] = value
+        if hidden:
+            self.environment[constants.CoreEnv.LOG_FILTER].append(value)
         return value
 
     def queryMultiString(self, name, note=None):
