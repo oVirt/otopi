@@ -19,6 +19,8 @@ import dnf.logging
 import dnf.subject
 import dnf.yum.rpmtrans
 
+from dnf.cli.cli import Cli
+
 
 def _(m):
     return gettext.dgettext(message=m, domain='otopi')
@@ -329,7 +331,7 @@ class MiniDNF():
         # its own transaction when doing a rollback.
         base.conf.clean_requirements_on_remove = False
 
-        base.init_plugins(disabled_glob=self._disabledPlugins)
+        base.init_plugins(disabled_glob=self._disabledPlugins, cli=Cli(base))
 
         base.read_all_repos()
         base.repos.all().set_progress_bar(self._MyDownloadProgress(self._sink))
