@@ -30,7 +30,7 @@ class FileTransaction(transaction.TransactionElement):
     """File transaction element."""
 
     @staticmethod
-    def _defaultAtomicMove(source, destination, binary=False):
+    def _defaultAtomicMove(source, destination):
         atomic = False
 
         # perform atomic move if on same device
@@ -52,9 +52,9 @@ class FileTransaction(transaction.TransactionElement):
         else:
             # pray!
             content = ''
-            with open(source, 'r' + ('b' if binary else '')) as f:
+            with open(source, 'rb') as f:
                 content = f.read()
-            with open(destination, 'w' + ('b' if binary else '')) as f:
+            with open(destination, 'wb') as f:
                 f.write(content)
             os.unlink(source)
 
@@ -120,7 +120,8 @@ class FileTransaction(transaction.TransactionElement):
         Keyword arguments:
         name -- name of file.
         content -- content of file (string or list of lines).
-        binary -- treat content as binary.
+        binary -- True if the content is binary data. If False, the content is
+            encoded to allow comparing with file content or writing to file.
         mode -- mode of file.
         dmode -- directory mode if directory is to be created.
         owner -- owner (name)
@@ -135,9 +136,8 @@ class FileTransaction(transaction.TransactionElement):
         """
         super(FileTransaction, self).__init__()
         self._name = name
-        self._binary = binary
 
-        if self._binary:
+        if binary:
             self._content = content
         else:
             if isinstance(content, list) or isinstance(content, tuple):
@@ -148,6 +148,7 @@ class FileTransaction(transaction.TransactionElement):
                 self._content = common.toStr(content)
                 if not self._content.endswith('\n'):
                     self._content += '\n'
+            self._content = self._content.encode("utf-8")
 
         self._mode = mode
         self._dmode = dmode
@@ -183,7 +184,7 @@ class FileTransaction(transaction.TransactionElement):
             self.logger.debug("file '%s' missing" % self._name)
         else:
             self.logger.debug("file '%s' exists" % self._name)
-            with open(self._name, 'r' + ('b' if self._binary else '')) as f:
+            with open(self._name, 'rb') as f:
                 if f.read() == self._content:
                     self.logger.debug(
                         "file '%s' already has content" % self._name
@@ -256,7 +257,6 @@ class FileTransaction(transaction.TransactionElement):
                     type(self)._atomicMove(
                         source=self._tmpname,
                         destination=self._name,
-                        binary=self._binary,
                     )
 
                 self._prepared = True
@@ -281,7 +281,6 @@ class FileTransaction(transaction.TransactionElement):
                     type(self)._atomicMove(
                         source=self._backup,
                         destination=self._name,
-                        binary=self._binary,
                     )
             else:
                 if (
@@ -299,7 +298,6 @@ class FileTransaction(transaction.TransactionElement):
                 type(self)._atomicMove(
                     source=self._tmpname,
                     destination=self._name,
-                    binary=self._binary,
                 )
             if self._modifiedList is not None:
                 self._modifiedList.append(self._name)
