@@ -160,33 +160,33 @@ class MiniDNF():
     class _MyTransactionDisplay(dnf.yum.rpmtrans.TransactionDisplay):
 
         _ACTION_TRANSLATION = {
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_CLEANUP: _('Cleanup'),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_DOWNGRADE: _(
+            dnf.callback.PKG_CLEANUP: _('Cleanup'),
+            dnf.callback.PKG_DOWNGRADE: _(
                 'Downgrading'
             ),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_ERASE: _('Erasing'),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_INSTALL: _('Installing'),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_OBSOLETE: _('Obsoleting'),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_REINSTALL: _(
+            dnf.callback.PKG_ERASE: _('Erasing'),
+            dnf.callback.PKG_INSTALL: _('Installing'),
+            dnf.callback.PKG_OBSOLETE: _('Obsoleting'),
+            dnf.callback.PKG_REINSTALL: _(
                 'Reinstalling'
             ),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_UPGRADE: _('Upgrading'),
-            dnf.yum.rpmtrans.TransactionDisplay.TRANS_POST: _(
+            dnf.callback.PKG_UPGRADE: _('Upgrading'),
+            dnf.callback.TRANS_POST: _(
                 'Post transaction'
             ),
         }
 
         _FILEACTION_TRANSLATION = {
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_CLEANUP: _('Cleanup'),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_DOWNGRADE: _('Downgraded'),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_ERASE: _('Erased'),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_INSTALL: _('Installed'),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_OBSOLETE: _('Obsoleted'),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_REINSTALL: _(
+            dnf.callback.PKG_CLEANUP: _('Cleanup'),
+            dnf.callback.PKG_DOWNGRADE: _('Downgraded'),
+            dnf.callback.PKG_ERASE: _('Erased'),
+            dnf.callback.PKG_INSTALL: _('Installed'),
+            dnf.callback.PKG_OBSOLETE: _('Obsoleted'),
+            dnf.callback.PKG_REINSTALL: _(
                 'Reinstalled'
             ),
-            dnf.yum.rpmtrans.TransactionDisplay.PKG_UPGRADE:  _('Upgraded'),
-            dnf.yum.rpmtrans.TransactionDisplay.TRANS_POST: _(
+            dnf.callback.PKG_UPGRADE:  _('Upgraded'),
+            dnf.callback.TRANS_POST: _(
                 'Post transaction'
             ),
         }
