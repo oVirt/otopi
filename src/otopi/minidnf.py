@@ -164,7 +164,6 @@ class MiniDNF():
             dnf.callback.PKG_DOWNGRADE: _(
                 'Downgrading'
             ),
-            dnf.callback.PKG_ERASE: _('Erasing'),
             dnf.callback.PKG_INSTALL: _('Installing'),
             dnf.callback.PKG_OBSOLETE: _('Obsoleting'),
             dnf.callback.PKG_REINSTALL: _(
@@ -179,7 +178,6 @@ class MiniDNF():
         _FILEACTION_TRANSLATION = {
             dnf.callback.PKG_CLEANUP: _('Cleanup'),
             dnf.callback.PKG_DOWNGRADE: _('Downgraded'),
-            dnf.callback.PKG_ERASE: _('Erased'),
             dnf.callback.PKG_INSTALL: _('Installed'),
             dnf.callback.PKG_OBSOLETE: _('Obsoleted'),
             dnf.callback.PKG_REINSTALL: _(
