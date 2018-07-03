@@ -439,7 +439,7 @@ class MiniDNF():
         self._base = None
         self._baseTransaction = None
 
-        if int(dnf.__version__.split('.')[0]) != 2:
+        if int(dnf.__version__.split('.')[0]) not in (2, 3):
             raise RuntimeError(_('Incompatible DNF'))
 
         self._sink = sink if sink else self._VoidSink()
