@@ -1,0 +1,5 @@
+distros:
+  - fc28
+  - el7
+release_branches:
+  otopi-1.7: ovirt-4.2
