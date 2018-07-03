@@ -1,0 +1,6 @@
+distros:
+  - fcraw
+  - fc28
+  - el7
+release_branches:
+  master: ovirt-master
