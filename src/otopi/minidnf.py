@@ -547,7 +547,8 @@ class MiniDNF():
             logging.getLogger('dnf').addHandler(self._handler)
             self._sink.verbose(_('Creating transaction'))
             self._base = self._createBase()
-            self._baseTransaction = self._base.history.last().tid
+            lastTrans = self._base.history.last()
+            self._baseTransaction = lastTrans.tid if lastTrans else 0
         except Exception as e:
             if self._base is not None:
                 self._base.close()
@@ -566,9 +567,10 @@ class MiniDNF():
                 )
             )
 
-            currentTransaction = self._base.history.last(
+            currTrans = self._base.history.last(
                 complete_transactions_only=False,
-            ).tid
+            )
+            currentTransaction = currTrans.tid if currTrans else 0
 
             self._destroyBase(self._base)
             self._base = None
