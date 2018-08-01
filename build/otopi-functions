@@ -31,7 +31,7 @@ find_otopi() {
 }
 
 get_otopi_python() {
-	for p in "python3" "python"
+	for p in "python" "python3"
 	do
 		pyexec=$(find_otopi ${p})
 		if [ -n "${pyexec}" ]; then
