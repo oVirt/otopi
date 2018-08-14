@@ -20,3 +20,8 @@ dist_sbin_SCRIPTS = \
 dist_bin_SCRIPTS = \
 	otopi-config-query \
 	$(NULL)
+
+mydir=$(pkgdatadir)/scripts
+dist_my_PYTHON = \
+	otopi-config-query.py \
+	$(NULL)

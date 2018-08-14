@@ -8,7 +8,6 @@
 %global _use_maven 1
 %global _use_repolib 0
 %global maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
-%global binfiles %{_bindir}/%{name}-config-query
 %global _configure ../configure
 
 %if 0%{?fedora} || 0%{?rhel} >= 8
@@ -201,30 +200,14 @@ popd
 %install
 %if 0%{?with_python2}
 make -C py2 %{?_smp_mflags} install DESTDIR="%{buildroot}"
-for bf in %{binfiles}
-do
-	sed "s#%{__python}#%{__python2}#" %{buildroot}/$bf > %{buildroot}/$bf-%{python2_version}
-	chmod 755 %{buildroot}/$bf-%{python2_version}
-	ln -sf $(basename $bf)-%{python2_version} %{buildroot}/$bf-2
-done
 %endif # with_python2
 
 %if 0%{?with_python3}
 make -C py3 %{?_smp_mflags} install DESTDIR="%{buildroot}"
-for bf in %{binfiles}
-do
-	sed "s#%{__python}#%{__python3}#" %{buildroot}/$bf > %{buildroot}/$bf-%{python3_version}
-	chmod 755 %{buildroot}/$bf-%{python3_version}
-	ln -sf $(basename $bf)-%{python3_version} %{buildroot}/$bf-3
-done
 %endif # with_python3
 
 # Point to otopi2 binaries by default
 %if 0%{?with_python2}
-for bf in %{binfiles}
-do
-    ln -sf $(basename $bf)-2 %{buildroot}/$bf
-done
 %endif # with_python2
 
 %if %{_use_maven}
@@ -262,9 +245,6 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.dialog
 %doc README.environment
 %exclude %{python2_sitelib}/%{name}/codegen/
-%{_bindir}/%{name}-config-query
-%{_bindir}/%{name}-config-query-2
-%{_bindir}/%{name}-config-query-%{python2_version}
 %{python2_sitelib}/%{name}/
 %endif # with_python2
 
@@ -280,8 +260,6 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.dialog
 %doc README.environment
 %exclude %{python2_sitelib}/%{name}/codegen/
-%{_bindir}/%{name}-config-query-3
-%{_bindir}/%{name}-config-query-%{python3_version}
 %{python3_sitelib}/%{name}/
 %endif # with_python3
 
@@ -290,6 +268,8 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %dir %{_datadir}/%{name}/plugins
 %dir %{_sysconfdir}/%{name}.conf.d
 %{_sbindir}/%{name}
+%{_bindir}/%{name}-config-query
+%{_datadir}/%{name}/scripts/
 %{_datadir}/%{name}/plugins/%{name}/
 %{_datadir}/%{name}/%{name}-bundle
 %{_datadir}/%{name}/%{name}-functions
