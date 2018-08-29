@@ -10,9 +10,11 @@
 %global maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
 %global _configure ../configure
 
+%global src_java_dir src/java
+
+
 %if 0%{?fedora} || 0%{?rhel} >= 8
 %global with_python3 1
-%global src_java_dir py3/src/java
 %else
 %global with_python3 0
 %endif
@@ -21,7 +23,6 @@
 %global with_python2 0
 %else
 %global with_python2 1
-%global src_java_dir py2/src/java
 %endif
 
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
@@ -168,10 +169,11 @@ mkdir py2 py3
 
 %if 0%{?with_python2}
 pushd py2
+# Build python but don't touch java
 %configure PYTHON="%{__python2}" \
 	--docdir="%{_docdir}/%{name}-%{version}" \
 	--disable-python-syntax-check \
-	--enable-java-sdk \
+	--disable-java-sdk-compile \
 	--with-local-version="%{name}-%{version}-%{release}" \
 	%{?conf}
 make %{?_smp_mflags}
@@ -180,15 +182,29 @@ popd
 
 %if 0%{?with_python3}
 pushd py3
+# Build python but don't touch java
 %configure PYTHON="%{__python3}" \
+	--docdir="%{_docdir}/%{name}-%{version}" \
+	--disable-python-syntax-check \
+	--disable-java-sdk-compile \
+	--with-local-version="%{name}-%{version}-%{release}" \
+	%{?conf}
+make %{?_smp_mflags}
+popd
+%endif # with_python3
+
+
+# This takes care of codegen for java and building java
+# We don't really care about which version of python is used to generate
+# java code since the generated code is not depending on interpreter version.
+./configure \
 	--docdir="%{_docdir}/%{name}-%{version}" \
 	--disable-python-syntax-check \
 	--enable-java-sdk \
 	--with-local-version="%{name}-%{version}-%{release}" \
 	%{?conf}
 make %{?_smp_mflags}
-popd
-%endif # with_python3
+
 
 %if %{_use_maven}
 pushd %{src_java_dir}
