@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-17 15:47+0100\n"
+"POT-Creation-Date: 2019-01-08 09:48+0200\n"
 "PO-Revision-Date: 2016-03-02 13:57-0300\n"
 "Last-Translator:Wesley Morais de Oliveira \n"
 "Language-Team: \n"
@@ -17,10 +17,12 @@ msgstr ""
 
 #: src/otopi/command.py:21 src/otopi/common.py:18 src/otopi/context.py:31
 #: src/otopi/dialog.py:26 src/otopi/filetransaction.py:25
-#: src/otopi/__main__.py:22 src/otopi/main.py:28 src/otopi/minidnf.py:24
+#: src/otopi/__main__.py:22 src/otopi/main.py:28 src/otopi/minidnf.py:26
 #: src/otopi/miniyum.py:28 src/otopi/packager.py:21 src/otopi/plugin.py:27
-#: src/otopi/transaction.py:17 src/otopi/util.py:18
+#: src/otopi/transaction.py:17 src/otopi/util.py:23
 #: src/plugins/otopi/core/log.py:27 src/plugins/otopi/core/misc.py:19
+#: src/plugins/otopi/debug/debug_failure/debug_failure.py:20
+#: src/plugins/otopi/dialog/answer_file.py:24
 #: src/plugins/otopi/dialog/cli.py:29 src/plugins/otopi/dialog/human.py:21
 #: src/plugins/otopi/dialog/machine.py:29
 #: src/plugins/otopi/network/firewalld.py:22
@@ -76,16 +78,27 @@ msgstr "Sequência de build loop detectada"
 msgid "Cyclic dependencies found"
 msgstr ""
 
-#: src/otopi/context.py:734
+#: src/otopi/context.py:740
 #, python-brace-format
 msgid "Stage: {stage}"
 msgstr "Etapa: {stage}"
 
-#: src/otopi/context.py:767
+#: src/otopi/context.py:773
 msgid "Error during sequence"
 msgstr "Erro durante sequência"
 
-#: src/otopi/context.py:863
+#: src/otopi/context.py:828
+#, python-brace-format
+msgid ""
+"\"{which}\" parameter of method {name} is a string, should probably be a "
+"tuple. Perhaps a missing comma?"
+msgstr ""
+
+#: src/otopi/context.py:844
+msgid "Found bad \"before\" or \"after\" parameters"
+msgstr ""
+
+#: src/otopi/context.py:901
 #, python-brace-format
 msgid "Internal error, plugins {groups} are missing"
 msgstr "Erro interno, plugins {groups} estão faltando"
@@ -115,12 +128,12 @@ msgstr ""
 "\n"
 "Por favor especifique '{name}'"
 
-#: src/otopi/filetransaction.py:177
+#: src/otopi/filetransaction.py:178
 #, python-brace-format
 msgid "File transaction for '{file}'"
 msgstr "Transação de arquivo para '{file}'"
 
-#: src/otopi/filetransaction.py:335 src/otopi/filetransaction.py:344
+#: src/otopi/filetransaction.py:333 src/otopi/filetransaction.py:342
 #, python-brace-format
 msgid "Failed to restore SELinux attributes for '{file}'"
 msgstr "Falhou ao restaurar atributos SELinux para '{file}'"
@@ -134,80 +147,72 @@ msgstr "Erro interno"
 msgid "FATAL Internal error (main): {error}"
 msgstr "Erro interno FATAL (main): {error}"
 
-#: src/otopi/minidnf.py:113
+#: src/otopi/minidnf.py:115
 msgid "FAILED"
 msgstr "FALHOU"
 
-#: src/otopi/minidnf.py:114
+#: src/otopi/minidnf.py:116
 msgid "SKIPPED"
 msgstr "IGNORADO"
 
-#: src/otopi/minidnf.py:115
+#: src/otopi/minidnf.py:117
 msgid "MIRROR"
 msgstr "MIRROR"
 
-#: src/otopi/minidnf.py:116
+#: src/otopi/minidnf.py:118
 msgid "DRPM"
 msgstr "DRPM"
 
-#: src/otopi/minidnf.py:129
+#: src/otopi/minidnf.py:131
 #, python-brace-format
 msgid "Downloading {files} files, {size:.2f}KB"
 msgstr "Baixando {files} arquivos, {size:.2f}KB"
 
-#: src/otopi/minidnf.py:137
+#: src/otopi/minidnf.py:139
 #, python-brace-format
 msgid "Downloading {payload} {done:.2f}/{total:.2f}KB"
 msgstr "Baixando {payload} {done:.2f}/{total:.2f}KB"
 
-#: src/otopi/minidnf.py:148
+#: src/otopi/minidnf.py:150
 #, python-brace-format
 msgid "Downloaded {payload}{status}{message}"
 msgstr "Baixado {payload}{status}{message}"
 
-#: src/otopi/minidnf.py:151 src/otopi/minidnf.py:224 src/otopi/minidnf.py:236
+#: src/otopi/minidnf.py:153 src/otopi/minidnf.py:224 src/otopi/minidnf.py:236
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: src/otopi/minidnf.py:161 src/otopi/minidnf.py:178
+#: src/otopi/minidnf.py:163 src/otopi/minidnf.py:179
 msgid "Cleanup"
 msgstr "Limpeza"
 
-#: src/otopi/minidnf.py:163
+#: src/otopi/minidnf.py:165
 msgid "Downgrading"
 msgstr "Baixando"
 
-#: src/otopi/minidnf.py:165
-msgid "Erasing"
-msgstr "Apagando"
-
-#: src/otopi/minidnf.py:166
+#: src/otopi/minidnf.py:167
 msgid "Installing"
 msgstr "Instalando"
 
-#: src/otopi/minidnf.py:167
+#: src/otopi/minidnf.py:168
 msgid "Obsoleting"
 msgstr "Marcando como obsoleto"
 
-#: src/otopi/minidnf.py:169
+#: src/otopi/minidnf.py:170
 msgid "Reinstalling"
 msgstr "Reinstalando"
 
-#: src/otopi/minidnf.py:171
+#: src/otopi/minidnf.py:172
 msgid "Upgrading"
 msgstr "Atualizando"
 
-#: src/otopi/minidnf.py:173 src/otopi/minidnf.py:188
+#: src/otopi/minidnf.py:174 src/otopi/minidnf.py:188
 msgid "Post transaction"
 msgstr "Pós transação"
 
-#: src/otopi/minidnf.py:179
+#: src/otopi/minidnf.py:180
 msgid "Downgraded"
 msgstr "Baixado"
-
-#: src/otopi/minidnf.py:180
-msgid "Erased"
-msgstr "Apagado"
 
 #: src/otopi/minidnf.py:181
 msgid "Installed"
@@ -250,57 +255,57 @@ msgstr "{action}: {package}"
 msgid "Verify: {package} {count}/{total}"
 msgstr "Verificar: {package} {count}/{total}"
 
-#: src/otopi/minidnf.py:364
+#: src/otopi/minidnf.py:363
 #, python-brace-format
 msgid "Queue package {package} for {action}"
 msgstr "Enfileirar pacote {package} para {action}"
 
-#: src/otopi/minidnf.py:372 src/otopi/minidnf.py:383
+#: src/otopi/minidnf.py:371 src/otopi/minidnf.py:382
 #, python-brace-format
 msgid "Cannot queue package '{package}': {error}"
 msgstr "Não posso enfileirar pacote '{package}':{error}"
 
-#: src/otopi/minidnf.py:401
+#: src/otopi/minidnf.py:400
 #, python-brace-format
 msgid "Queue group {group} for {action}"
 msgstr "Enfileirar grupo {group} para {action}"
 
-#: src/otopi/minidnf.py:409
+#: src/otopi/minidnf.py:408
 #, python-brace-format
 msgid "Group {group} cannot be resolved"
 msgstr "Grupo {group} não pode ser resolvido"
 
-#: src/otopi/minidnf.py:416 src/otopi/minidnf.py:428
+#: src/otopi/minidnf.py:415 src/otopi/minidnf.py:427
 #, python-brace-format
 msgid "Cannot queue group '{group}': {error}"
 msgstr "Não posso enfileirar grupo '{group}':{error}"
 
-#: src/otopi/minidnf.py:441
+#: src/otopi/minidnf.py:443
 msgid "Incompatible DNF"
 msgstr "DNF incompatível"
 
-#: src/otopi/minidnf.py:506 src/otopi/miniyum.py:656
+#: src/otopi/minidnf.py:505 src/otopi/miniyum.py:656
 msgid "Cannot get selinux context"
 msgstr "Não posso obter o contexto selinux"
 
-#: src/otopi/minidnf.py:509 src/otopi/miniyum.py:659
+#: src/otopi/minidnf.py:508 src/otopi/miniyum.py:659
 msgid "Cannot create selinux context"
 msgstr "Não posso criar contexto selinux"
 
-#: src/otopi/minidnf.py:513 src/otopi/miniyum.py:663
+#: src/otopi/minidnf.py:512 src/otopi/miniyum.py:663
 msgid "Cannot set role within selinux context"
 msgstr "Não posso definir função dentro do contexto selinux"
 
-#: src/otopi/minidnf.py:517 src/otopi/miniyum.py:667
+#: src/otopi/minidnf.py:516 src/otopi/miniyum.py:667
 msgid "Cannot set selinux exec context"
 msgstr "Não posso definir contexto exec no selinux"
 
-#: src/otopi/minidnf.py:535
+#: src/otopi/minidnf.py:534
 #, python-brace-format
 msgid "Cleaning cache: {what}"
 msgstr "Limpando cache: {what}"
 
-#: src/otopi/minidnf.py:549
+#: src/otopi/minidnf.py:548
 msgid "Creating transaction"
 msgstr "Criando transação"
 
@@ -321,45 +326,45 @@ msgstr "restaurando"
 msgid "commit"
 msgstr "commit"
 
-#: src/otopi/minidnf.py:578
+#: src/otopi/minidnf.py:579
 msgid "Performing DNF transaction rollback"
 msgstr "Realizando transação de restauração DNF"
 
-#: src/otopi/minidnf.py:608
+#: src/otopi/minidnf.py:613
 msgid "Building transaction"
 msgstr "Construindo transação"
 
-#: src/otopi/minidnf.py:610
+#: src/otopi/minidnf.py:615
 msgid "Transaction built"
 msgstr "Transação construída"
 
-#: src/otopi/minidnf.py:612
+#: src/otopi/minidnf.py:617
 msgid "Empty transaction"
 msgstr "Transação vazia"
 
-#: src/otopi/minidnf.py:616 src/otopi/minidnf.py:664 src/otopi/minidnf.py:691
+#: src/otopi/minidnf.py:621 src/otopi/minidnf.py:669 src/otopi/minidnf.py:696
 #: src/otopi/miniyum.py:99
 msgid "install"
 msgstr "instalar"
 
-#: src/otopi/minidnf.py:617 src/otopi/minidnf.py:675
+#: src/otopi/minidnf.py:622 src/otopi/minidnf.py:680
 msgid "remove"
 msgstr "remover"
 
-#: src/otopi/minidnf.py:621
+#: src/otopi/minidnf.py:626
 #, python-brace-format
 msgid "    {op:10}: {package}"
 msgstr "    {op:10}: {package}"
 
-#: src/otopi/minidnf.py:683 src/otopi/minidnf.py:723 src/otopi/miniyum.py:98
+#: src/otopi/minidnf.py:688 src/otopi/minidnf.py:728 src/otopi/miniyum.py:98
 msgid "update"
 msgstr "atualizar"
 
-#: src/otopi/minidnf.py:707
+#: src/otopi/minidnf.py:712
 msgid "install/update"
 msgstr "instalar/atualizar"
 
-#: src/otopi/minidnf.py:715 src/otopi/miniyum.py:101
+#: src/otopi/minidnf.py:720 src/otopi/miniyum.py:101
 msgid "erase"
 msgstr "apagar"
 
@@ -464,27 +469,27 @@ msgstr "Um ou mais elementos dentro da transação Yum falhou"
 msgid "    {operation} - {package}"
 msgstr "    {operation} - {package}"
 
-#: src/otopi/packager.py:59
+#: src/otopi/packager.py:63
 msgid "Packager installGroup not implemented"
 msgstr "Packager installGroup não implementado"
 
-#: src/otopi/packager.py:72
+#: src/otopi/packager.py:76
 msgid "Packager updateGroup not implemented"
 msgstr "Packager updateGroup não implementado"
 
-#: src/otopi/packager.py:85
+#: src/otopi/packager.py:89
 msgid "Packager removeGroup not implemented"
 msgstr "Packager removeGroup não implementado"
 
-#: src/otopi/packager.py:98
+#: src/otopi/packager.py:102
 msgid "Packager install not implemented"
 msgstr "Packager instalar não implementado"
 
-#: src/otopi/packager.py:111
+#: src/otopi/packager.py:115
 msgid "Packager update not implemented"
 msgstr "Packager atualizar não implementado"
 
-#: src/otopi/packager.py:150
+#: src/otopi/packager.py:154
 msgid "Packager remove not implemented"
 msgstr "Packager remover não implementado"
 
@@ -496,7 +501,7 @@ msgstr "Booting"
 msgid "Initializing"
 msgstr "Inicializando"
 
-#: src/otopi/plugin.py:89 src/otopi/plugin.py:114
+#: src/otopi/plugin.py:89
 msgid "Environment setup"
 msgstr "Configuração de ambiente"
 
@@ -507,6 +512,11 @@ msgstr "Configuração dos pacotes de ambiente"
 #: src/otopi/plugin.py:106
 msgid "Programs detection"
 msgstr "Detecção de programas"
+
+#: src/otopi/plugin.py:114
+#, fuzzy
+msgid "Environment setup (late)"
+msgstr "Configuração de ambiente"
 
 #: src/otopi/plugin.py:122
 msgid "Environment customization"
@@ -520,13 +530,18 @@ msgstr "Validação do setup"
 msgid "Transaction setup"
 msgstr "Transação do setup"
 
-#: src/otopi/plugin.py:147 src/otopi/plugin.py:163
-msgid "Misc configuration"
+#: src/otopi/plugin.py:147
+#, fuzzy
+msgid "Misc configuration (early)"
 msgstr "Configuração misc"
 
 #: src/otopi/plugin.py:155
 msgid "Package installation"
 msgstr "Instalação de pacotes"
+
+#: src/otopi/plugin.py:163
+msgid "Misc configuration"
+msgstr "Configuração misc"
 
 #: src/otopi/plugin.py:171
 msgid "Transaction commit"
@@ -626,6 +641,11 @@ msgstr "Versão: {package}-{version} ({local_version})"
 #: src/plugins/otopi/debug/force_fail/force_fail.py:18
 #: src/plugins/otopi/debug/wait_on_error/wait_on_error.py:19
 msgid "ovirt-engine-setup"
+msgstr ""
+
+#: src/plugins/otopi/dialog/answer_file.py:86
+#, python-brace-format
+msgid "Generating OTOPI answer file '{name}'"
 msgstr ""
 
 #: src/plugins/otopi/dialog/cli.py:62
@@ -762,16 +782,27 @@ msgstr "mostrar informações de exceção"
 msgid "{prefix}[{level:^7}]{suffix}"
 msgstr "{prefix}[{level:^7}]{suffix}"
 
-#: src/plugins/otopi/dialog/human.py:196
+#: src/plugins/otopi/dialog/human.py:201
+#: src/plugins/otopi/dialog/machine.py:230
+#, python-brace-format
+msgid "provided answer: {answer}"
+msgstr ""
+
+#: src/plugins/otopi/dialog/human.py:203
+#: src/plugins/otopi/dialog/machine.py:232
+msgid "(hidden)"
+msgstr ""
+
+#: src/plugins/otopi/dialog/human.py:217
 msgid "Invalid value"
 msgstr "Valor inválido"
 
-#: src/plugins/otopi/dialog/human.py:198
+#: src/plugins/otopi/dialog/human.py:219
 msgid "Please specify value"
 msgstr "Por favor, especifique o valor"
 
-#: src/plugins/otopi/dialog/human.py:206
-#: src/plugins/otopi/dialog/machine.py:270
+#: src/plugins/otopi/dialog/human.py:231
+#: src/plugins/otopi/dialog/machine.py:303
 #, python-brace-format
 msgid ""
 "\n"
@@ -780,13 +811,13 @@ msgstr ""
 "\n"
 "Por favor especificar multiplas strings para '{name}':"
 
-#: src/plugins/otopi/dialog/human.py:211
+#: src/plugins/otopi/dialog/human.py:236
 #, python-brace-format
 msgid "type '{boundary}' in own line to mark end."
 msgstr "tipo '{boundary}' na própria linha para marcar o fim."
 
-#: src/plugins/otopi/dialog/human.py:226
-#: src/plugins/otopi/dialog/machine.py:307
+#: src/plugins/otopi/dialog/human.py:251
+#: src/plugins/otopi/dialog/machine.py:340
 #, python-brace-format
 msgid ""
 "\n"
@@ -795,11 +826,11 @@ msgstr ""
 "\n"
 "Por favor especificar valor para '{name}':"
 
-#: src/plugins/otopi/dialog/human.py:230
+#: src/plugins/otopi/dialog/human.py:255
 msgid "Format is type:value."
 msgstr "O formato é do tipo:value."
 
-#: src/plugins/otopi/dialog/human.py:271
+#: src/plugins/otopi/dialog/human.py:296
 #, python-brace-format
 msgid ""
 "\n"
@@ -808,47 +839,47 @@ msgstr ""
 "\n"
 "Por favor confirmar {description} [sim/não]: "
 
-#: src/plugins/otopi/dialog/machine.py:262
+#: src/plugins/otopi/dialog/machine.py:291
 #, python-brace-format
 msgid "Invalid value provided to '{name}'"
 msgstr "Valor fornecido inválido para '{name}'"
 
-#: src/plugins/otopi/dialog/machine.py:277
+#: src/plugins/otopi/dialog/machine.py:310
 #, python-brace-format
 msgid "type '{boundary}' in own line to mark end, '{abortboundary}' aborts"
 msgstr ""
 "tipo '{boundary}' na própria linha para marcar o fim, '{abortboundary}' "
 "abortadas"
 
-#: src/plugins/otopi/dialog/machine.py:300
-#: src/plugins/otopi/dialog/machine.py:345
-#: src/plugins/otopi/dialog/machine.py:438
+#: src/plugins/otopi/dialog/machine.py:333
+#: src/plugins/otopi/dialog/machine.py:378
+#: src/plugins/otopi/dialog/machine.py:471
 msgid "Aborted by dialog"
 msgstr "Abortado pelo diálogo"
 
-#: src/plugins/otopi/dialog/machine.py:315
+#: src/plugins/otopi/dialog/machine.py:348
 #, python-brace-format
 msgid "Response is VALUE {name}=type:value or ABORT {name}"
 msgstr "Resposta é VALUE {name}=type:value  ou ABORTAR {name}"
 
-#: src/plugins/otopi/dialog/machine.py:336
-#: src/plugins/otopi/dialog/machine.py:429
+#: src/plugins/otopi/dialog/machine.py:369
+#: src/plugins/otopi/dialog/machine.py:462
 #, python-brace-format
 msgid "Expected response for {name}, received '{received}'"
 msgstr "Resposta esperada para {name}, recebida '{received}'"
 
-#: src/plugins/otopi/dialog/machine.py:349
-#: src/plugins/otopi/dialog/machine.py:442
+#: src/plugins/otopi/dialog/machine.py:382
+#: src/plugins/otopi/dialog/machine.py:475
 msgid "Value ot provided"
 msgstr "Valor ot fornecido"
 
-#: src/plugins/otopi/dialog/machine.py:353
-#: src/plugins/otopi/dialog/machine.py:446
+#: src/plugins/otopi/dialog/machine.py:386
+#: src/plugins/otopi/dialog/machine.py:479
 #, python-brace-format
 msgid "Invalid response opcode '{code}'"
 msgstr "Resposta opcode inválida '{code}'"
 
-#: src/plugins/otopi/dialog/machine.py:397
+#: src/plugins/otopi/dialog/machine.py:430
 #, python-brace-format
 msgid ""
 "\n"
@@ -857,7 +888,7 @@ msgstr ""
 "\n"
 "Por favor confirmar '{name}' {description}\n"
 
-#: src/plugins/otopi/dialog/machine.py:416
+#: src/plugins/otopi/dialog/machine.py:449
 #, python-brace-format
 msgid "Response is CONFIRM {name}=yes|no or ABORT {name}"
 msgstr "Resposta é CONFIRM {name}=sim|não ou ABORTAR {name}"
@@ -952,6 +983,11 @@ msgstr "habilitado"
 msgid "disable"
 msgstr "desabilitado"
 
+#: src/plugins/otopi/services/systemd.py:157
+#, fuzzy, python-brace-format
+msgid "Failed to restart service '{service}'"
+msgstr "Falhou ao {do} serviço '{service}'"
+
 #: src/plugins/otopi/system/clock.py:96
 #, python-brace-format
 msgid ""
@@ -972,6 +1008,12 @@ msgstr "Daemon não finalizou adequadamente"
 #: src/plugins/otopi/system/reboot.py:108
 msgid "Reboot scheduled"
 msgstr "Reboot agendado"
+
+#~ msgid "Erasing"
+#~ msgstr "Apagando"
+
+#~ msgid "Erased"
+#~ msgstr "Apagado"
 
 #~ msgid ""
 #~ "Cannot parse configuration file key {key} at section {section}: "

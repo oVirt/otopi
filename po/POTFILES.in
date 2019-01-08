@@ -1,3 +1,4 @@
+./src/bin/otopi-config-query.py
 ./src/otopi/base.py
 ./src/otopi/codegen/__init__.py
 ./src/otopi/codegen/__main__.py
@@ -21,10 +22,17 @@
 ./src/plugins/otopi/core/log.py
 ./src/plugins/otopi/core/misc.py
 ./src/plugins/otopi/core/transaction.py
+./src/plugins/otopi/debug/debug_failure/debug_failure.py
+./src/plugins/otopi/debug/debug_failure/__init__.py
 ./src/plugins/otopi/debug/force_fail/force_fail.py
 ./src/plugins/otopi/debug/force_fail/__init__.py
+./src/plugins/otopi/debug/packages/__init__.py
+./src/plugins/otopi/debug/packages/packages.py
+./src/plugins/otopi/debug/test_command/__init__.py
+./src/plugins/otopi/debug/test_command/test_command.py
 ./src/plugins/otopi/debug/wait_on_error/__init__.py
 ./src/plugins/otopi/debug/wait_on_error/wait_on_error.py
+./src/plugins/otopi/dialog/answer_file.py
 ./src/plugins/otopi/dialog/cli.py
 ./src/plugins/otopi/dialog/constants.py
 ./src/plugins/otopi/dialog/human.py
@@ -36,6 +44,7 @@
 ./src/plugins/otopi/network/__init__.py
 ./src/plugins/otopi/network/iptables.py
 ./src/plugins/otopi/network/ssh.py
+./src/plugins/otopi/packagers/core.py
 ./src/plugins/otopi/packagers/dnfpackager.py
 ./src/plugins/otopi/packagers/__init__.py
 ./src/plugins/otopi/packagers/yumpackager.py

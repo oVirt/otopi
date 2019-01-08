@@ -1,6 +1,45 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.8.0
+2019-01-08 - Version 1.8.0
+ * core: Default to python3
+ * automation: Add a plugin to test hidden input dialog
+ * dialog: Filter hidden replies
+ * minidnf: Support dnf 4
+ * packaging: spec: drop javadoc plugin dep
+ * packaging: spec: fix java handling
+ * build: Always match maven version to package version
+ * spec: Fix sitelib macro use
+ * otopi-config-query: Use OTOPI_PYTHON
+ * core: Default to python2
+ * automation: Test also with python3
+ * minidnf: add support for empty dnf history
+ * packaging: moved to python2_sitelib for python2
+ * automation: Add .ovirtci.yaml
+ * minidnf: Support dnf-3
+ * minidnf: Remove PKG_ERASE
+ * minidnf: Use official PKG_* constants
+ * packagers: dnf: Add stack trace if _boot fails
+ * filetransaction: Fix str/bytes issues on python 3
+ * otopi:util: loadModule by using importlib
+ * automation: install dnf-plugin-versionlock
+ * minidnf: add cli object when initializing plugins
+ * network: firewalld: change firewalld version check
+ * Make stage descriptions unique
+ * src: plugins: Sort answerfile content
+ * automation: check-patch.sh: Collect bundle sfx
+ * java: Log invalid data as error
+ * core: Use python3 when possible
+ * automation: Cleanups and fixes for fedora
+ * dialog: human: Always add answers to generated answer files
+ * build: modified binfiles to point to python2
+ * automation: Minimal testing for python3
+ * minidnf: adapt to dnf-2 api
+ * build: set otopi-devtools as obsolete
+ * automation: Make test logs nicer
+ * automation: Always keep logs
+ * core: Log python version
+ * build: packaging for both python2 and python3
+ * build: post otopi-1.7
  * services: Add restart action
  * core: dump env keys also if only type changed
  * automation: Test a plugin that changes an env key type
