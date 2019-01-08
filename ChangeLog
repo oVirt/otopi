@@ -1,5 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.8.1
+
 2019-01-08 - Version 1.8.0
  * core: Default to python3
  * automation: Add a plugin to test hidden input dialog
