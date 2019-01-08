@@ -12,9 +12,7 @@ python-coverage
 python3-coverage
 pyflakes
 python-pep8
-python2-devel
 rpm-build
 dnf-utils
-python2-dnf
 dnf-plugin-versionlock
 makeself

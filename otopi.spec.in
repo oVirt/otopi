@@ -19,7 +19,7 @@
 %global with_python3 0
 %endif
 
-%if 0%{?rhel} >= 8
+%if 0%{?fedora} >= 30 || 0%{?rhel} >= 8
 %global with_python2 0
 %else
 %global with_python2 1
@@ -101,6 +101,12 @@ Summary:	%{summary}
 Requires:	python%{python3_pkgversion} >= 3.6.0
 Requires:	python%{python3_pkgversion}-dateutil
 Requires:	%{name}-common = %{version}-%{release}
+
+# If we build for python3, but not for python2, let the python3 version
+# provide 'otopi'.
+%if ! 0%{?with_python2}
+Provides:	%{name} = %{version}-%{release}
+%endif
 
 %description -n python%{python3_pkgversion}-%{name}
 %{summary}.
