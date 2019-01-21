@@ -1,0 +1,27 @@
+Name:		testpackage1
+Version:	1.0.0
+Release:	1%{?dist}
+Summary:	testpackage1 Provides testpackage
+
+License:	GPL
+Provides:	testpackage
+Source0:	testpackage1.tar.gz
+
+BuildArch:	noarch
+
+%description
+testpackage1 Provides testpackage
+
+
+%prep
+%setup -q -n testpackage1
+
+
+%build
+
+%install
+
+%files
+
+%changelog
+

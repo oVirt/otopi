@@ -157,5 +157,8 @@ AC_CONFIG_FILES([
 	src/java/Makefile
 	src/java/pom.xml
 	automation/config.sh
+	automation/testRPMs/testpackage1/testpackage1.spec
+	automation/testRPMs/testpackage2/testpackage2.spec
+
 ])
 AC_OUTPUT

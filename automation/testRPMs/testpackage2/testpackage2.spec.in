@@ -1,0 +1,27 @@
+Name:		testpackage2
+Version:	1.0.0
+Release:	1%{?dist}
+Summary:	testpackage2 Requires testpackage
+
+License:	GPL
+Requires:	testpackage
+Source0:	testpackage2.tar.gz
+
+BuildArch:	noarch
+
+%description
+testpackage2 Requires testpackage
+
+
+%prep
+%setup -q -n testpackage2
+
+
+%build
+
+%install
+
+%files
+
+%changelog
+

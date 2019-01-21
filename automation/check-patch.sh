@@ -31,8 +31,30 @@ cov_otopi() {
 }
 
 # Test packager
-cov_otopi otopi packager ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
-cov_otopi otopi packager ODEBUG/packagesAction=str:remove ODEBUG/packages=str:zsh
+# First, create test packages and add a repo for them
+pushd automation/testRPMs
+mkdir repos
+for p in testpackage*; do
+	tar czf "${p}.tar.gz" "${p}"
+	rpmbuild -D "_topdir $PWD/repos" -ta "${p}.tar.gz"
+done
+createrepo_c repos
+for yumdnfconf in /etc/yum.conf /etc/dnf/dnf.conf; do
+	if [ -f "${yumdnfconf}" ]; then
+		cat << __EOF__ >> "${yumdnfconf}"
+[testpackages]
+name=packages for testing otopi
+baseurl=file://${PWD}/repos
+gpgcheck=0
+enabled=1
+__EOF__
+	fi
+done
+popd
+
+# Test
+cov_otopi otopi packager ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage2
+cov_otopi otopi packager ODEBUG/packagesAction=str:remove ODEBUG/packages=str:testpackage1
 cov_otopi otopi packager ODEBUG/packagesAction=str:queryGroups
 
 # Test command

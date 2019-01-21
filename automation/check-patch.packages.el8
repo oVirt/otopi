@@ -1,6 +1,7 @@
 apache-commons-logging
 autoconf
 automake
+createrepo_c
 dnf-plugin-versionlock
 dnf-utils
 gettext-devel
