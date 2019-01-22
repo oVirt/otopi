@@ -15,5 +15,4 @@ python-pep8
 python2-devel
 rpm-build
 yum-utils
-python2-dnf
 makeself
