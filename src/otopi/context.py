@@ -8,7 +8,6 @@
 
 import gettext
 import glob
-import operator
 import os
 import random
 import sys
@@ -321,132 +320,6 @@ class Context(base.Base):
         """
         self._post_event_callbacks.append(callback)
 
-    def _castlingBuildSequence(self):
-        # Enforce before/after by replacing locations of offending events
-        # TODO Remove once the toposort version is considered stable and
-        # all code using otopi is verified to work with it.
-
-        #
-        # bind functions to plugin
-        #
-        tmplist = []
-        for p in self._plugins:
-            for metadata in util.methodsByAttribute(
-                p.__class__, 'decoration_event'
-            ):
-                metadata = metadata.copy()
-                metadata['method'] = metadata['method'].__get__(p)
-                metadata['condition'] = metadata['condition'].__get__(p)
-                tmplist.append(metadata)
-
-        #
-        # Set some stable order or randomize
-        #
-        if self.environment[constants.BaseEnv.RANDOMIZE_EVENTS]:
-            random.shuffle(tmplist)
-        else:
-            tmplist.sort(key=self.methodName)
-
-        #
-        # sort based on priority
-        #
-        tmplist.sort(key=operator.itemgetter('priority'))
-
-        #
-        # Handle before and after
-        # KISS mode
-        #
-        def _doit(l, what, compare, aggregate, offset):
-            def _indexOfName(names):
-                try:
-                    return aggregate(
-                        i for i, data in enumerate(l)
-                        if data['name'] in names
-                    )
-                except ValueError:
-                    return None
-
-            everModified = False
-            for limit in range(400):    # boundary
-                modified = False
-                for index, metadata in enumerate(l):
-                    candidateindex = _indexOfName(metadata[what])
-                    if (
-                        candidateindex is not None and
-                        compare(candidateindex, index)
-                    ):
-                        self._earlyDebug(
-                            'modifying location: candidateindex %s index %s '
-                            'what %s metadata[what] %s method %s' % (
-                                candidateindex,
-                                index,
-                                what,
-                                metadata[what],
-                                metadata['method'],
-                            )
-                        )
-                        l.insert(candidateindex + offset, metadata)
-                        if candidateindex < index:
-                            del l[index + 1]
-                        else:
-                            del l[index]
-                        modified = True
-                        everModified = True
-                        break
-                if not modified:
-                    break
-            if modified:
-                raise RuntimeError(_('Sequence build loop detected'))
-            return everModified
-
-        for x in range(400):
-            modified = False
-            modified = modified or _doit(
-                tmplist,
-                'before',
-                operator.lt,
-                min,
-                0
-            )
-            modified = modified or _doit(
-                tmplist,
-                'after',
-                operator.gt,
-                max,
-                1
-            )
-            if not modified:
-                break
-        if modified:
-            raise RuntimeError(_('Sequence build loop detected'))
-
-        sequence = {}
-        for m in tmplist:
-            sequence.setdefault(m['stage'], []).append(m)
-
-        prio_dep_reverses = []
-        for stage, methods in sequence.items():
-            for i, m in enumerate(methods[:-1]):
-                if m['priority'] > methods[i + 1]['priority']:
-                    prio_dep_reverses.append(
-                        (
-                            'Priorities were reversed during buildSequence: '
-                            'method %s with priority %s appears after '
-                            'method %s with priority %s'
-                        ) % (
-                            methods[i+1]['method'],
-                            methods[i+1]['priority'],
-                            m['method'],
-                            m['priority'],
-                        )
-                    )
-        if prio_dep_reverses:
-            msg = '\n'.join(prio_dep_reverses)
-            self._earlyDebug(msg)
-            if self.environment[constants.BaseEnv.FAIL_ON_PRIO_OVERRIDE]:
-                raise RuntimeError(msg)
-        return sequence
-
     class ToposortCycleException(Exception):
         def __init__(self, leftovers):
             self.leftovers = leftovers
@@ -713,11 +586,7 @@ class Context(base.Base):
             self._sequence = self._toposortBuildSequence()
         except Exception as e:
             self._earlyDebug("_toposortBuildSequence failed: %s" % e)
-            if not os.environ.get(
-                constants.SystemEnvironment.ALLOW_LEGACY_BUILDSEQ
-            ):
-                raise
-            self._sequence = self._castlingBuildSequence()
+            raise
 
     def _typed_value_str(self, value):
         return '%s:%s' % (
