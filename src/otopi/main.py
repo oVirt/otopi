@@ -124,12 +124,6 @@ class Otopi(object):
             except:
                 pass
 
-        self._debug = int(
-            os.environ.get(
-                constants.SystemEnvironment.DEBUG,
-                0
-            )
-        )
         self._bundledir = os.environ.get(
             'OTOPI_BUNDLED',
             ''

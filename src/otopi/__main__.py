@@ -69,12 +69,7 @@ class Installer(object):
         )[0]['code']
 
     def __init__(self):
-        self._debug = int(
-            os.environ.get(
-                constants.SystemEnvironment.DEBUG,
-                0
-            )
-        )
+        pass
 
     def main(self):
         try:
@@ -99,17 +94,15 @@ class Installer(object):
                     e,
                 )
             )
-            if self._debug > 0:
-                traceback.print_exc()
+            traceback.print_exc()
             return constants.Const.EXIT_CODE_INITIALIZATION_ERROR
         except Exception as e:
-            if self._debug > 0:
-                print(
-                    _('FATAL Internal error (main): {error}').format(
-                        error=e
-                    ),
-                )
-                traceback.print_exc()
+            print(
+                _('FATAL Internal error (main): {error}').format(
+                    error=e
+                ),
+            )
+            traceback.print_exc()
 
             # return failure if someone set, never success
             return max(
