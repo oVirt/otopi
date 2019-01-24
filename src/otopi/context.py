@@ -395,7 +395,7 @@ class Context(base.Base):
             )
             if method['name'] is not None:
                 if method_by_name.get(method['name']):
-                    self._earlyDebug(
+                    print(
                         '    error: duplicate name: %s %s %s' % (
                             method['name'],
                             self.methodName(method),
@@ -436,7 +436,7 @@ class Context(base.Base):
                 )
             for i in before_after_method_deps:
                 if method['stage'] < methods[i]['stage']:
-                    self._earlyDebug(
+                    print(
                         (
                             'error: method {m} is in a later stage '
                             'than method {method} although it depends on it'
@@ -460,7 +460,7 @@ class Context(base.Base):
                     methods[i]['stage'] == method['stage'] and
                     method['priority'] < methods[i]['priority']
                 ):
-                    self._earlyDebug(
+                    print(
                         (
                             'error: method {method} has a higher priority '
                             'than method {m} '
@@ -515,7 +515,7 @@ class Context(base.Base):
                 sortedmethods.extend([methods[i] for i in l])
         except Context.ToposortCycleException as e:
             leftovers = e.leftovers
-            self._earlyDebug(
+            print(
                 (
                     'error: toposort failed due to a cycle: {leftovers}\n'
                     'More details:\n{details}'
