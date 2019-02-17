@@ -97,12 +97,13 @@ class Installer(object):
             traceback.print_exc()
             return constants.Const.EXIT_CODE_INITIALIZATION_ERROR
         except Exception as e:
-            print(
-                _('FATAL Internal error (main): {error}').format(
-                    error=e
-                ),
-            )
-            traceback.print_exc()
+            if os.environ.get(constants.SystemEnvironment.DEBUG, 0):
+                print(
+                    _('FATAL Internal error (main): {error}').format(
+                        error=e
+                    ),
+                )
+                traceback.print_exc()
 
             # return failure if someone set, never success
             return max(
