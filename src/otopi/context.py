@@ -131,7 +131,10 @@ class Context(base.Base):
             if method['condition']():
                 method['method']()
             else:
-                self.logger.debug('condition False')
+                self.logger.debug(
+                    '%s condition False',
+                    self.methodName(method)
+                )
         except Exception as e:
             self.environment[constants.BaseEnv.ERROR] = True
             self.environment[constants.BaseEnv.EXCEPTION_INFO].append(
