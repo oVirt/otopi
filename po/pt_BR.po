@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-08 09:48+0200\n"
+"POT-Creation-Date: 2019-03-10 12:05+0200\n"
 "PO-Revision-Date: 2016-03-02 13:57-0300\n"
 "Last-Translator:Wesley Morais de Oliveira \n"
 "Language-Team: \n"
@@ -15,7 +15,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: src/otopi/command.py:21 src/otopi/common.py:18 src/otopi/context.py:31
+#: src/otopi/command.py:21 src/otopi/common.py:18 src/otopi/context.py:30
 #: src/otopi/dialog.py:26 src/otopi/filetransaction.py:25
 #: src/otopi/__main__.py:22 src/otopi/main.py:28 src/otopi/minidnf.py:26
 #: src/otopi/miniyum.py:28 src/otopi/packager.py:21 src/otopi/plugin.py:27
@@ -52,53 +52,49 @@ msgstr "Tipo de váriavel ausente"
 msgid "Invalid variable type {type}"
 msgstr "Tipo de variável invalido {type}"
 
-#: src/otopi/context.py:147
+#: src/otopi/context.py:149
 msgid "Aborted"
 msgstr "Abortado"
 
-#: src/otopi/context.py:150
+#: src/otopi/context.py:152
 #, python-brace-format
 msgid "Failed to execute stage '{stage}': {exception}"
 msgstr "Falhou ao executar etapa '{stage}': {exception}"
 
-#: src/otopi/context.py:249
+#: src/otopi/context.py:251
 msgid "Unexepcted exception"
 msgstr "Exceção inesperada"
 
-#: src/otopi/context.py:287
+#: src/otopi/context.py:289
 #, fuzzy
 msgid "Unexpected exception"
 msgstr "Exceção inesperada"
 
-#: src/otopi/context.py:399 src/otopi/context.py:421
-msgid "Sequence build loop detected"
-msgstr "Sequência de build loop detectada"
-
-#: src/otopi/context.py:672
+#: src/otopi/context.py:548
 msgid "Cyclic dependencies found"
 msgstr ""
 
-#: src/otopi/context.py:740
+#: src/otopi/context.py:612
 #, python-brace-format
 msgid "Stage: {stage}"
 msgstr "Etapa: {stage}"
 
-#: src/otopi/context.py:773
+#: src/otopi/context.py:645
 msgid "Error during sequence"
 msgstr "Erro durante sequência"
 
-#: src/otopi/context.py:828
+#: src/otopi/context.py:700
 #, python-brace-format
 msgid ""
 "\"{which}\" parameter of method {name} is a string, should probably be a "
 "tuple. Perhaps a missing comma?"
 msgstr ""
 
-#: src/otopi/context.py:844
+#: src/otopi/context.py:716
 msgid "Found bad \"before\" or \"after\" parameters"
 msgstr ""
 
-#: src/otopi/context.py:901
+#: src/otopi/context.py:773
 #, python-brace-format
 msgid "Internal error, plugins {groups} are missing"
 msgstr "Erro interno, plugins {groups} estão faltando"
@@ -138,11 +134,11 @@ msgstr "Transação de arquivo para '{file}'"
 msgid "Failed to restore SELinux attributes for '{file}'"
 msgstr "Falhou ao restaurar atributos SELinux para '{file}'"
 
-#: src/otopi/__main__.py:98
+#: src/otopi/__main__.py:93
 msgid "Internal error"
 msgstr "Erro interno"
 
-#: src/otopi/__main__.py:108
+#: src/otopi/__main__.py:102
 #, python-brace-format
 msgid "FATAL Internal error (main): {error}"
 msgstr "Erro interno FATAL (main): {error}"
@@ -1008,6 +1004,9 @@ msgstr "Daemon não finalizou adequadamente"
 #: src/plugins/otopi/system/reboot.py:108
 msgid "Reboot scheduled"
 msgstr "Reboot agendado"
+
+#~ msgid "Sequence build loop detected"
+#~ msgstr "Sequência de build loop detectada"
 
 #~ msgid "Erasing"
 #~ msgstr "Apagando"

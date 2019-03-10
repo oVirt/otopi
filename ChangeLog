@@ -1,6 +1,13 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.8.1
+2019-03-10 - Version 1.8.1
+ * core: Log method name if condition is False
+ * core: Output stack trace on exception only if debug
+ * automation: Add event_cyclic_dep test plugin
+ * core: Always output _toposortBuildSequence errors
+ * core: Remove _castlingBuildSequence and ALLOW_LEGACY_BUILDSEQ
+ * core: Always output early error message and stacktrace
+ * automation: Do not install dnf in el7
 
 2019-01-08 - Version 1.8.0
  * core: Default to python3
