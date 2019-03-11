@@ -4,3 +4,4 @@ distros:
   - el7
 release_branches:
   master: ovirt-master
+  otopi-1.8: ovirt-4.3
