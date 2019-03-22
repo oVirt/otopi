@@ -188,6 +188,7 @@ public class MachineDialogParser {
 	 * env-get command.
 	 * @param name variable name.
 	 * @return variable value (null, Integer, String, String[])
+	 * @throws java.io.IOException on unexpected connection termination
 	 */
 	public Object cliEnvironmentGet(String name) throws IOException {
 		Object value = null;
@@ -233,6 +234,7 @@ public class MachineDialogParser {
 	 * env-set command.
 	 * @param name variable name.
 	 * @param value value to set, type of object is attached (null, Integer, String, String[]).
+	 * @throws java.io.IOException on unexpected connection termination
 	 */
 	public void cliEnvironmentSet(String name, Object value) throws IOException {
 		log.debug(
@@ -281,6 +283,7 @@ public class MachineDialogParser {
 	/**
 	 * log command.
 	 * @param out stream to write log into.
+	 * @throws java.io.IOException on unexpected connection termination
 	 */
 	public void cliDownloadLog(OutputStream out) throws IOException {
 		_outgoing.printf("log\n");
@@ -299,6 +302,7 @@ public class MachineDialogParser {
 
 	/**
 	 * noop command.
+	 * @throws java.io.IOException on unexpected connection termination
 	 */
 	public void cliNoop() throws IOException {
 		_outgoing.printf("noop\n");
@@ -306,6 +310,7 @@ public class MachineDialogParser {
 
 	/**
 	 * quit command.
+	 * @throws java.io.IOException on unexpected connection termination
 	 */
 	public void cliQuit() throws IOException {
 		_outgoing.printf("quit\n");
@@ -313,6 +318,7 @@ public class MachineDialogParser {
 
 	/**
 	 * install command.
+	 * @throws java.io.IOException on unexpected connection termination
 	 */
 	public void cliInstall() throws IOException {
 		_outgoing.printf("install\n");
@@ -320,6 +326,7 @@ public class MachineDialogParser {
 
 	/**
 	 * abort command.
+	 * @throws java.io.IOException on unexpected connection termination
 	 */
 	public void cliAbort() throws IOException {
 		_outgoing.printf("abort\n");
@@ -329,6 +336,7 @@ public class MachineDialogParser {
 	 * Get next event from stream.
 	 * @param out output stream for multistring display.
 	 * @return Next event in stream.
+	 * @throws java.io.IOException on unexpected connection termination
 	 */
 	public Event.Base nextEvent(OutputStream out) throws IOException, SoftError {
 		Event.Base bevent = null;
@@ -402,6 +410,7 @@ public class MachineDialogParser {
 	/**
 	 * Get next event from stream.
 	 * @return Next event in stream.
+	 * @throws java.io.IOException on unexpected connection termination
 	 */
 	public Event.Base nextEvent() throws IOException {
 		return nextEvent(null);
