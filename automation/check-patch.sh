@@ -1,10 +1,4 @@
 #!/bin/bash -ex
-autoreconf -ivf
-./configure --enable-java-sdk COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
-make distcheck
-
-automation/build-artifacts.sh
-
 DISTVER="$(rpm --eval "%dist"|cut -c2-4)"
 installer=""
 if [[ "${DISTVER}" == "el7" ]]; then
@@ -12,6 +6,13 @@ if [[ "${DISTVER}" == "el7" ]]; then
 else
     installer=dnf
 fi
+
+autoreconf -ivf
+./configure --enable-java-sdk COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
+make distcheck
+
+automation/build-artifacts.sh
+
 ${installer} install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
 
 mkdir -p exported-artifacts/logs
@@ -67,8 +68,8 @@ if OTOPI_PYTHON=python3 otopi PACKAGER/dnfpackagerEnabled=bool:False PACKAGER/yu
 	OTOPI_PYTHON=python3 cov_otopi otopi packager-python3 ODEBUG/packagesAction=str:install ODEBUG/packages=str:yelp-tools
 fi
 
-coverage combine
-coverage html -d exported-artifacts/coverage_html_report
+coverage combine --rcfile="${PWD}/automation/coverage.rc"
+coverage html -d exported-artifacts/coverage_html_report --rcfile="${PWD}/automation/coverage.rc"
 cp automation/index.html exported-artifacts/
 
 # Validate a bundle on a system without otopi installed

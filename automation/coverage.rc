@@ -2,6 +2,27 @@
 [run]
 branch = True
 
+omit =
+    /usr/lib/python2.7/site-packages/dateutil/*
+    /usr/lib/python3.6/site-packages/dateutil/*
+    /usr/lib/python3.7/site-packages/dateutil/*
+    /usr/lib/python3.7/site-packages/distro.py
+    /usr/lib/python3.6/site-packages/dnf-plugins/*
+    /usr/lib/python3.7/site-packages/dnf-plugins/*
+    /usr/lib/python3.6/site-packages/dnfpluginscore/*
+    /usr/lib/python3.7/site-packages/dnfpluginscore/*
+    /usr/lib/python2.7/site-packages/iniparse/*
+    /usr/lib/python3.6/site-packages/iniparse/*
+    /usr/lib/python3.7/site-packages/iniparse/*
+    /usr/lib/python2.7/site-packages/rpmUtils/*
+    /usr/lib/python2.7/site-packages/six.py
+    /usr/lib/python3.6/site-packages/six.py
+    /usr/lib/python3.7/site-packages/six.py
+    /usr/lib/python2.7/site-packages/urlgrabber/*
+    /usr/lib/python2.7/site-packages/yum/*
+    /usr/lib/python3.6/site-packages/dnf/*
+    /usr/lib/python3.7/site-packages/dnf/*
+
 [report]
 # Regexes for lines to exclude from consideration
 exclude_lines =
@@ -24,10 +45,21 @@ ignore_errors = True
 
 omit =
     /usr/lib/python2.7/site-packages/dateutil/*
-    /usr/lib/python3.6/site-packages/dateutil/
+    /usr/lib/python3.6/site-packages/dateutil/*
+    /usr/lib/python3.7/site-packages/dateutil/*
+    /usr/lib/python3.7/site-packages/distro.py
+    /usr/lib/python3.6/site-packages/dnf-plugins/*
+    /usr/lib/python3.7/site-packages/dnf-plugins/*
+    /usr/lib/python3.6/site-packages/dnfpluginscore/*
+    /usr/lib/python3.7/site-packages/dnfpluginscore/*
     /usr/lib/python2.7/site-packages/iniparse/*
     /usr/lib/python3.6/site-packages/iniparse/*
+    /usr/lib/python3.7/site-packages/iniparse/*
     /usr/lib/python2.7/site-packages/rpmUtils/*
+    /usr/lib/python2.7/site-packages/six.py
+    /usr/lib/python3.6/site-packages/six.py
+    /usr/lib/python3.7/site-packages/six.py
     /usr/lib/python2.7/site-packages/urlgrabber/*
     /usr/lib/python2.7/site-packages/yum/*
     /usr/lib/python3.6/site-packages/dnf/*
+    /usr/lib/python3.7/site-packages/dnf/*
