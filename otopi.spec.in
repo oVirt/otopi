@@ -58,7 +58,6 @@ BuildRequires:	maven-jar-plugin
 BuildRequires:	maven-source-plugin
 BuildRequires:	maven-surefire-provider-junit
 BuildRequires:	maven-local
-BuildRequires:	sonatype-oss-parent
 %endif
 
 %description
@@ -164,6 +163,7 @@ Summary:	%{name} maven repo
 %prep
 %setup -q -n %{name}-%{package_version}
 %pom_remove_plugin :maven-javadoc-plugin src/java/pom.xml.in
+%pom_remove_plugin :nexus-staging-maven-plugin src/java/pom.xml.in
 mkdir py2 py3
 
 %build
