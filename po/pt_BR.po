@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-10 12:05+0200\n"
+"POT-Creation-Date: 2019-05-19 10:30+0300\n"
 "PO-Revision-Date: 2016-03-02 13:57-0300\n"
 "Last-Translator:Wesley Morais de Oliveira \n"
 "Language-Team: \n"
@@ -28,7 +28,7 @@ msgstr ""
 #: src/plugins/otopi/network/firewalld.py:22
 #: src/plugins/otopi/network/hostname.py:19
 #: src/plugins/otopi/network/iptables.py:20 src/plugins/otopi/network/ssh.py:22
-#: src/plugins/otopi/packagers/dnfpackager.py:22
+#: src/plugins/otopi/packagers/dnfpackager.py:23
 #: src/plugins/otopi/packagers/yumpackager.py:22
 #: src/plugins/otopi/services/openrc.py:20
 #: src/plugins/otopi/services/rhel.py:20
@@ -923,11 +923,11 @@ msgstr "Distribuição sem suporte para plug-in iptables"
 msgid "SSH public key is invalid"
 msgstr "Chave pública SSH é inválida"
 
-#: src/plugins/otopi/packagers/dnfpackager.py:41
+#: src/plugins/otopi/packagers/dnfpackager.py:42
 msgid "DNF Transaction"
 msgstr "Transação DNF"
 
-#: src/plugins/otopi/packagers/dnfpackager.py:98
+#: src/plugins/otopi/packagers/dnfpackager.py:99
 #: src/plugins/otopi/packagers/yumpackager.py:99
 #, python-brace-format
 msgid "Confirm use of GPG Key userid={userid} hexkeyid={hexkeyid}"

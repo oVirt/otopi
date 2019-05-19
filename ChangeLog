@@ -1,6 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.8.2
+2019-05-19 - Version 1.8.2
+ * packagers: dnf: Disable dnf by default on el7
 
 2019-03-10 - Version 1.8.1
  * core: Log method name if condition is False
