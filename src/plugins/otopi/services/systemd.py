@@ -65,6 +65,18 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
             raiseOnError=raiseOnError
         )
 
+    def _executeSocketCommand(self, name, command, raiseOnError=True):
+        return self.execute(
+            (
+                self.command.get('systemctl'),
+            ) +
+            (command if isinstance(command, tuple) else (command,)) +
+            (
+                '%s.socket' % name,
+            ),
+            raiseOnError=raiseOnError
+        )
+
     @property
     def supportsDependency(self):
         return True
@@ -118,6 +130,34 @@ class Plugin(plugin.PluginBase, services.ServicesBase):
         if rc != 0:
             raise RuntimeError(
                 _("Failed to {do} service '{service}'").format(
+                    do=_('enable') if state else _('disable'),
+                    service=name,
+                )
+            )
+
+    def startupSocket(self, name, state):
+        self.logger.debug('set socket %s startup to %s', name, state)
+
+        # resolve service name
+        rc, stdout, stderr = self._executeSocketCommand(
+            name,
+            (
+                'show',
+                '-p',
+                'Id',
+            )
+        )
+        if len(stdout) == 1:
+            name = stdout[0].split('=')[1].strip().replace('.socket', '')
+
+        rc, stdout, stderr = self._executeSocketCommand(
+            name,
+            'enable' if state else 'disable',
+            raiseOnError=False,
+        )
+        if rc != 0:
+            raise RuntimeError(
+                _("Failed to {do} socket '{service}'").format(
                     do=_('enable') if state else _('disable'),
                     service=name,
                 )

@@ -38,6 +38,10 @@ class ServicesBase(object):
         """Sets service state after reboot"""
         pass
 
+    def startupSocket(self, name, state):
+        """Sets socket state after reboot"""
+        pass
+
     def state(self, name, state):
         """Sets service state"""
         pass
