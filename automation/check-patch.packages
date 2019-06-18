@@ -11,7 +11,7 @@ make
 python-coverage
 python3-coverage
 pyflakes
-python-pep8
+python3-pep8
 rpm-build
 dnf-utils
 dnf-plugin-versionlock
