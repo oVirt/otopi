@@ -814,12 +814,9 @@ class MiniDNF():
         try:
             return [
                 {
-                    'operation': (
-                        'installed' if base._group_persistor.group(
-                            group.id
-                        ).installed
-                        else 'available'
-                    ),
+                    'operation': 'installed'
+                    if base.history.group.get(group.id) is not None
+                    else 'available',
                     'name': group.id,
                     'description': group.name,
                     'uservisible': group.visible
