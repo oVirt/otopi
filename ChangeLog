@@ -1,6 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.8.3
+2019-06-25 - Version 1.8.3
+ * core: Disable minidnf by default on el7
+ * services: systemd: add startup socket support
 
 2019-05-19 - Version 1.8.2
  * packagers: dnf: Disable dnf by default on el7
