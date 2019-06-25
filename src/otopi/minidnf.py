@@ -21,6 +21,8 @@ import dnf.yum.rpmtrans
 
 from dnf.cli.cli import Cli
 
+from . import packager
+
 
 def _(m):
     return gettext.dgettext(message=m, domain='otopi')
@@ -438,6 +440,9 @@ class MiniDNF():
     ):
         self._base = None
         self._baseTransaction = None
+
+        if not packager.ok_to_use_dnf():
+            raise RuntimeError('minidnf is disabled')
 
         if int(dnf.__version__.split('.')[0]) not in (2, 3, 4):
             raise RuntimeError(_('Incompatible DNF'))

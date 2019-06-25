@@ -91,6 +91,7 @@ class SystemEnvironment(object):
     ALLOW_PRIORITY_OVERRIDE = 'OTOPI_ALLOW_PRIORITY_OVERRIDE'
     COVERAGE = 'OTOPI_COVERAGE'
     SYS_PATH = 'PATH'
+    DNF_ENABLE = 'OTOPI_DNF_ENABLE'
 
 
 @util.export

@@ -32,6 +32,10 @@ OTOPI_NONROOT
 OTOPI_PYTHON [/usr/bin/python]
     Python to use.
 
+OTOPI_DNF_ENABLE
+    If '1', allow forcing trying to use dnf. Without this,
+    dnf is enabled only on fedora and RHEL (and derivatives) >= 8.
+
 INSTALLER ENVIRONMENT
 ---------------------
 
