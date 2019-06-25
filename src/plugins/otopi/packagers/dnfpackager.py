@@ -6,7 +6,6 @@
 """dnf packager provider."""
 
 
-import platform
 import gettext
 import os
 import time
@@ -118,23 +117,6 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
         self._minidnf = None
         self._enabled = False
 
-    def _ok_to_use_dnf(self):
-        plat_dist = platform.linux_distribution(full_distribution_name=0)
-        distribution = plat_dist[0]
-        version = plat_dist[1]
-        return (
-            distribution in (
-                'fedora',
-            ) or (
-                distribution in (
-                    'redhat',
-                    'centos',
-                    'ibm_powerkvm',
-                ) and
-                version >= '8.0'
-            )
-        )
-
     @plugin.event(
         stage=plugin.Stages.STAGE_BOOT,
         before=(
@@ -149,7 +131,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
     def _boot(self):
         self.environment.setdefault(
             constants.PackEnv.DNFPACKAGER_ENABLED,
-            self._ok_to_use_dnf()
+            packager.ok_to_use_dnf()
         )
         self.environment.setdefault(
             constants.PackEnv.DNF_DISABLED_PLUGINS,
