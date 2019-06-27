@@ -32,6 +32,7 @@ cov_otopi() {
 # Test packager
 cov_otopi otopi packager ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
 cov_otopi otopi packager ODEBUG/packagesAction=str:remove ODEBUG/packages=str:zsh
+cov_otopi otopi packager ODEBUG/packagesAction=str:queryGroups
 
 # Test command
 PATH="${PWD}/automation/testbin:$PATH" OTOPI_TEST_COMMAND=1 cov_otopi otopi command
