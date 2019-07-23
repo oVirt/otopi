@@ -9,6 +9,7 @@
 import configparser
 import gettext
 import glob
+import io
 import os
 
 
@@ -99,22 +100,24 @@ class Plugin(plugin.PluginBase):
             configs = []
             if f:
                 for c in f.split(':'):
-                    myconfigs = []
-                    configFile = self.resolveFile(c)
-                    configDir = '%s.d' % configFile
-                    if os.path.exists(configFile):
-                        myconfigs.append(configFile)
-                    myconfigs += sorted(
-                        glob.glob(
-                            os.path.join(configDir, '*.conf')
+                    if c:
+                        myconfigs = []
+                        configFile = self.resolveFile(c)
+                        configDir = '%s.d' % configFile
+                        if os.path.exists(configFile):
+                            myconfigs.append(configFile)
+                        myconfigs += sorted(
+                            glob.glob(
+                                os.path.join(configDir, '*.conf')
+                            )
                         )
-                    )
-                    configs.extend(myconfigs)
-                    if not missingOK and not myconfigs:
-                        self._missingconf.append(c)
+                        configs.extend(myconfigs)
+                        if not missingOK and not myconfigs:
+                            self._missingconf.append(c)
             return configs
 
-        self._configFiles = self._config.read(
+        self._configFiles = []
+        allConfigFiles = (
             _addConfig(
                 f=self.environment[constants.CoreEnv.CONFIG_FILE_NAME],
                 missingOK=True
@@ -124,6 +127,22 @@ class Plugin(plugin.PluginBase):
                 missingOK=False
             )
         )
+        if hasattr(self._config, 'read_file'):
+            readfunc = self._config.read_file
+        else:
+            # Deprecated in python 3.2
+            readfunc = self._config.readfp
+
+        for f in allConfigFiles:
+            try:
+                with io.open(f, mode='r', encoding='utf-8') as fp:
+                    readfunc(fp)
+                self._configFiles.append(f)
+            except Exception:
+                self.logger.debug(
+                    'Failed to read config file %s' % f,
+                    exc_info=True,
+                )
 
         self._readEnvironment(
             section=constants.Const.CONFIG_SECTION_DEFAULT,
@@ -140,8 +159,8 @@ class Plugin(plugin.PluginBase):
     )
     def _post_init(self):
         self.dialog.note(
-            _('Configuration files: {files}').format(
-                files=self._configFiles,
+            _(u'Configuration files: {files}').format(
+                files=u', '.join(self._configFiles),
             )
         )
         if self._missingconf:

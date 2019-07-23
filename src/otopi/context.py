@@ -767,7 +767,7 @@ class Context(base.Base):
                 ]:
                     value = '***'
                 self.logger.debug(
-                    "ENV %s=%s:'%s'",
+                    u"ENV %s=%s:'%s'",
                     key,
                     type(self.environment[key]).__name__,
                     value,
