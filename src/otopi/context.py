@@ -688,6 +688,14 @@ class Context(base.Base):
     def checkSequence(self):
         """Check Sequence"""
         ok = True
+        all_method_names = []
+        for stage, methodinfos in self._sequence.items():
+            for methodinfo in methodinfos:
+                if methodinfo['name'] is not None:
+                    # Just collect them, do not check for uniqueness.
+                    # This is verified earlier in buildSequence.
+                    all_method_names.append(methodinfo['name'])
+
         for stage, methodinfos in self._sequence.items():
             for methodinfo in methodinfos:
 
@@ -706,6 +714,25 @@ class Context(base.Base):
                             ),
                         )
                         self.dialog.note('methodinfo: %s' % methodinfo)
+                    elif (
+                        isinstance(methodinfo[which], list) or
+                        isinstance(methodinfo[which], tuple)
+                    ):
+                        for m in methodinfo[which]:
+                            if m not in all_method_names:
+                                ok = False
+                                self.logger.error(
+                                    _(
+                                        '"{which}" parameter of method '
+                                        '"{name}" refers to a method name '
+                                        '"{m}", but no method with this name '
+                                        'exists'
+                                    ).format(
+                                        which=which,
+                                        name=self.methodName(methodinfo),
+                                        m=m,
+                                    )
+                                )
                     return ok
 
                 if not check('before', methodinfo):
