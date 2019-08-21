@@ -61,7 +61,7 @@ class Plugin(plugin.PluginBase):
                 constants.CoreEnv.QUESTION_PREFIX
             ):
                 content.append(
-                    '{key}={type}:{value}\n'.format(
+                    u'{key}={type}:{value}\n'.format(
                         key=key,
                         type=common.typeName(value),
                         value=(
