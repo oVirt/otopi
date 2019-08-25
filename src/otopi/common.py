@@ -95,4 +95,33 @@ def toStr(o):
     return o.__class__.__name__
 
 
+@util.export
+def toUStr(o):
+    if isinstance(o, str):
+        return o
+
+    if isinstance(o, builtins.unicode):
+        return o
+
+    if hasattr(o, '__unicode__'):
+        try:
+            return toUStr(o.__unicode__())
+        except Exception:
+            pass
+
+    if hasattr(o, '__str__'):
+        try:
+            return o.__str__()
+        except Exception:
+            pass
+
+    if hasattr(o, '__repr__'):
+        try:
+            return toUStr(o.__repr__())
+        except Exception:
+            pass
+
+    return o.__class__.__name__
+
+
 # vim: expandtab tabstop=4 shiftwidth=4
