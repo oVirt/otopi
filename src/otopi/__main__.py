@@ -38,6 +38,11 @@ class Installer(object):
 
         for arg in sys.argv[1:]:
             for statement in shlex.split(arg):
+                if sys.version_info[0] <= 2:
+                    try:
+                        statement = statement.decode('utf-8')
+                    except UnicodeDecodeError:
+                        pass
                 entry = statement.split('=', 1)
                 if len(entry) == 2:
                     key, value = entry[0], common.parseTypedValue(entry[1])
