@@ -8,6 +8,7 @@
 
 import getpass
 import gettext
+import io
 import os
 import re
 
@@ -60,7 +61,7 @@ class Plugin(plugin.PluginBase):
         found = False
         content = []
 
-        with open(authkeys, 'r') as f:
+        with io.open(authkeys, mode='r', encoding='utf-8') as f:
             current = f.read().splitlines()
 
         keymatch = self._RE_SSHPUB.match(sshKey)
