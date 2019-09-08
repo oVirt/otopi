@@ -225,7 +225,8 @@ class Context(base.Base):
             constants.BaseEnv.FAIL_ON_PRIO_OVERRIDE: not os.environ.get(
                 constants.SystemEnvironment.ALLOW_PRIORITY_OVERRIDE,
                 False
-            )
+            ),
+            constants.BaseEnv.IGNORE_MISSING_BEFORE_AFTER: True,
         }
         self.registerDialog(dialog.DialogBase())
         self.registerServices(services.ServicesBase())
@@ -720,8 +721,12 @@ class Context(base.Base):
                     ):
                         for m in methodinfo[which]:
                             if m not in all_method_names:
-                                ok = False
-                                self.logger.error(
+                                if not self.environment[
+                                    constants.BaseEnv.
+                                    IGNORE_MISSING_BEFORE_AFTER
+                                ]:
+                                    ok = False
+                                self.logger.debug(
                                     _(
                                         '"{which}" parameter of method '
                                         '"{name}" refers to a method name '

@@ -110,6 +110,7 @@ class BaseEnv(object):
     COMMAND_PREFIX = 'COMMAND/'
     RANDOMIZE_EVENTS = 'CORE/randomizeEvents'
     FAIL_ON_PRIO_OVERRIDE = 'CORE/failOnPrioOverride'
+    IGNORE_MISSING_BEFORE_AFTER = 'CORE/ignoreMissingBeforeAfter'
 
 
 @util.export
