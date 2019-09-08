@@ -333,6 +333,12 @@ class MiniDNF():
         # its own transaction when doing a rollback.
         base.conf.clean_requirements_on_remove = False
 
+        # This causes DNF to either use the highest available version or fail.
+        # When it fails, it should show the reasons. Without this, it will
+        # simply ignore the unsatisfied dependencies of the highest version,
+        # and either install an older version or do nothing.
+        base.conf.best = True
+
         base.init_plugins(disabled_glob=self._disabledPlugins, cli=Cli(base))
 
         base.read_all_repos()
