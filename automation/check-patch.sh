@@ -5,9 +5,9 @@ make distcheck
 
 automation/build-artifacts.sh
 
-DISTVER="$(rpm --eval "%dist"|cut -c2-3)"
+DISTVER="$(rpm --eval "%dist"|cut -c2-4)"
 installer=""
-if [[ "${DISTVER}" == "el" ]]; then
+if [[ "${DISTVER}" == "el7" ]]; then
     installer=yum
 else
     installer=dnf
