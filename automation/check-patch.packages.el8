@@ -1,0 +1,17 @@
+apache-commons-logging
+autoconf
+automake
+git
+java-devel
+javapackages-tools
+junit
+gettext-devel
+libselinux-python
+make
+python3-coverage
+pyflakes
+python3-pep8
+rpm-build
+dnf-utils
+dnf-plugin-versionlock
+makeself
