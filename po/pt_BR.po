@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-10 12:05+0200\n"
+"POT-Creation-Date: 2019-09-30 10:56+0200\n"
 "PO-Revision-Date: 2016-03-02 13:57-0300\n"
 "Last-Translator:Wesley Morais de Oliveira \n"
 "Language-Team: \n"
@@ -17,8 +17,8 @@ msgstr ""
 
 #: src/otopi/command.py:21 src/otopi/common.py:18 src/otopi/context.py:30
 #: src/otopi/dialog.py:26 src/otopi/filetransaction.py:25
-#: src/otopi/__main__.py:22 src/otopi/main.py:28 src/otopi/minidnf.py:26
-#: src/otopi/miniyum.py:28 src/otopi/packager.py:21 src/otopi/plugin.py:27
+#: src/otopi/__main__.py:22 src/otopi/main.py:28 src/otopi/minidnf.py:28
+#: src/otopi/miniyum.py:28 src/otopi/packager.py:24 src/otopi/plugin.py:27
 #: src/otopi/transaction.py:17 src/otopi/util.py:23
 #: src/plugins/otopi/core/log.py:27 src/plugins/otopi/core/misc.py:19
 #: src/plugins/otopi/debug/debug_failure/debug_failure.py:20
@@ -27,7 +27,7 @@ msgstr ""
 #: src/plugins/otopi/dialog/machine.py:29
 #: src/plugins/otopi/network/firewalld.py:22
 #: src/plugins/otopi/network/hostname.py:19
-#: src/plugins/otopi/network/iptables.py:20 src/plugins/otopi/network/ssh.py:22
+#: src/plugins/otopi/network/iptables.py:20 src/plugins/otopi/network/ssh.py:23
 #: src/plugins/otopi/packagers/dnfpackager.py:22
 #: src/plugins/otopi/packagers/yumpackager.py:22
 #: src/plugins/otopi/services/openrc.py:20
@@ -61,40 +61,47 @@ msgstr "Abortado"
 msgid "Failed to execute stage '{stage}': {exception}"
 msgstr "Falhou ao executar etapa '{stage}': {exception}"
 
-#: src/otopi/context.py:251
+#: src/otopi/context.py:252
 msgid "Unexepcted exception"
 msgstr "Exceção inesperada"
 
-#: src/otopi/context.py:289
+#: src/otopi/context.py:290
 #, fuzzy
 msgid "Unexpected exception"
 msgstr "Exceção inesperada"
 
-#: src/otopi/context.py:548
+#: src/otopi/context.py:549
 msgid "Cyclic dependencies found"
 msgstr ""
 
-#: src/otopi/context.py:612
+#: src/otopi/context.py:613
 #, python-brace-format
 msgid "Stage: {stage}"
 msgstr "Etapa: {stage}"
 
-#: src/otopi/context.py:645
+#: src/otopi/context.py:646
 msgid "Error during sequence"
 msgstr "Erro durante sequência"
 
-#: src/otopi/context.py:700
+#: src/otopi/context.py:709
 #, python-brace-format
 msgid ""
 "\"{which}\" parameter of method {name} is a string, should probably be a "
 "tuple. Perhaps a missing comma?"
 msgstr ""
 
-#: src/otopi/context.py:716
+#: src/otopi/context.py:731
+#, python-brace-format
+msgid ""
+"\"{which}\" parameter of method \"{name}\" refers to a method name \"{m}\", "
+"but no method with this name exists"
+msgstr ""
+
+#: src/otopi/context.py:748
 msgid "Found bad \"before\" or \"after\" parameters"
 msgstr ""
 
-#: src/otopi/context.py:773
+#: src/otopi/context.py:805
 #, python-brace-format
 msgid "Internal error, plugins {groups} are missing"
 msgstr "Erro interno, plugins {groups} estão faltando"
@@ -134,233 +141,242 @@ msgstr "Transação de arquivo para '{file}'"
 msgid "Failed to restore SELinux attributes for '{file}'"
 msgstr "Falhou ao restaurar atributos SELinux para '{file}'"
 
-#: src/otopi/__main__.py:93
+#: src/otopi/__main__.py:98
 msgid "Internal error"
 msgstr "Erro interno"
 
-#: src/otopi/__main__.py:102
+#: src/otopi/__main__.py:107
 #, python-brace-format
 msgid "FATAL Internal error (main): {error}"
 msgstr "Erro interno FATAL (main): {error}"
 
-#: src/otopi/minidnf.py:115
+#: src/otopi/minidnf.py:117
 msgid "FAILED"
 msgstr "FALHOU"
 
-#: src/otopi/minidnf.py:116
+#: src/otopi/minidnf.py:118
 msgid "SKIPPED"
 msgstr "IGNORADO"
 
-#: src/otopi/minidnf.py:117
+#: src/otopi/minidnf.py:119
 msgid "MIRROR"
 msgstr "MIRROR"
 
-#: src/otopi/minidnf.py:118
+#: src/otopi/minidnf.py:120
 msgid "DRPM"
 msgstr "DRPM"
 
-#: src/otopi/minidnf.py:131
+#: src/otopi/minidnf.py:133
 #, python-brace-format
 msgid "Downloading {files} files, {size:.2f}KB"
 msgstr "Baixando {files} arquivos, {size:.2f}KB"
 
-#: src/otopi/minidnf.py:139
+#: src/otopi/minidnf.py:141
 #, python-brace-format
 msgid "Downloading {payload} {done:.2f}/{total:.2f}KB"
 msgstr "Baixando {payload} {done:.2f}/{total:.2f}KB"
 
-#: src/otopi/minidnf.py:150
+#: src/otopi/minidnf.py:152
 #, python-brace-format
 msgid "Downloaded {payload}{status}{message}"
 msgstr "Baixado {payload}{status}{message}"
 
-#: src/otopi/minidnf.py:153 src/otopi/minidnf.py:224 src/otopi/minidnf.py:236
+#: src/otopi/minidnf.py:155 src/otopi/minidnf.py:228 src/otopi/minidnf.py:240
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: src/otopi/minidnf.py:163 src/otopi/minidnf.py:179
+#: src/otopi/minidnf.py:165 src/otopi/minidnf.py:182
 msgid "Cleanup"
 msgstr "Limpeza"
 
-#: src/otopi/minidnf.py:165
+#: src/otopi/minidnf.py:167
 msgid "Downgrading"
 msgstr "Baixando"
 
-#: src/otopi/minidnf.py:167
+#: src/otopi/minidnf.py:169
+msgid "Removing"
+msgstr ""
+
+#: src/otopi/minidnf.py:170
 msgid "Installing"
 msgstr "Instalando"
 
-#: src/otopi/minidnf.py:168
+#: src/otopi/minidnf.py:171
 msgid "Obsoleting"
 msgstr "Marcando como obsoleto"
 
-#: src/otopi/minidnf.py:170
+#: src/otopi/minidnf.py:173
 msgid "Reinstalling"
 msgstr "Reinstalando"
 
-#: src/otopi/minidnf.py:172
+#: src/otopi/minidnf.py:175
 msgid "Upgrading"
 msgstr "Atualizando"
 
-#: src/otopi/minidnf.py:174 src/otopi/minidnf.py:188
+#: src/otopi/minidnf.py:177 src/otopi/minidnf.py:192
 msgid "Post transaction"
 msgstr "Pós transação"
 
-#: src/otopi/minidnf.py:180
+#: src/otopi/minidnf.py:183
 msgid "Downgraded"
 msgstr "Baixado"
 
-#: src/otopi/minidnf.py:181
+#: src/otopi/minidnf.py:184
+#, fuzzy
+msgid "Removed"
+msgstr "remover"
+
+#: src/otopi/minidnf.py:185
 msgid "Installed"
 msgstr "Instalado"
 
-#: src/otopi/minidnf.py:182
+#: src/otopi/minidnf.py:186
 msgid "Obsoleted"
 msgstr "Obsoleto"
 
-#: src/otopi/minidnf.py:184
+#: src/otopi/minidnf.py:188
 msgid "Reinstalled"
 msgstr "Reinstalado"
 
-#: src/otopi/minidnf.py:186
+#: src/otopi/minidnf.py:190
 msgid "Upgraded"
 msgstr "Atualizado"
 
-#: src/otopi/minidnf.py:221 src/otopi/miniyum.py:189
+#: src/otopi/minidnf.py:225 src/otopi/miniyum.py:189
 #, python-brace-format
 msgid "{action}: {count}/{total}: {package}"
 msgstr "{action}: {count}/{total}: {package}"
 
-#: src/otopi/minidnf.py:233
+#: src/otopi/minidnf.py:237
 #, python-brace-format
 msgid "{action}"
 msgstr "{action}"
 
-#: src/otopi/minidnf.py:247
+#: src/otopi/minidnf.py:251
 #, python-brace-format
 msgid "Script out: {messages}"
 msgstr "Saída do script: {messages}"
 
-#: src/otopi/minidnf.py:261
+#: src/otopi/minidnf.py:265
 #, python-brace-format
 msgid "{action}: {package}"
 msgstr "{action}: {package}"
 
-#: src/otopi/minidnf.py:274
+#: src/otopi/minidnf.py:278
 #, python-brace-format
 msgid "Verify: {package} {count}/{total}"
 msgstr "Verificar: {package} {count}/{total}"
 
-#: src/otopi/minidnf.py:363
+#: src/otopi/minidnf.py:373
 #, python-brace-format
 msgid "Queue package {package} for {action}"
 msgstr "Enfileirar pacote {package} para {action}"
 
-#: src/otopi/minidnf.py:371 src/otopi/minidnf.py:382
+#: src/otopi/minidnf.py:381 src/otopi/minidnf.py:392
 #, python-brace-format
 msgid "Cannot queue package '{package}': {error}"
 msgstr "Não posso enfileirar pacote '{package}':{error}"
 
-#: src/otopi/minidnf.py:400
+#: src/otopi/minidnf.py:410
 #, python-brace-format
 msgid "Queue group {group} for {action}"
 msgstr "Enfileirar grupo {group} para {action}"
 
-#: src/otopi/minidnf.py:408
+#: src/otopi/minidnf.py:418
 #, python-brace-format
 msgid "Group {group} cannot be resolved"
 msgstr "Grupo {group} não pode ser resolvido"
 
-#: src/otopi/minidnf.py:415 src/otopi/minidnf.py:427
+#: src/otopi/minidnf.py:425 src/otopi/minidnf.py:437
 #, python-brace-format
 msgid "Cannot queue group '{group}': {error}"
 msgstr "Não posso enfileirar grupo '{group}':{error}"
 
-#: src/otopi/minidnf.py:443
+#: src/otopi/minidnf.py:456
 msgid "Incompatible DNF"
 msgstr "DNF incompatível"
 
-#: src/otopi/minidnf.py:505 src/otopi/miniyum.py:656
+#: src/otopi/minidnf.py:518 src/otopi/miniyum.py:656
 msgid "Cannot get selinux context"
 msgstr "Não posso obter o contexto selinux"
 
-#: src/otopi/minidnf.py:508 src/otopi/miniyum.py:659
+#: src/otopi/minidnf.py:521 src/otopi/miniyum.py:659
 msgid "Cannot create selinux context"
 msgstr "Não posso criar contexto selinux"
 
-#: src/otopi/minidnf.py:512 src/otopi/miniyum.py:663
+#: src/otopi/minidnf.py:525 src/otopi/miniyum.py:663
 msgid "Cannot set role within selinux context"
 msgstr "Não posso definir função dentro do contexto selinux"
 
-#: src/otopi/minidnf.py:516 src/otopi/miniyum.py:667
+#: src/otopi/minidnf.py:529 src/otopi/miniyum.py:667
 msgid "Cannot set selinux exec context"
 msgstr "Não posso definir contexto exec no selinux"
 
-#: src/otopi/minidnf.py:534
+#: src/otopi/minidnf.py:547
 #, python-brace-format
 msgid "Cleaning cache: {what}"
 msgstr "Limpando cache: {what}"
 
-#: src/otopi/minidnf.py:548
+#: src/otopi/minidnf.py:561
 msgid "Creating transaction"
 msgstr "Criando transação"
 
-#: src/otopi/minidnf.py:562
+#: src/otopi/minidnf.py:575
 msgid "Illegal transaction state"
 msgstr "Estado de transação ilegal"
 
-#: src/otopi/minidnf.py:565
+#: src/otopi/minidnf.py:578
 #, python-brace-format
 msgid "Closing transaction with {op}"
 msgstr "Fechando transação com {op}"
 
-#: src/otopi/minidnf.py:566
+#: src/otopi/minidnf.py:579
 msgid "rollback"
 msgstr "restaurando"
 
-#: src/otopi/minidnf.py:566
+#: src/otopi/minidnf.py:579
 msgid "commit"
 msgstr "commit"
 
-#: src/otopi/minidnf.py:579
+#: src/otopi/minidnf.py:592
 msgid "Performing DNF transaction rollback"
 msgstr "Realizando transação de restauração DNF"
 
-#: src/otopi/minidnf.py:613
+#: src/otopi/minidnf.py:626
 msgid "Building transaction"
 msgstr "Construindo transação"
 
-#: src/otopi/minidnf.py:615
+#: src/otopi/minidnf.py:628
 msgid "Transaction built"
 msgstr "Transação construída"
 
-#: src/otopi/minidnf.py:617
+#: src/otopi/minidnf.py:630
 msgid "Empty transaction"
 msgstr "Transação vazia"
 
-#: src/otopi/minidnf.py:621 src/otopi/minidnf.py:669 src/otopi/minidnf.py:696
+#: src/otopi/minidnf.py:634 src/otopi/minidnf.py:682 src/otopi/minidnf.py:709
 #: src/otopi/miniyum.py:99
 msgid "install"
 msgstr "instalar"
 
-#: src/otopi/minidnf.py:622 src/otopi/minidnf.py:680
+#: src/otopi/minidnf.py:635 src/otopi/minidnf.py:693
 msgid "remove"
 msgstr "remover"
 
-#: src/otopi/minidnf.py:626
+#: src/otopi/minidnf.py:639
 #, python-brace-format
 msgid "    {op:10}: {package}"
 msgstr "    {op:10}: {package}"
 
-#: src/otopi/minidnf.py:688 src/otopi/minidnf.py:728 src/otopi/miniyum.py:98
+#: src/otopi/minidnf.py:701 src/otopi/minidnf.py:741 src/otopi/miniyum.py:98
 msgid "update"
 msgstr "atualizar"
 
-#: src/otopi/minidnf.py:712
+#: src/otopi/minidnf.py:725
 msgid "install/update"
 msgstr "instalar/atualizar"
 
-#: src/otopi/minidnf.py:720 src/otopi/miniyum.py:101
+#: src/otopi/minidnf.py:733 src/otopi/miniyum.py:101
 msgid "erase"
 msgstr "apagar"
 
@@ -465,27 +481,27 @@ msgstr "Um ou mais elementos dentro da transação Yum falhou"
 msgid "    {operation} - {package}"
 msgstr "    {operation} - {package}"
 
-#: src/otopi/packager.py:63
+#: src/otopi/packager.py:87
 msgid "Packager installGroup not implemented"
 msgstr "Packager installGroup não implementado"
 
-#: src/otopi/packager.py:76
+#: src/otopi/packager.py:100
 msgid "Packager updateGroup not implemented"
 msgstr "Packager updateGroup não implementado"
 
-#: src/otopi/packager.py:89
+#: src/otopi/packager.py:113
 msgid "Packager removeGroup not implemented"
 msgstr "Packager removeGroup não implementado"
 
-#: src/otopi/packager.py:102
+#: src/otopi/packager.py:126
 msgid "Packager install not implemented"
 msgstr "Packager instalar não implementado"
 
-#: src/otopi/packager.py:115
+#: src/otopi/packager.py:139
 msgid "Packager update not implemented"
 msgstr "Packager atualizar não implementado"
 
-#: src/otopi/packager.py:154
+#: src/otopi/packager.py:178
 msgid "Packager remove not implemented"
 msgstr "Packager remover não implementado"
 
@@ -919,7 +935,7 @@ msgstr "não posso resolver o próprio nome '{name}'"
 msgid "Unsupported distribution for iptables plugin"
 msgstr "Distribuição sem suporte para plug-in iptables"
 
-#: src/plugins/otopi/network/ssh.py:121
+#: src/plugins/otopi/network/ssh.py:122
 msgid "SSH public key is invalid"
 msgstr "Chave pública SSH é inválida"
 
@@ -939,21 +955,21 @@ msgstr "Transação Yum"
 
 #: src/plugins/otopi/services/openrc.py:108
 #: src/plugins/otopi/services/rhel.py:196
-#: src/plugins/otopi/services/systemd.py:120
-#: src/plugins/otopi/services/systemd.py:139
+#: src/plugins/otopi/services/systemd.py:132
+#: src/plugins/otopi/services/systemd.py:179
 #, python-brace-format
 msgid "Failed to {do} service '{service}'"
 msgstr "Falhou ao {do} serviço '{service}'"
 
 #: src/plugins/otopi/services/openrc.py:109
 #: src/plugins/otopi/services/rhel.py:197
-#: src/plugins/otopi/services/systemd.py:140
+#: src/plugins/otopi/services/systemd.py:180
 msgid "start"
 msgstr "iniciar"
 
 #: src/plugins/otopi/services/openrc.py:109
 #: src/plugins/otopi/services/rhel.py:197
-#: src/plugins/otopi/services/systemd.py:140
+#: src/plugins/otopi/services/systemd.py:180
 msgid "stop"
 msgstr "parar"
 
@@ -971,15 +987,22 @@ msgstr "ligado"
 msgid "off"
 msgstr "desligado"
 
-#: src/plugins/otopi/services/systemd.py:121
+#: src/plugins/otopi/services/systemd.py:133
+#: src/plugins/otopi/services/systemd.py:161
 msgid "enable"
 msgstr "habilitado"
 
-#: src/plugins/otopi/services/systemd.py:121
+#: src/plugins/otopi/services/systemd.py:133
+#: src/plugins/otopi/services/systemd.py:161
 msgid "disable"
 msgstr "desabilitado"
 
-#: src/plugins/otopi/services/systemd.py:157
+#: src/plugins/otopi/services/systemd.py:160
+#, fuzzy, python-brace-format
+msgid "Failed to {do} socket '{service}'"
+msgstr "Falhou ao {do} serviço '{service}'"
+
+#: src/plugins/otopi/services/systemd.py:197
 #, fuzzy, python-brace-format
 msgid "Failed to restart service '{service}'"
 msgstr "Falhou ao {do} serviço '{service}'"

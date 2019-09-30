@@ -116,6 +116,7 @@ class Installer(object):
                 constants.Const.EXIT_CODE_GENERAL_ERROR,
             )
 
+
 if __name__ == '__main__':
     installer = Installer()
     sys.exit(installer.main())

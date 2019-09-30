@@ -12,5 +12,6 @@ make
 makeself
 python3-coverage
 python3-libselinux
+python3-pycodestyle
 python3-pyflakes
 rpm-build
