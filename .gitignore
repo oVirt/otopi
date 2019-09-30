@@ -31,3 +31,5 @@ intl
 src/otopi/config.py
 src/otopi/config.py.in
 target
+automation/config.sh
+m4/extern-inline.m4
