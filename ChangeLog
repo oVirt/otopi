@@ -1,6 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.8.4
+2019-10-17 - Version 1.8.4
+ * core: Use python 2 on EL7
 
 2019-06-25 - Version 1.8.3
  * core: Disable minidnf by default on el7
