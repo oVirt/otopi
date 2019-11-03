@@ -251,7 +251,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
                         _qep(dialogcons.DialogMachineConst.QUERY_VALID_VALUES),
                         '|'.join(
                             [
-                                x.replace('\\', '\\\\').replace('|', '\|')
+                                x.replace('\\', '\\\\').replace('|', r'\|')
                                 for x in validValues
                             ]
                         ),

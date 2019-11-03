@@ -74,7 +74,7 @@ class Plugin(plugin.PluginBase):
     def _pre_end(self):
         try:
             self._internalPackageTransaction.commit()
-        except:
+        except Exception:
             self._internalPackageTransaction.abort()
             raise
         finally:
@@ -92,7 +92,7 @@ class Plugin(plugin.PluginBase):
     def _main_end(self):
         try:
             self._mainTransaction.commit()
-        except:
+        except Exception:
             self._mainTransaction.abort()
             raise
         finally:

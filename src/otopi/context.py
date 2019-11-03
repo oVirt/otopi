@@ -243,7 +243,7 @@ class Context(base.Base):
         for n in self._notifications:
             try:
                 n(event=event)
-            except:
+            except Exception:
                 self.environment[constants.BaseEnv.ERROR] = True
                 self.logger.debug(
                     'Unexpected exception from notification',
@@ -284,7 +284,7 @@ class Context(base.Base):
         for c in callbacks:
             try:
                 c(stage=stage, method=method)
-            except:
+            except Exception:
                 self.environment[constants.BaseEnv.ERROR] = True
                 self.logger.debug(debugmsg, exc_info=True)
                 self.logger.error(_('Unexpected exception'))
@@ -500,15 +500,17 @@ class Context(base.Base):
             deps[index] = set(method_deps)
         sortedmethods = []
         try:
-            for s in self._toposort(deps):
+            for toposort_group_set in self._toposort(deps):
                 # toposort yields sets
-                l = list(s)
+                toposort_group = list(toposort_group_set)
                 if self.environment[constants.BaseEnv.RANDOMIZE_EVENTS]:
-                    random.shuffle(l)
+                    random.shuffle(toposort_group)
                 else:
-                    l.sort(key=lambda i: self.methodName(methods[i]))
+                    toposort_group.sort(
+                        key=lambda i: self.methodName(methods[i])
+                    )
                 self._earlyDebug('toposort group:')
-                for i in l:
+                for i in toposort_group:
                     self._earlyDebug(
                         '  %s %s %s' % (
                             i,
@@ -516,7 +518,7 @@ class Context(base.Base):
                             methods[i]['name']
                         )
                     )
-                sortedmethods.extend([methods[i] for i in l])
+                sortedmethods.extend([methods[i] for i in toposort_group])
         except Context.ToposortCycleException as e:
             leftovers = e.leftovers
             print(

@@ -862,7 +862,7 @@ class PluginBase(base.Base):
                 args,
                 rc,
             )
-        except:
+        except Exception:
             self.logger.debug(
                 'execute-result: %s, exception',
                 args,

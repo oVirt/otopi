@@ -59,7 +59,7 @@ class Plugin(plugin.PluginBase):
 
     def _get_inode_pids(self):
         res = {}
-        target_re = re.compile('socket:\[(\d*)\]')
+        target_re = re.compile(r'socket:\[(\d*)\]')
         try:
             for pidpath in glob.glob('/proc/[0-9]*'):
                 pid = os.path.basename(pidpath)

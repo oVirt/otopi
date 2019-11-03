@@ -298,16 +298,16 @@ class Plugin(plugin.PluginBase):
                 environment=self.environment,
             )
         )
-        l = logging.getLogger("otopi")
-        l.addHandler(self._handler)
+        logger = logging.getLogger("otopi")
+        logger.addHandler(self._handler)
         self._filtered_keys_at_setup = self.environment[
             constants.CoreEnv.LOG_FILTER_KEYS
         ][:]
 
     def _closeLogging(self):
         if self._handler is not None:
-            l = logging.getLogger("otopi")
-            l.removeHandler(self._handler)
+            logger = logging.getLogger("otopi")
+            logger.removeHandler(self._handler)
             self._handler.close()
             self._handler = None
 

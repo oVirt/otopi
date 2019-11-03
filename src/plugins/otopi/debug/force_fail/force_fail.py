@@ -43,6 +43,7 @@ def _init_plugin():
         if _prio is None:
             _prio = plugin.Stages.PRIORITY_DEFAULT
 
+
 # Need to be called before the Plugin class definition, because
 # the globals need to have their values for the annotation to work.
 # That's also why we can't allow setting this in the answer file -

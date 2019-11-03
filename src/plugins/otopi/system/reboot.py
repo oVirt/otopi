@@ -63,7 +63,7 @@ class Plugin(plugin.PluginBase):
 
                 try:
                     main(*args, **kwargs)
-                except:
+                except Exception:
                     import traceback
                     traceback.print_exc()
             finally:

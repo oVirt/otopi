@@ -118,7 +118,7 @@ class Transaction(base.Base):
             try:
                 self.logger.debug("aborting '%s'", element)
                 element.abort()
-            except:
+            except Exception:
                 self.logger.debug(
                     "Unexpected exception from abort() of '%s'",
                     element,

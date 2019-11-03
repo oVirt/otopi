@@ -101,7 +101,7 @@ class MiniDNF():
         def emit(self, record):
             if record.getMessage():
                 if record.levelno > logging.WARNING:
-                        self._sink.error(record.getMessage())
+                    self._sink.error(record.getMessage())
                 elif record.levelno > logging.DEBUG:
                     self._sink.info(record.getMessage())
                 else:
@@ -932,6 +932,7 @@ class Example():
                 raise IgnoreMe()
         except IgnoreMe:
             pass
+
 
 if __name__ == '__main__':
     Example.main()

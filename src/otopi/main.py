@@ -121,7 +121,7 @@ class Otopi(object):
         ):
             try:
                 signal.signal(i, self._signal)
-            except:
+            except Exception:
                 pass
 
         self._bundledir = os.environ.get(

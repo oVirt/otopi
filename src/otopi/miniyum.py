@@ -777,7 +777,7 @@ class MiniYum(object):
                                         )
                                     )
 
-            except:
+            except Exception:
                 self._sink.error(
                     _('Transaction close failed: {error}').format(
                         error=traceback.format_exc()
@@ -1147,8 +1147,10 @@ class Example(object):
         except IgnoreMe:
             pass
 
+
 if __name__ == '__main__':
     Example.main()
+
 
 __all__ = ['MiniYum', 'MiniYumSinkBase']
 

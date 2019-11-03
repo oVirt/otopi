@@ -146,7 +146,7 @@ class Plugin(plugin.PluginBase):
                             '--systohc'
                         ),
                     )
-                except:
+                except Exception:
                     self.logger.warning(
                         _('Cannot set clock'),
                         exc_info=True
