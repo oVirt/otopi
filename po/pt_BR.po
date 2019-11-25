@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-30 10:56+0200\n"
+"POT-Creation-Date: 2019-11-25 12:26+0200\n"
 "PO-Revision-Date: 2016-03-02 13:57-0300\n"
 "Last-Translator:Wesley Morais de Oliveira \n"
 "Language-Team: \n"
@@ -70,38 +70,38 @@ msgstr "Exceção inesperada"
 msgid "Unexpected exception"
 msgstr "Exceção inesperada"
 
-#: src/otopi/context.py:549
+#: src/otopi/context.py:551
 msgid "Cyclic dependencies found"
 msgstr ""
 
-#: src/otopi/context.py:613
+#: src/otopi/context.py:615
 #, python-brace-format
 msgid "Stage: {stage}"
 msgstr "Etapa: {stage}"
 
-#: src/otopi/context.py:646
+#: src/otopi/context.py:648
 msgid "Error during sequence"
 msgstr "Erro durante sequência"
 
-#: src/otopi/context.py:709
+#: src/otopi/context.py:711
 #, python-brace-format
 msgid ""
 "\"{which}\" parameter of method {name} is a string, should probably be a "
 "tuple. Perhaps a missing comma?"
 msgstr ""
 
-#: src/otopi/context.py:731
+#: src/otopi/context.py:733
 #, python-brace-format
 msgid ""
 "\"{which}\" parameter of method \"{name}\" refers to a method name \"{m}\", "
 "but no method with this name exists"
 msgstr ""
 
-#: src/otopi/context.py:748
+#: src/otopi/context.py:750
 msgid "Found bad \"before\" or \"after\" parameters"
 msgstr ""
 
-#: src/otopi/context.py:805
+#: src/otopi/context.py:807
 #, python-brace-format
 msgid "Internal error, plugins {groups} are missing"
 msgstr "Erro interno, plugins {groups} estão faltando"

@@ -322,6 +322,9 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %endif
 
 %changelog
+* Mon Nov 25 2019 - Yedidyah Bar David <didi@redhat.com> - 1.9.0-1
+- Release.
+
 * Sun Mar 10 2019 - Yedidyah Bar David <didi@redhat.com> - 1.8.1-1
 - Release.
 
