@@ -38,9 +38,9 @@ get_otopi_python() {
 	fi
 
 	# Use "python" on EL7
-	local anypython=$(find_util python)
+	local anypython=$(find_util python3)
 	[ -z "${anypython}" ] && anypython=$(find_util python2)
-	[ -z "${anypython}" ] && anypython=$(find_util python3)
+	[ -z "${anypython}" ] && anypython=$(find_util python)
 	[ -z "${anypython}" ] && die "get_otopi_python: Cannot find any python"
 	local distribution_name="$(${anypython} -c "import platform; print(platform.linux_distribution(full_distribution_name=0)[0])")"
 	local distribution_version="$(${anypython} -c "import platform; print(platform.linux_distribution(full_distribution_name=0)[1].split('.')[0])")"
