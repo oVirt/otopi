@@ -1,5 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.9.2
+
 2020-03-26 - Version 1.9.1
  * core: Try python3 first when checking distribution
 
