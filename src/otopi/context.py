@@ -666,9 +666,9 @@ class Context(base.Base):
     def dumpSequence(self):
         """Dump sequence."""
         self.logger.debug('SEQUENCE DUMP - BEGIN')
-        for stage, methodinfos in self._sequence.items():
+        for stage in sorted(self._sequence.keys()):
             self.logger.debug('STAGE %s', plugin.Stages.stage_id(stage))
-            for methodinfo in methodinfos:
+            for methodinfo in self._sequence[stage]:
                 self.logger.debug(
                     '    METHOD %s (%s)',
                     self.methodName(methodinfo),
