@@ -68,7 +68,7 @@ class Plugin(plugin.PluginBase):
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
-        self._config = configparser.ConfigParser()
+        self._config = configparser.RawConfigParser()
         self._config.optionxform = str
         self._missingconf = []
 
