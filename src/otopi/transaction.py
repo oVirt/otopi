@@ -88,7 +88,12 @@ class Transaction(base.Base):
         self.abort()
 
     def __str__(self):
-        return 'transaction'
+        return '[{elements}]'.format(
+            elements=', '.join([
+                str(element)
+                for element in self._elements
+            ])
+        )
 
     def append(self, element):
         """Append transaction element.
