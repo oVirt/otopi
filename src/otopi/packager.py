@@ -40,7 +40,7 @@ def ok_to_use_dnf():
                 'centos',
                 'ibm_powerkvm',
             ) and
-            version >= '8.0'
+            version >= '8'
         )
     )
 

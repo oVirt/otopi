@@ -339,7 +339,9 @@ class MiniDNF():
         # and either install an older version or do nothing.
         base.conf.best = True
 
-        base.init_plugins(disabled_glob=self._disabledPlugins, cli=Cli(base))
+        cli = Cli(base)
+        cli._read_conf_file()
+        base.init_plugins(disabled_glob=self._disabledPlugins, cli=cli)
 
         base.read_all_repos()
         base.repos.all().set_progress_bar(self._MyDownloadProgress(self._sink))
