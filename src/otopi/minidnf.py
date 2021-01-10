@@ -19,8 +19,6 @@ import dnf.logging
 import dnf.subject
 import dnf.yum.rpmtrans
 
-from dnf.cli.cli import Cli
-
 from . import packager
 
 
@@ -339,11 +337,15 @@ class MiniDNF():
         # and either install an older version or do nothing.
         base.conf.best = True
 
-        cli = Cli(base)
-        cli._read_conf_file()
-        base.init_plugins(disabled_glob=self._disabledPlugins, cli=cli)
-
+        base.conf.read(priority=dnf.conf.PRIO_MAINCONFIG)
+        base.conf.substitutions.update_from_etc(
+            base.conf.installroot,
+            varsdir=base.conf.varsdir,
+        )
+        base.init_plugins(disabled_glob=self._disabledPlugins)
+        base.pre_configure_plugins()
         base.read_all_repos()
+        base.configure_plugins()
         base.repos.all().set_progress_bar(self._MyDownloadProgress(self._sink))
 
         # dnf does not keep packages for offline usage
