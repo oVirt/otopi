@@ -214,5 +214,8 @@ class PackagerBase(object):
         """
         return []
 
+    def getConf(self):
+        return None
+
 
 # vim: expandtab tabstop=4 shiftwidth=4

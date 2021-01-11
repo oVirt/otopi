@@ -209,6 +209,7 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
                 parent=self,
             )
         )
+        self.logger.debug(self._minidnf.getConf())
         self.environment[
             constants.CoreEnv.INTERNAL_PACKAGES_TRANSACTION
         ].append(

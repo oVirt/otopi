@@ -840,6 +840,29 @@ class MiniDNF():
             if _base is not None:
                 self._destroyBase(_base)
 
+    def getConf(self):
+        we_created_base = False
+        if self._base is None:
+            base = self._createBase()
+            we_created_base = True
+        else:
+            base = self._base
+
+        try:
+            return 'DNF Conf dump:\n{conf}\n{repos}'.format(
+                conf=base.conf.dump(),
+                repos=''.join(
+                    f'DNF Repo dump: {repo.repofile}\n{repo.dump()}\n'
+                    for repo in base.repos.values()
+                )
+            )
+        except Exception as e:
+            self._sink.error(e)
+            raise
+        finally:
+            if we_created_base and base is not None:
+                self._destroyBase(base)
+
 
 class Example():
 
