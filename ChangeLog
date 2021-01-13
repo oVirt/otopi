@@ -1,6 +1,12 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.9.3
+2021-01-13 - Version 1.9.3
+ * packager: Log conf dump
+ * minidnf: Do not use private method _read_conf_file
+ * automation: check-patch: Check packager on CentOS Stream
+ * core: Support dnf packager in CentOS Stream
+ * automation: Remove fc30
+ * Log transaction elements when it changes
 
 2020-06-07 - Version 1.9.2
  * automation: Do not build on el7
