@@ -53,9 +53,13 @@ done
 popd
 
 # Test
-cov_otopi otopi packager ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage2
-cov_otopi otopi packager ODEBUG/packagesAction=str:remove ODEBUG/packages=str:testpackage1
-cov_otopi otopi packager ODEBUG/packagesAction=str:queryGroups
+cov_otopi otopi packager-install-testpackage2 ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage2
+cov_otopi otopi packager-remove-testpackage1 ODEBUG/packagesAction=str:remove ODEBUG/packages=str:testpackage1
+cov_otopi otopi packager-queryGroups ODEBUG/packagesAction=str:queryGroups
+
+# Group install/remove. TODO: Create our own group in automation/testRPMs and use that, instead of 'ftp-server'.
+cov_otopi otopi packager-install-group-ftp-server ODEBUG/packagesAction=str:installGroup ODEBUG/packages=str:ftp-server
+cov_otopi otopi packager-remove-group-ftp-server ODEBUG/packagesAction=str:removeGroup ODEBUG/packages=str:ftp-server
 
 # Test command
 PATH="${PWD}/automation/testbin:$PATH" OTOPI_TEST_COMMAND=1 cov_otopi otopi command
@@ -135,9 +139,9 @@ ${PACKAGER} distro-sync -y
 ${installer} install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
 ${PACKAGER} repolist enabled
 ${PACKAGER} clean all
-cov_otopi otopi packager-stream ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage2
-cov_otopi otopi packager-stream ODEBUG/packagesAction=str:remove ODEBUG/packages=str:testpackage1
-cov_otopi otopi packager-stream ODEBUG/packagesAction=str:queryGroups
+cov_otopi otopi packager-stream-install-testpackage2 ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage2
+cov_otopi otopi packager-stream-remove-testpackage1 ODEBUG/packagesAction=str:remove ODEBUG/packages=str:testpackage1
+cov_otopi otopi packager-stream-queryGroups ODEBUG/packagesAction=str:queryGroups
 
 
 
