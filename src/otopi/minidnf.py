@@ -698,7 +698,7 @@ class MiniDNF():
             _('install'),
             lambda group: self._base.group_install(
                 group,
-                pkg_types=('default',),
+                pkg_types=('mandatory', 'default'),
             ),
             group,
             **kwargs
