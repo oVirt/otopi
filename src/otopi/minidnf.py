@@ -416,14 +416,14 @@ class MiniDNF():
                     action=action,
                 )
             )
-            g = self._base.comps._group_by_id(group)
-            if g is None:
+            groups = [g for g in self._base.comps.groups if g.id == group]
+            if not groups:
                 raise dnf.exceptions.Error(
                     _('Group {group} cannot be resolved').format(
                         group=group,
                     )
                 )
-            call(g.id)
+            call(groups[0].id)
             return True
         except dnf.exceptions.Error as e:
             msg = _("Cannot queue group '{group}': {error}").format(
