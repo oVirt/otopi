@@ -19,6 +19,8 @@ import dnf.logging
 import dnf.subject
 import dnf.yum.rpmtrans
 
+from dnf.cli.cli import Cli
+
 from . import packager
 
 
@@ -342,7 +344,14 @@ class MiniDNF():
             base.conf.installroot,
             varsdir=base.conf.varsdir,
         )
-        base.init_plugins(disabled_glob=self._disabledPlugins)
+
+        # dnf seems to behave differently depending on whether cli is passed
+        # or not (defaults to None). With None, filtering out disabled plugins
+        # does not work well. Not sure whether that's by design or a bug.
+        # See also: https://bugzilla.redhat.com/show_bug.cgi?id=1919803
+        cli = Cli(base)
+        base.init_plugins(disabled_glob=self._disabledPlugins, cli=cli)
+
         base.pre_configure_plugins()
         base.read_all_repos()
         base.configure_plugins()
