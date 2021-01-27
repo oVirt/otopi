@@ -1,6 +1,12 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.9.4
+2021-01-27 - Version 1.9.4
+ * automation: Do not fail if failed on Stream
+ * minidnf: Pass cli to init_plugins
+ * automation: Improve packager testing
+ * minidnf: Remove use of private dnf method _group_by_id
+ * minidnf: Install/Update/Remove also mandatory packages
+ * minidnf: Check package signatures
 
 2021-01-13 - Version 1.9.3
  * packager: Log conf dump
