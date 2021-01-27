@@ -108,42 +108,43 @@ if [ -x ${bundle_exec} ]; then
     makeself --follow "${bundle_dir}" "${selfinst}" "Test ${name}" ./otopi packager ODEBUG/packagesAction=str:install ODEBUG/packages=str:zziplib,zsh
 fi
 
+try_on_centos_stream() {
+	echo "Testing CentOS Stream"
+	# Copied from ovirt-release, keep variable PACKAGER although it's also hardcoded there now
+	PACKAGER=dnf
+	export PACKAGER
 
-# Test packager on CentOS Stream
-echo "Testing CentOS Stream"
-# Copied from ovirt-release, keep variable PACKAGER although it's also hardcoded there now
-PACKAGER=dnf
-export PACKAGER
+	# Restoring sane yum environment
+	rm -f /etc/yum.conf
+	${PACKAGER} reinstall -y system-release ${PACKAGER}
+	[[ -d /etc/dnf ]] && [[ -x /usr/bin/dnf ]] && dnf -y reinstall dnf-conf
+	[[ -d /etc/dnf ]] && sed -i -re 's#^(reposdir *= *).*$#\1/etc/yum.repos.d#' '/etc/dnf/dnf.conf'
+	[[ -e /etc/dnf/dnf.conf ]] && echo "deltarpm=False" >> /etc/dnf/dnf.conf
+	${PACKAGER} install -y https://resources.ovirt.org/pub/yum-repo/ovirt-release-master.rpm
+	rm -f /etc/yum/yum.conf
 
-# Restoring sane yum environment
-rm -f /etc/yum.conf
-${PACKAGER} reinstall -y system-release ${PACKAGER}
-[[ -d /etc/dnf ]] && [[ -x /usr/bin/dnf ]] && dnf -y reinstall dnf-conf
-[[ -d /etc/dnf ]] && sed -i -re 's#^(reposdir *= *).*$#\1/etc/yum.repos.d#' '/etc/dnf/dnf.conf'
-[[ -e /etc/dnf/dnf.conf ]] && echo "deltarpm=False" >> /etc/dnf/dnf.conf
-${PACKAGER} install -y https://resources.ovirt.org/pub/yum-repo/ovirt-release-master.rpm
-rm -f /etc/yum/yum.conf
+	${PACKAGER} install -y centos-release-stream
+	${PACKAGER} repolist enabled
+	${PACKAGER} --releasever=8-stream --disablerepo=* --enablerepo=Stream-BaseOS download centos-stream-repos
+	${PACKAGER} install -y centos-stream-release
+	rpm -e --nodeps centos-linux-repos
+	rpm -i centos-stream-repo*
+	rm -fv centos-stream-repo*
+	ls -l /etc/yum.repos.d/
+	${PACKAGER} distro-sync -y
+	# Install again, because distro-sync above downgraded for some reason, didn't check
+	# TODO remove this "Stream support" if/when we move fully to Stream.
+	${installer} install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
+	${PACKAGER} repolist enabled
+	${PACKAGER} clean all
+	cov_otopi otopi packager-stream-install-testpackage2 ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage2
+	cov_otopi otopi packager-stream-remove-testpackage1 ODEBUG/packagesAction=str:remove ODEBUG/packages=str:testpackage1
+	cov_otopi otopi packager-stream-queryGroups ODEBUG/packagesAction=str:queryGroups
+}
 
-# Switching to CentOS Stream
-${PACKAGER} install -y centos-release-stream
-${PACKAGER} repolist enabled
-${PACKAGER} --releasever=8-stream --disablerepo=* --enablerepo=Stream-BaseOS download centos-stream-repos
-${PACKAGER} install -y centos-stream-release
-rpm -e --nodeps centos-linux-repos
-rpm -i centos-stream-repo*
-rm -fv centos-stream-repo*
-ls -l /etc/yum.repos.d/
-${PACKAGER} distro-sync -y
-# Install again, because distro-sync above downgraded for some reason, didn't check
-# TODO remove this "Stream support" if/when we move fully to Stream.
-${installer} install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
-${PACKAGER} repolist enabled
-${PACKAGER} clean all
-cov_otopi otopi packager-stream-install-testpackage2 ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage2
-cov_otopi otopi packager-stream-remove-testpackage1 ODEBUG/packagesAction=str:remove ODEBUG/packages=str:testpackage1
-cov_otopi otopi packager-stream-queryGroups ODEBUG/packagesAction=str:queryGroups
-
-
+if ! try_on_centos_stream; then
+	echo "WARNING: Failed to try on Centos Stream, not failing the build"
+fi
 
 ${installer} remove "*otopi*" zsh
 ${selfinst}
