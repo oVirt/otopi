@@ -10,5 +10,4 @@ SUBDIRS = \
 	bin \
 	otopi \
 	plugins \
-	java \
 	$(NULL)

@@ -8,7 +8,7 @@ else
 fi
 
 autoreconf -ivf
-./configure --enable-java-sdk COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
+./configure
 make distcheck
 
 automation/build-artifacts.sh

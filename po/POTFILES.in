@@ -1,7 +1,5 @@
 ./src/bin/otopi-config-query.py
 ./src/otopi/base.py
-./src/otopi/codegen/__init__.py
-./src/otopi/codegen/__main__.py
 ./src/otopi/command.py
 ./src/otopi/common.py
 ./src/otopi/constants.py

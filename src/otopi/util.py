@@ -41,7 +41,11 @@ def export(o):
 
 @export
 def codegen(o):
-    """Decoration to code generate class symbols.
+    """A no-op decoration left for backwards-compatibility.
+
+    Original doc string follows:
+
+    Decoration to code generate class symbols.
 
     Usage:
         import util
@@ -50,9 +54,6 @@ def codegen(o):
             CONSTANT = 'value'
 
     """
-    sys.modules[o.__module__].__dict__.setdefault(
-        '__codegen__', []
-    ).append(o)
     return o
 
 

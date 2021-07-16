@@ -50,7 +50,6 @@ class Log(object):
 
 
 @util.export
-@util.codegen
 class Types(object):
     NONE = 'none'
     BOOLEAN = 'bool'
@@ -61,7 +60,6 @@ class Types(object):
 
 
 @util.export
-@util.codegen
 class Const(object):
     ENVIRONMENT_APPEND_PREFIX = 'APPEND:'
     ENVIRONMENT_PREPEND_PREFIX = 'PREPEND:'
@@ -77,7 +75,6 @@ class Const(object):
 
 
 @util.export
-@util.codegen
 class SystemEnvironment(object):
     DEBUG = 'OTOPI_DEBUG'
     LOG_FILE = 'OTOPI_LOGFILE'
@@ -95,7 +92,6 @@ class SystemEnvironment(object):
 
 
 @util.export
-@util.codegen
 class BaseEnv(object):
     ERROR = 'BASE/error'
     ABORTED = 'BASE/aborted'
@@ -114,7 +110,6 @@ class BaseEnv(object):
 
 
 @util.export
-@util.codegen
 class CoreEnv(object):
     PACKAGE_NAME = 'INFO/PACKAGE_NAME'
     PACKAGE_VERSION = 'INFO/PACKAGE_VERSION'
@@ -136,7 +131,6 @@ class CoreEnv(object):
 
 
 @util.export
-@util.codegen
 class DialogEnv(object):
     DIALECT = 'DIALOG/dialect'
     CUSTOMIZATION = 'DIALOG/customization'
@@ -148,7 +142,6 @@ class DialogEnv(object):
 
 
 @util.export
-@util.codegen
 class SysEnv(object):
     CLOCK_MAX_GAP = 'SYSTEM/clockMaxGap'
     CLOCK_SET = 'SYSTEM/clockSet'
@@ -159,7 +152,6 @@ class SysEnv(object):
 
 
 @util.export
-@util.codegen
 class NetEnv(object):
     SSH_ENABLE = 'NETWORK/sshEnable'
     SSH_KEY = 'NETWORK/sshKey'
@@ -173,7 +165,6 @@ class NetEnv(object):
 
 
 @util.export
-@util.codegen
 class PackEnv(object):
     KEEP_ALIVE_INTERVAL = 'PACKAGER/keepAliveInterval'
     YUMPACKAGER_ENABLED = 'PACKAGER/yumpackagerEnabled'
@@ -188,7 +179,6 @@ class PackEnv(object):
 
 
 @util.export
-@util.codegen
 class Queries(object):
     CUSTOMIZATION_COMMAND = 'CUSTOMIZATION_COMMAND'
     TERMINATION_COMMAND = 'TERMINATION_COMMAND'
@@ -196,13 +186,11 @@ class Queries(object):
 
 
 @util.export
-@util.codegen
 class Confirms(object):
     GPG_KEY = 'GPG_KEY'
 
 
 @util.export
-@util.codegen
 class DebugEnv(object):
     WAIT_ON_ERROR = 'ODEBUG/WaitOnError'
     PACKAGES_ACTION = 'ODEBUG/packagesAction'

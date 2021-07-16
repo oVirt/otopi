@@ -1,4 +1,3 @@
-apache-commons-logging
 autoconf
 automake
 createrepo_c
@@ -7,9 +6,6 @@ dnf-plugin-versionlock
 dnf-utils
 gettext-devel
 git
-java-devel
-javapackages-tools
-junit
 make
 makeself
 python3-coverage

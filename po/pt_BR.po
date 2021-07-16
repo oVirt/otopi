@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-25 12:26+0200\n"
+"POT-Creation-Date: 2021-07-16 13:28+0200\n"
 "PO-Revision-Date: 2016-03-02 13:57-0300\n"
 "Last-Translator:Wesley Morais de Oliveira \n"
 "Language-Team: \n"
@@ -267,116 +267,116 @@ msgstr "{action}: {package}"
 msgid "Verify: {package} {count}/{total}"
 msgstr "Verificar: {package} {count}/{total}"
 
-#: src/otopi/minidnf.py:373
+#: src/otopi/minidnf.py:386
 #, python-brace-format
 msgid "Queue package {package} for {action}"
 msgstr "Enfileirar pacote {package} para {action}"
 
-#: src/otopi/minidnf.py:381 src/otopi/minidnf.py:392
+#: src/otopi/minidnf.py:394 src/otopi/minidnf.py:405
 #, python-brace-format
 msgid "Cannot queue package '{package}': {error}"
 msgstr "Não posso enfileirar pacote '{package}':{error}"
 
-#: src/otopi/minidnf.py:410
+#: src/otopi/minidnf.py:423
 #, python-brace-format
 msgid "Queue group {group} for {action}"
 msgstr "Enfileirar grupo {group} para {action}"
 
-#: src/otopi/minidnf.py:418
+#: src/otopi/minidnf.py:431
 #, python-brace-format
 msgid "Group {group} cannot be resolved"
 msgstr "Grupo {group} não pode ser resolvido"
 
-#: src/otopi/minidnf.py:425 src/otopi/minidnf.py:437
+#: src/otopi/minidnf.py:438 src/otopi/minidnf.py:450
 #, python-brace-format
 msgid "Cannot queue group '{group}': {error}"
 msgstr "Não posso enfileirar grupo '{group}':{error}"
 
-#: src/otopi/minidnf.py:456
+#: src/otopi/minidnf.py:469
 msgid "Incompatible DNF"
 msgstr "DNF incompatível"
 
-#: src/otopi/minidnf.py:518 src/otopi/miniyum.py:656
+#: src/otopi/minidnf.py:531 src/otopi/miniyum.py:656
 msgid "Cannot get selinux context"
 msgstr "Não posso obter o contexto selinux"
 
-#: src/otopi/minidnf.py:521 src/otopi/miniyum.py:659
+#: src/otopi/minidnf.py:534 src/otopi/miniyum.py:659
 msgid "Cannot create selinux context"
 msgstr "Não posso criar contexto selinux"
 
-#: src/otopi/minidnf.py:525 src/otopi/miniyum.py:663
+#: src/otopi/minidnf.py:538 src/otopi/miniyum.py:663
 msgid "Cannot set role within selinux context"
 msgstr "Não posso definir função dentro do contexto selinux"
 
-#: src/otopi/minidnf.py:529 src/otopi/miniyum.py:667
+#: src/otopi/minidnf.py:542 src/otopi/miniyum.py:667
 msgid "Cannot set selinux exec context"
 msgstr "Não posso definir contexto exec no selinux"
 
-#: src/otopi/minidnf.py:547
+#: src/otopi/minidnf.py:560
 #, python-brace-format
 msgid "Cleaning cache: {what}"
 msgstr "Limpando cache: {what}"
 
-#: src/otopi/minidnf.py:561
+#: src/otopi/minidnf.py:574
 msgid "Creating transaction"
 msgstr "Criando transação"
 
-#: src/otopi/minidnf.py:575
+#: src/otopi/minidnf.py:588
 msgid "Illegal transaction state"
 msgstr "Estado de transação ilegal"
 
-#: src/otopi/minidnf.py:578
+#: src/otopi/minidnf.py:591
 #, python-brace-format
 msgid "Closing transaction with {op}"
 msgstr "Fechando transação com {op}"
 
-#: src/otopi/minidnf.py:579
+#: src/otopi/minidnf.py:592
 msgid "rollback"
 msgstr "restaurando"
 
-#: src/otopi/minidnf.py:579
+#: src/otopi/minidnf.py:592
 msgid "commit"
 msgstr "commit"
 
-#: src/otopi/minidnf.py:592
+#: src/otopi/minidnf.py:605
 msgid "Performing DNF transaction rollback"
 msgstr "Realizando transação de restauração DNF"
 
-#: src/otopi/minidnf.py:626
+#: src/otopi/minidnf.py:639
 msgid "Building transaction"
 msgstr "Construindo transação"
 
-#: src/otopi/minidnf.py:628
+#: src/otopi/minidnf.py:641
 msgid "Transaction built"
 msgstr "Transação construída"
 
-#: src/otopi/minidnf.py:630
+#: src/otopi/minidnf.py:643
 msgid "Empty transaction"
 msgstr "Transação vazia"
 
-#: src/otopi/minidnf.py:634 src/otopi/minidnf.py:682 src/otopi/minidnf.py:709
+#: src/otopi/minidnf.py:647 src/otopi/minidnf.py:707 src/otopi/minidnf.py:734
 #: src/otopi/miniyum.py:99
 msgid "install"
 msgstr "instalar"
 
-#: src/otopi/minidnf.py:635 src/otopi/minidnf.py:693
+#: src/otopi/minidnf.py:648 src/otopi/minidnf.py:718
 msgid "remove"
 msgstr "remover"
 
-#: src/otopi/minidnf.py:639
+#: src/otopi/minidnf.py:652
 #, python-brace-format
 msgid "    {op:10}: {package}"
 msgstr "    {op:10}: {package}"
 
-#: src/otopi/minidnf.py:701 src/otopi/minidnf.py:741 src/otopi/miniyum.py:98
+#: src/otopi/minidnf.py:726 src/otopi/minidnf.py:766 src/otopi/miniyum.py:98
 msgid "update"
 msgstr "atualizar"
 
-#: src/otopi/minidnf.py:725
+#: src/otopi/minidnf.py:750
 msgid "install/update"
 msgstr "instalar/atualizar"
 
-#: src/otopi/minidnf.py:733 src/otopi/miniyum.py:101
+#: src/otopi/minidnf.py:758 src/otopi/miniyum.py:101
 msgid "erase"
 msgstr "apagar"
 
@@ -617,15 +617,15 @@ msgstr ""
 "Mau argumento enquanto tentava executar {args}, ambiente Deformado é "
 "{keyType}:{key}={valueType}:{value}."
 
-#: src/otopi/transaction.py:101
+#: src/otopi/transaction.py:106
 msgid "Invalid transaction element type"
 msgstr "Transação do tipo de elemento inválido"
 
-#: src/otopi/transaction.py:133
+#: src/otopi/transaction.py:138
 msgid "Cannot commit transaction as transaction not prepared"
 msgstr "Não posso salvar transação como transação não preparada"
 
-#: src/otopi/transaction.py:139
+#: src/otopi/transaction.py:144
 msgid "Cannot commit transaction as one of the elements failed"
 msgstr "Não posso salvar transação com um dos elementos em falha"
 

@@ -14,9 +14,6 @@ CLEANFILES = \
 
 SUFFIXES = .in
 
-SUBDIRS = \
-	codegen \
-	$(NULL)
 
 dist_otopilib_PYTHON = \
 	__init__.py \

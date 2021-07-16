@@ -1,11 +1,7 @@
-apache-commons-logging
 autoconf
 automake
 createrepo_c
 git
-java-devel
-javapackages-tools
-junit
 gettext-devel
 libselinux-python
 make

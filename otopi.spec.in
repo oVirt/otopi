@@ -3,27 +3,7 @@
 #
 
 %global		package_version @PACKAGE_VERSION@
-%global		package_maven_version @PACKAGE_MAVEN_VERSION@
 
-%global _use_maven 1
-%global _use_repolib 0
-%global maven2brewrepodir %{_javadir}/repository.jboss.com/maven2-brew/dummy
-%global _configure ../configure
-
-%global src_java_dir src/java
-
-
-%if 0%{?fedora} || 0%{?rhel} >= 8
-%global with_python3 1
-%else
-%global with_python3 0
-%endif
-
-%if 0%{?fedora} >= 30 || 0%{?rhel} >= 8
-%global with_python2 0
-%else
-%global with_python2 1
-%endif
 
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
 Name:		@PACKAGE_NAME@
@@ -36,29 +16,9 @@ Group:		Development/Libraries
 
 BuildArch:	noarch
 
-BuildRequires:	apache-commons-logging
-BuildRequires:	java-devel
-BuildRequires:	junit
 BuildRequires:	gettext >= 0.18.2
-BuildRequires:	javapackages-tools
-
-%if 0%{?with_python2}
-BuildRequires:	python2-devel
-%endif
-
-%if 0%{?with_python3}
 BuildRequires:	python%{python3_pkgversion}-devel
-%endif
 
-%if %{_use_maven}
-BuildRequires:	maven-compiler-plugin
-BuildRequires:	maven-enforcer-plugin
-BuildRequires:	maven-install-plugin
-BuildRequires:	maven-jar-plugin
-BuildRequires:	maven-source-plugin
-BuildRequires:	maven-surefire-provider-junit
-BuildRequires:	maven-local
-%endif
 
 %description
 Standalone plugin based installation framework to be used to setup
@@ -66,85 +26,26 @@ system components. The plugin nature provides simplicity to
 add new installation functionality without the complexity of the state
 and transaction management.
 
-%if 0%{?with_python2}
-%package -n python2-%{name}
-Summary:	%{summary}
-%{?python_provide:%python_provide python2-%{name}}
-Requires:	python
-Requires:	python-dateutil
-Requires:	%{name}-common = %{version}-%{release}
-Provides:	%{name} = %{version}-%{release}
-Obsoletes:	%{name} < %{version}-%{release}
-
-%description -n python2-%{name}
-%{summary}.
-
-Python 2 version.
-
-%package -n python2-otopi-devtools
-Summary:	%{name} development tools
-Requires:	python2-%{name} = %{version}-%{release}
-Provides:	%{name}-devtools = %{version}-%{release}
-Obsoletes:	%{name}-devtools < %{version}-%{release}
-
-%description -n python2-otopi-devtools
-Development tools for %{name}.
-
-Python 2 version.
-%endif # with_python2
-
-%if 0%{?with_python3}
 %package -n python%{python3_pkgversion}-%{name}
 Summary:	%{summary}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{name}}
 Requires:	python%{python3_pkgversion} >= 3.6.0
 Requires:	python%{python3_pkgversion}-dateutil
 Requires:	%{name}-common = %{version}-%{release}
-
-# If we build for python3, but not for python2, let the python3 version
-# provide 'otopi'.
-%if ! 0%{?with_python2}
 Provides:	%{name} = %{version}-%{release}
-%endif
 
 %description -n python%{python3_pkgversion}-%{name}
 %{summary}.
 
 Python %{python3_pkgversion} version.
 
-%package -n python%{python3_pkgversion}-otopi-devtools
-Summary:	%{name} development tools
-Requires:	python%{python3_pkgversion}-%{name} = %{version}-%{release}
-
-%description -n python%{python3_pkgversion}-otopi-devtools
-Development tools for %{name}.
-
-Python %{python3_pkgversion} version.
-%endif # with_python3
 
 %package common
-Summary:	Commong files for %{name}
+Summary:	Common files for %{name}
 
 %description common
 %{summary}
 
-%package java
-Summary:	%{name} java support
-Requires:	%{name} = %{version}-%{release}
-Requires:	java-headless
-Requires:	apache-commons-logging
-
-%description java
-java libraries.
-
-%if %{_use_maven}
-%package javadoc
-Summary:	Javadocs for %{name}
-Group:		Documentation
-
-%description javadoc
-This package contains the API documentation for %{name}.
-%endif
 
 %package debug-plugins
 Summary:	%{name} debug plugins
@@ -153,124 +54,26 @@ Requires:	%{name} = %{version}-%{release}
 %description debug-plugins
 Debug plugins for %{name}.
 
-%if 0%{?_use_repolib:1}
-%package repolib
-Summary:	%{name} maven repo
-%description repolib
-%{name} maven repo
-%endif
 
 %prep
 %setup -q -n %{name}-%{package_version}
-%pom_remove_plugin :maven-javadoc-plugin src/java/pom.xml.in
-%pom_remove_plugin :nexus-staging-maven-plugin src/java/pom.xml.in
-mkdir py2 py3
 
 %build
-%if %{_use_maven}
-%global conf --disable-java-sdk-compile
-%else
-%global conf COMMONS_LOGGING_JAR=$(build-classpath commons-logging) JUNIT_JAR=$((build-classpath junit4 || build-classpath junit) | sed '/^$/d')
-%endif
 
-%if 0%{?with_python2}
-pushd py2
-# Build python but don't touch java
-%configure PYTHON="%{__python2}" \
-	--docdir="%{_docdir}/%{name}-%{version}" \
-	--disable-python-syntax-check \
-	--disable-java-sdk-compile \
-	--with-local-version="%{name}-%{version}-%{release}" \
-	%{?conf}
-make %{?_smp_mflags}
-popd
-%endif # with_python2
-
-%if 0%{?with_python3}
-pushd py3
-# Build python but don't touch java
 %configure PYTHON="%{__python3}" \
 	--docdir="%{_docdir}/%{name}-%{version}" \
 	--disable-python-syntax-check \
-	--disable-java-sdk-compile \
 	--with-local-version="%{name}-%{version}-%{release}" \
 	%{?conf}
 make %{?_smp_mflags}
-popd
-%endif # with_python3
-
-
-# This takes care of codegen for java and building java
-# We don't really care about which version of python is used to generate
-# java code since the generated code is not depending on interpreter version.
-./configure \
-	--docdir="%{_docdir}/%{name}-%{version}" \
-	--disable-python-syntax-check \
-	--enable-java-sdk \
-	--with-local-version="%{name}-%{version}-%{release}" \
-	%{?conf}
-make %{?_smp_mflags}
-
-
-%if %{_use_maven}
-pushd %{src_java_dir}
-%mvn_build
-popd
-%endif
 
 
 %install
-%if 0%{?with_python2}
-make -C py2 %{?_smp_mflags} install DESTDIR="%{buildroot}"
-%endif # with_python2
-
-%if 0%{?with_python3}
-make -C py3 %{?_smp_mflags} install DESTDIR="%{buildroot}"
-%endif # with_python3
-
-# Point to otopi2 binaries by default
-%if 0%{?with_python2}
-%endif # with_python2
-
-%if %{_use_maven}
-pushd %{src_java_dir}
-%mvn_install
-popd
-%else
-install -d "%{buildroot}%{_javadir}/%{name}"
-install -m 644 target/%{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}"
-ln -s %{name}-%{package_maven_version}.jar "%{buildroot}%{_javadir}/%{name}/%{name}.jar"
-cat > %{src_java_dir}/.mfiles << __EOF__
-%{_javadir}/%{name}/
-__EOF__
-%endif
-
-%if %{_use_repolib}
-install -d "%{buildroot}%{maven2brewrepodir}"
-cp "%{buildroot}%{_javadir}/%{name}/%{name}.jar" "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.jar"
-cp %{src_java_dir}/pom.xml "%{buildroot}%{maven2brewrepodir}/%{name}-%{package_maven_version}.pom"
-%endif
-
+make %{?_smp_mflags} install DESTDIR="%{buildroot}"
 install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %find_lang %{name}
 
 
-%if 0%{?with_python2}
-%files -n python2-%{name}
-%doc AUTHORS
-%license COPYING
-%license LICENSE
-%doc README
-%doc README.API
-%doc README.config-query
-%doc README.debug-plugins
-%doc README.dialog
-%doc README.environment
-%exclude %{python2_sitelib}/%{name}/codegen/
-%{python2_sitelib}/%{name}/
-%endif # with_python2
-
-%if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-%{name}
 %doc AUTHORS
 %license COPYING
@@ -281,11 +84,12 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.debug-plugins
 %doc README.dialog
 %doc README.environment
-%exclude %{python3_sitelib}/%{name}/codegen/
 %{python3_sitelib}/%{name}/
-%endif # with_python3
 
 %files common -f %{name}.lang
+%doc AUTHORS
+%license COPYING
+%license LICENSE
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/plugins
 %dir %{_sysconfdir}/%{name}.conf.d
@@ -297,29 +101,12 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %{_datadir}/%{name}/%{name}-functions
 %exclude %{_datadir}/%{name}/plugins/%{name}/debug/
 
-%files java -f %{src_java_dir}/.mfiles
-
-%if %{_use_maven}
-%files javadoc -f %{src_java_dir}/.mfiles-javadoc
-%endif
-
-%if 0%{?with_python2}
-%files -n python2-otopi-devtools
-%{python2_sitelib}/%{name}/codegen/
-%endif # with_python2
-
-%if 0%{?with_python3}
-%files -n python%{python3_pkgversion}-otopi-devtools
-%{python3_sitelib}/%{name}/codegen/
-%endif # with_python3
-
 %files debug-plugins
 %{_datadir}/%{name}/plugins/%{name}/debug/
-
-%if %{_use_repolib}
-%files repolib
-%{maven2brewrepodir}/
-%endif
+%license COPYING
+%license LICENSE
+%doc AUTHORS
+%doc README.debug-plugins
 
 %changelog
 * Wed Jan 27 2021 - Yedidyah Bar David <didi@redhat.com> - 1.9.4-1

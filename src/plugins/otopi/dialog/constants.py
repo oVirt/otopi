@@ -10,10 +10,6 @@ Refer to README.dialog.
 """
 
 
-from otopi import util
-
-
-@util.codegen
 class DialogMachineConst(object):
     NOTE_PREFIX = '#'
     REQUEST_PREFIX = '***'
@@ -43,8 +39,7 @@ class DialogMachineConst(object):
 
     # Reusing QUERY_EXTRA_PREFIX for these too, even though they are unrelated
     # to queries. In practice QUERY_EXTRA_PREFIX is going to be used for all
-    # new additions to the machine dialog protocol, at least until some future
-    # version that can break compatibility with MachineDialogParser.java.
+    # new additions to the machine dialog protocol.
 
     # Events sequence stuff, used in the sequence dump we do in the beginning
     EVENTS_LIST_START = 'EventsListStart'
