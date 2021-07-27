@@ -597,8 +597,8 @@ class MiniYum(object):
                     self._DownloadCallback(self._sink)
                 )
 
-            for l in ('yum', 'rhsm'):
-                log = logging.getLogger(l)
+            for logger in ('yum', 'rhsm'):
+                log = logging.getLogger(logger)
                 log.propagate = False
                 log.handlers = []
                 log.addHandler(

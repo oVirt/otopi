@@ -86,8 +86,8 @@ class Plugin(plugin.PluginBase):
                 )
             else:
                 addresses = []
-                for l in stdout:
-                    m = self._ADDRESS_RE.match(l)
+                for line in stdout:
+                    m = self._ADDRESS_RE.match(line)
                     if m is not None:
                         for g in ('ipv4', 'ipv6'):
                             if m.group(g) is not None:

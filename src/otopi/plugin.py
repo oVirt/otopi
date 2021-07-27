@@ -725,8 +725,8 @@ class PluginBase(base.Base):
                 ret = s.splitlines()
             return ret
 
-        def _listToString(l):
-            return '' if l is None else '\n'.join(l)
+        def _listToString(li):
+            return '' if li is None else '\n'.join(li)
 
         res['stdout'] = _splitStream(res['stdout'])
         for r in res['result']:

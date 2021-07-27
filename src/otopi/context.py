@@ -788,8 +788,8 @@ class Context(base.Base):
         constants.BaseEnv.PLUGIN_PATH
 
         """
-        def mysplit(l):
-            return [i for i in l.split(':') if i]
+        def mysplit(line):
+            return [i for i in line.split(':') if i]
 
         needgroups = set(mysplit(
             self.environment[constants.BaseEnv.PLUGIN_GROUPS]

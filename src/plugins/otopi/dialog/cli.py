@@ -64,8 +64,8 @@ class Plugin(plugin.PluginBase):
             self.logger = logger
 
         def exit(self, status=0, msg=None):
-            for l in msg.splitlines():
-                self.logger.error(l)
+            for line in msg.splitlines():
+                self.logger.error(line)
             raise OptParseError(msg)
 
     def __init__(self, context):
@@ -422,11 +422,11 @@ class Plugin(plugin.PluginBase):
                 'r'
             ) as f:
                 log = [
-                    l.replace(
+                    line.replace(
                         self.environment[constants.DialogEnv.BOUNDARY],
                         '**BOUNDARY**'
                     ).rstrip('\n')
-                    for l in f.readlines()
+                    for line in f.readlines()
                 ]
             self.dialog.displayMultiString(
                 name='LOG',

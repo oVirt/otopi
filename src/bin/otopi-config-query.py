@@ -91,7 +91,7 @@ def do_match(args):
         value = common.parseTypedValue(value)
         user_value = common.parseTypedValue(args.value)
         if value != user_value:
-           rv = 1
+            rv = 1
 
     return rv
 
