@@ -1,12 +1,8 @@
 #!/bin/bash -ex
 DISTVER="$(rpm --eval "%dist"|cut -c2-4)"
-installer=""
-if [[ "${DISTVER}" == "el7" ]]; then
-    installer=yum
-else
-    installer=dnf
-fi
+installer=dnf
 
+autopoint
 autoreconf -ivf
 ./configure
 make distcheck

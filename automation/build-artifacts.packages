@@ -1,10 +1,9 @@
 autoconf
 automake
+dnf-utils
 gettext-devel
 git
 make
-pyflakes
-python3-pep8
-python2-devel
+python3-devel
+python3-pyflakes
 rpm-build
-dnf-utils

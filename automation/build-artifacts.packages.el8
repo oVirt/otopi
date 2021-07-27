@@ -1,9 +1,0 @@
-autoconf
-automake
-dnf-utils
-gettext-devel
-git
-make
-python3-devel
-python3-pyflakes
-rpm-build
