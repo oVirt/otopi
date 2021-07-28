@@ -7,6 +7,7 @@ libselinux-python
 make
 python-coverage
 python3-coverage
+python3-distro
 pyflakes
 python3-pep8
 rpm-build

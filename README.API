@@ -171,7 +171,6 @@ def createPlugins(context):
 ---
 example1.py
 ---
-import platform
 import gettext
 _ = lambda m: gettext.dgettext(message=m, domain='otopi')
 

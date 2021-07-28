@@ -6,8 +6,8 @@
 """iptables handler plugin."""
 
 
+import distro
 import gettext
-import platform
 
 
 from otopi import constants
@@ -33,7 +33,7 @@ class Plugin(plugin.PluginBase):
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
-        self._distribution = platform.linux_distribution(
+        self._distribution = distro.linux_distribution(
             full_distribution_name=0
         )[0]
         self._enabled = False

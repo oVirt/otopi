@@ -11,9 +11,9 @@ packager.
 """
 
 
+import distro
 import gettext
 import os
-import platform
 
 
 from . import constants
@@ -28,7 +28,7 @@ def ok_to_use_dnf():
     if os.environ.get(constants.SystemEnvironment.DNF_ENABLE):
         return True
 
-    plat_dist = platform.linux_distribution(full_distribution_name=0)
+    plat_dist = distro.linux_distribution(full_distribution_name=0)
     distribution = plat_dist[0]
     version = plat_dist[1]
     return (

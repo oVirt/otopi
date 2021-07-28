@@ -6,9 +6,9 @@
 """System information plugin."""
 
 
+import distro
 import gettext
 import os
-import platform
 import socket
 import sys
 
@@ -41,7 +41,7 @@ class Plugin(plugin.PluginBase):
         self.logger.debug('python version %s', sys.version)
         self.logger.debug('python %s', sys.executable)
         self.logger.debug('platform %s', sys.platform)
-        self.logger.debug('distribution %s', platform.linux_distribution())
+        self.logger.debug('distribution %s', distro.linux_distribution())
         self.logger.debug("host '%s'", socket.gethostname())
         self.logger.debug(
             'uid %s euid %s gid %s egid %s',
