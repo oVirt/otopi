@@ -1,6 +1,7 @@
 autoconf
 automake
 createrepo_c
+dnf
 dnf-plugins-core
 dnf-plugin-versionlock
 dnf-utils
