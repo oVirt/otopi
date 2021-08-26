@@ -5,6 +5,9 @@
 [[ -d tmp.repos ]] \
 || mkdir -p tmp.repos
 
+# stdci seems to ignore build-artifacts.packages
+dnf install -y $(cat automation/build-artifacts.packages)
+autopoint
 autoreconf -ivf
 ./configure
 
