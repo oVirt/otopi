@@ -56,8 +56,8 @@ class Context(base.Base):
     """
     def _earlyDebug(self, msg):
         if self.environment[constants.BaseEnv.DEBUG] > 0:
-            print(msg)
-            sys.stdout.flush()
+            print(msg, file=sys.stderr)
+            sys.stderr.flush()
 
     def _loadPlugins(self, base, path, groupname):
         if (
