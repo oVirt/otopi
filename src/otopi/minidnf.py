@@ -13,13 +13,17 @@ import sys
 import time
 import traceback
 
+# Users of minidnf should import it inside a try/except clause and handle
+# failures gracefully. otopi deliberately does not require dnf to be installed.
+# This applies also to python3-hawkey, which is a dependency of dnf.
 import dnf
 import dnf.callback
 import dnf.logging
 import dnf.subject
 import dnf.yum.rpmtrans
-
+import dnf.transaction_sr
 from dnf.cli.cli import Cli
+import hawkey
 
 from . import packager
 
@@ -89,6 +93,50 @@ class MiniDNFSinkBase(object):
     def reexec(self):
         """Last chance before reexec."""
         pass
+
+
+# Copied from dnf:dnf/cli/commands/history.py and edited a bit
+# TODO: Revert to using an official API once available:
+# https://bugzilla.redhat.com/2010209
+def _revert_transaction(trans, base, skip_unavailable):
+    action_map = {
+        "Install": "Removed",
+        "Removed": "Install",
+        "Upgrade": "Downgraded",
+        "Upgraded": "Downgrade",
+        "Downgrade": "Upgraded",
+        "Downgraded": "Upgrade",
+        "Reinstalled": "Reinstall",
+        "Reinstall": "Reinstalled",
+        "Obsoleted": "Install",
+        "Obsolete": "Obsoleted",
+    }
+
+    data = dnf.transaction_sr.serialize_transaction(trans)
+
+    # revert actions in the serialized transaction data to perform
+    # rollback/undo
+    for content_type in ("rpms", "groups", "environments"):
+        for ti in data.get(content_type, []):
+            ti["action"] = action_map[ti["action"]]
+
+            if ti["action"] == "Install" and ti.get("reason", None) == "clean":
+                ti["reason"] = "dependency"
+
+            if ti.get("repo_id") == hawkey.SYSTEM_REPO_NAME:
+                # erase repo_id, because it's not possible to perform forward
+                # actions from the @System repo
+                ti["repo_id"] = None
+
+    replay = dnf.transaction_sr.TransactionReplay(
+        base,
+        data=data,
+        ignore_installed=True,
+        ignore_extras=True,
+        skip_unavailable=skip_unavailable
+    )
+    replay.run()
+    return replay
 
 
 class MiniDNF():
@@ -304,13 +352,7 @@ class MiniDNF():
 
     @classmethod
     def _getPackageName(clz, po):
-        return '%s%s-%s-%s.%s' % (
-            '' if po.epoch == '0' else '%s:' % po.epoch,
-            po.name,
-            po.version,
-            po.release,
-            po.arch
-        )
+        return f'{po.name}-{po.version}-{po.release}.{po.arch}'
 
     @classmethod
     def _getPackageInfo(clz, po):
@@ -606,18 +648,17 @@ class MiniDNF():
                 base = self._createBase(offline=True)
                 try:
                     if self._baseTransaction < currentTransaction:
-                        history = dnf.history.open_history(base.history)
-                        operations = dnf.history.NEVRAOperations()
                         for id_ in range(
                             self._baseTransaction + 1,
                             currentTransaction + 1,
                         ):
-                            operations += history.transaction_nevra_ops(id_)
-                        base._history_undo_operations(
-                            operations,
-                            self._baseTransaction + 1,
-                            True
-                        )
+                            self._sink.verbose(f'Reverting transaction {id_}')
+                            _revert_transaction(
+                                trans=base.history.old([id_])[0],
+                                base=base,
+                                skip_unavailable=True,
+                            )
+                        base.resolve(allow_erasing=True)
                         self._processTransaction(base=base)
                 finally:
                     self._destroyBase(base)
@@ -700,6 +741,7 @@ class MiniDNF():
                         operation=op,
                     )
                 )
+        self._sink.verbose(f'queryTransaction ret: {ret}')
         return ret
 
     def installGroup(self, group, **kwargs):
@@ -802,20 +844,11 @@ class MiniDNF():
                             ndinst[key] = po
                     installed = dinst.values()
 
-                    if not showdups:
-                        q = q.latest()
-                    for pkg in q:
-                        if showdups:
-                            if pkg.pkgtup in dinst:
-                                reinstall_available.append(pkg)
-                            else:
-                                available.append(pkg)
-                        else:
-                            key = (pkg.name, pkg.arch)
-                            if pkg.pkgtup in dinst:
-                                reinstall_available.append(pkg)
-                            elif key not in ndinst or pkg.evr_gt(ndinst[key]):
-                                available.append(pkg)
+                    for pkg in (q if showdups else q.latest()):
+                        available.append(pkg)
+
+                    for pkg in (q.available() if showdups else q.latest()):
+                        reinstall_available.append(pkg)
             finally:
                 if _base is not None:
                     self._destroyBase(_base)
@@ -830,6 +863,11 @@ class MiniDNF():
                     info['operation'] = op
                     ret.append(info)
 
+            self._sink.verbose(
+                f'queryPackages: showdups: {showdups}\n'
+                f'queryPackages: patterns: {patterns}\n'
+                f'queryPackages: result: {ret}'
+            )
             return ret
         except Exception as e:
             self._sink.error(e)
