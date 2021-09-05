@@ -14,19 +14,23 @@ automation/build-artifacts.sh
 
 ${installer} install -y $(find "$PWD/exported-artifacts" -iname \*noarch\*.rpm)
 
-mkdir -p exported-artifacts/logs
-
-cleanup() {
-	cp -p /tmp/otopi-*.log exported-artifacts/logs
-}
-
-trap cleanup EXIT
+LOGS=exported-artifacts/otopi_logs
+mkdir -p "${LOGS}"
 
 cov_otopi() {
-	otopi="$1"
-	name="$2"
+	local otopi="$1"
+	local name="$2"
 	shift 2
-	OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" COVERAGE_FILE=$(mktemp -p $PWD .coverage.XXXXXX) "${otopi}" CORE/logFileNamePrefix="str:${otopi}-${name}" "$@"
+	local log_dir="${LOGS}/otopi-$(date +"%Y%m%d-%H%M%S")-${name}"
+	mkdir -p "${log_dir}"
+	local stderrfile="${log_dir}/otopi-stderr-${name}.log"
+
+	OTOPI_DEBUG=1 OTOPI_COVERAGE=1 COVERAGE_PROCESS_START="${PWD}/automation/coverage.rc" COVERAGE_FILE=$(mktemp -p $PWD .coverage.XXXXXX) "${otopi}" CORE/logFileNamePrefix="str:${otopi}-${name}" CORE/logDir=str:"${log_dir}" "$@" 2> "${stderrfile}"
+	if [ "$?" -ne 0 ]; then
+		echo "cov_otopi: Failed: ${name}"
+		tail -20 "${stderrfile}"
+		return 1
+	fi
 }
 
 # Test packager
