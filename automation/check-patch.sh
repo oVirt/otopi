@@ -85,6 +85,18 @@ cov_failing_otopi otopi cyclic_dep "APPEND:BASE/pluginPath=str:${PWD}/automation
 cov_failing_otopi otopi non_existent_before_after "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:non_existent_before_after CORE/ignoreMissingBeforeAfter=bool:False"
 cov_failing_otopi otopi duplicate_method_names "APPEND:BASE/pluginPath=str:${PWD}/automation/testplugins" "APPEND:BASE/pluginGroups=str:duplicate_method_names"
 
+# Test packager rollback. testpackage1 should not be installed at this point, because we remove it earlier
+if rpm -q testpackage1 2>&1; then
+	echo "Packager rollback: testpackage1 found before testing, failing"
+	exit 1
+fi
+OTOPI_FORCE_FAIL_STAGE=STAGE_MISC cov_failing_otopi otopi packager-install-testpackage1-undo ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage1
+# force_fail should fail it, so using 'cov_failing_otopi', but we also want to verify that testpackage1's installation was reverted
+if rpm -q testpackage1 2>&1; then
+	echo "Packager rollback: testpackage1 found after testing, failing"
+	exit 1
+fi
+
 # Do some minimal testing for python3, even if we default to python2 in the
 # rest of the tests. Test if python3 is "supported" simply by running otopi
 # with python3 and see if this works. Disable the packagers so that problems
