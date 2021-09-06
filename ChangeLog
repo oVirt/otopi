@@ -1,6 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
 ????-??-?? - Version 1.9.6
+ * packaging: obsolete dropped packages
 
 2021-08-03 - Version 1.9.5
  * drop java bindings and python2
