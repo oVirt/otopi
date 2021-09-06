@@ -34,6 +34,7 @@ Requires:	python%{python3_pkgversion}-dateutil
 Requires:	python%{python3_pkgversion}-distro
 Requires:	%{name}-common = %{version}-%{release}
 Provides:	%{name} = %{version}-%{release}
+Obsoletes:	python%{python3_pkgversion}-%{name}-devtools
 
 %description -n python%{python3_pkgversion}-%{name}
 %{summary}.
@@ -43,6 +44,7 @@ Python %{python3_pkgversion} version.
 
 %package common
 Summary:	Common files for %{name}
+Obsoletes:	%{name}-java
 
 %description common
 %{summary}
