@@ -57,6 +57,7 @@ popd
 
 # Test
 cov_otopi otopi packager-install-testpackage2 ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage2
+cov_otopi otopi packager-query-testpackages ODEBUG/packagesAction=str:queryPackages ODEBUG/packages=str:testpackage\*
 cov_otopi otopi packager-remove-testpackage1 ODEBUG/packagesAction=str:remove ODEBUG/packages=str:testpackage1
 cov_otopi otopi packager-queryGroups ODEBUG/packagesAction=str:queryGroups
 

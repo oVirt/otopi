@@ -68,7 +68,6 @@ class Plugin(plugin.PluginBase):
             'update',
             'installUpdate',
             'remove',
-            'queryPackages',
         ):
             # A single param that is a tuple (iterable).
             # In principle we can call action once, for now call per
@@ -82,6 +81,14 @@ class Plugin(plugin.PluginBase):
                     )
                 )
                 res = getattr(self.packager, action)((p,))
+                self.dialog.note('Result is: %s' % pprint.pformat(res))
+        elif action in (
+            'queryPackages',
+        ):
+            # Same as above, but I want to pass another optional param
+            for p in self.environment[constants.DebugEnv.PACKAGES].split(','):
+                self.dialog.note(f'\nCalling queryPackages({p}, listAll=True)')
+                res = self.packager.queryPackages((p,), listAll=True)
                 self.dialog.note('Result is: %s' % pprint.pformat(res))
         else:
             raise RuntimeError(
