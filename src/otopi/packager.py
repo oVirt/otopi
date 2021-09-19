@@ -217,5 +217,22 @@ class PackagerBase(object):
     def getConf(self):
         return None
 
+    def checkForSafeUpdate(self, packages):
+        """Check for updates for packages.
+
+        packages -- packages tuple to check.
+
+        Returns a dict:
+            upgradeAvailable - bool
+                Whether there is an update for at least one package
+            missingRollback - set
+                Installed packages that are not reinstallable
+            packageOperations - list of tuples
+                (Package display name (string), Operation (string))
+        """
+        raise NotImplementedError(
+            _('Packager checkForSafeUpdate not implemented')
+        )
+
 
 # vim: expandtab tabstop=4 shiftwidth=4

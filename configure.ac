@@ -91,6 +91,8 @@ AC_CONFIG_FILES([
 	automation/config.sh
 	automation/testRPMs/testpackage1/testpackage1.spec
 	automation/testRPMs/testpackage2/testpackage2.spec
+	automation/testRPMsUpdates/testpackage1/testpackage1.spec
+	automation/testRPMsUpdates/testpackage2/testpackage2.spec
 
 ])
 AC_OUTPUT

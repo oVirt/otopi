@@ -922,6 +922,46 @@ class MiniDNF():
             if we_created_base and base is not None:
                 self._destroyBase(base)
 
+    def checkForSafeUpdate(self, packages):
+        missingRollback = []
+        upgradeAvailable = False
+        plist = []
+
+        with self.transaction():
+            self.installUpdate(packages)
+
+            if self.buildTransaction():
+                upgradeAvailable = True
+
+                for p in self.queryTransaction():
+                    plist.append((p['display_name'], p['operation']))
+
+                # Verify all installed packages available in repos
+                for package in self.queryTransaction():
+                    installed = False
+                    reinstall_available = False
+                    for query in self.queryPackages(
+                        patterns=(package['display_name'],),
+                        showdups=True,
+                    ):
+                        self._sink.verbose(
+                            'dupes: operation [%s] package %s' % (
+                                query['operation'],
+                                query['display_name'],
+                            )
+                        )
+                        if query['operation'] == 'installed':
+                            installed = True
+                        if query['operation'] == 'reinstall_available':
+                            reinstall_available = True
+                    if installed and not reinstall_available:
+                        missingRollback.append(package['display_name'])
+        return {
+            'upgradeAvailable': upgradeAvailable,
+            'missingRollback': set(missingRollback),
+            'packageOperations': plist,
+        }
+
 
 class Example():
 

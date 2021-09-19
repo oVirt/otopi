@@ -305,5 +305,10 @@ class Plugin(plugin.PluginBase, packager.PackagerBase):
             showdups=listAll,
         )
 
+    def checkForSafeUpdate(self, packages=None):
+        return self._minidnf.checkForSafeUpdate(
+            packages=packages,
+        )
+
 
 # vim: expandtab tabstop=4 shiftwidth=4
