@@ -1,6 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.9.6
+2021-10-05 - Version 1.9.6
+ * automation: Test packager rollback
+ * minidnf: fix rollback
  * packaging: obsolete dropped packages
 
 2021-08-03 - Version 1.9.5
