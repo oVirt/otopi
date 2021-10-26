@@ -1,4 +1,5 @@
 # otopi -- oVirt Task Oriented Pluggable Installer/Implementation
+[![Copr build status](https://copr.fedorainfracloud.org/coprs/ovirt/ovirt-master-snapshot/package/otopi/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/ovirt/ovirt-master-snapshot/package/otopi/)
 
 Standalone plugin based installation framework to be used to setup
 system components. The plugin nature provides simplicity to

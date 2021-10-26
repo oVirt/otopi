@@ -18,7 +18,7 @@ BuildArch:	noarch
 
 BuildRequires:	gettext >= 0.18.2
 BuildRequires:	python%{python3_pkgversion}-devel
-
+BuildRequires:	gcc
 
 %description
 Standalone plugin based installation framework to be used to setup
