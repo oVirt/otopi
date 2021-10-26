@@ -1,5 +1,4 @@
-otopi -- oVirt Task Oriented Pluggable Installer/Implementation
-===============================================================
+# otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
 Standalone plugin based installation framework to be used to setup
 system components. The plugin nature provides simplicity to
@@ -25,50 +24,57 @@ Features:
 
  * Distribution independent implementation (core).
 
- * Compatible with python-2.6, python-2.7, python-3.2
+ * Compatible with python-3.6, 3.9
 
-USAGE
------
+## USAGE
 
+```
 otopi [variables]
 
 variables ::= name=type:value variables | APPEND:name=type:value | ''
 type ::= none | bool | int | str | multi-str
 
 APPEND: prefix appends as colon list string.
+```
 
-CUSTOMIZATION
--------------
+## CUSTOMIZATION
 
 Set the following environment:
 
-    DIALOG/customization=bool:True
+  `DIALOG/customization=bool:True`
 
 This will trigger command-line prompt before validation and
 before termination.
 
-Refer to README.dialog for more information.
+Refer to `README.dialog` for more information.
 
-FILES
------
+## FILES
 
-CONFIGURATION
+### CONFIGURATION
 
 Configuration files used to override the environment.
 
 System environment:
-    OTOPI_CONFIG
+
+   `OTOPI_CONFIG`
+
 Environment:
-    CORE/configFileName
+
+   `CORE/configFileName`
+
 Default:
-    /etc/otopi.conf
+
+   `/etc/otopi.conf`
 
 Config files to be read:
-    @configFileName@
-    @configFileName@.d/*.conf (sorted)
+
+   `@configFileName@`
+
+   `@configFileName@.d/*.conf (sorted)`
 
 Structure:
 
+```
     [environment:default]
     key=type:value
 
@@ -80,33 +86,32 @@ Structure:
 
     [environment:enforce]
     key=type:value
+```
 
 default is applied during setup without override.
 init is applied during setup with override.
 override is applied before customization with override.
 enforce is applied after customization with override.
 
-type ::= none | bool | int | str | multi-str
+`type ::= none | bool | int | str | multi-str`
 
-ENVIRONMENT
------------
+## ENVIRONMENT
 
-Refer to README.environment
+Refer to `README.environment`
 
-UNPRIVILEDGE EXECUTION
-----------------------
+## UNPRIVILEDGE EXECUTION
 
 Using sudo it is possible to escalate privilege. Use the following
 configuration:
 
-/etc/sudoers.d/50-otopi.conf
+`/etc/sudoers.d/50-otopi.conf`
 
+```
     Defaults:user1 !requiretty
     user1 ALL=(ALL) NOPASSWD: /bin/sh
+```
 
-COMPATIBILITY
--------------
+## COMPATIBILITY
 
-- Python-2.6
-- Python-2.7
-- Python-3.2
+- Python-3.6
+- Python-3.9

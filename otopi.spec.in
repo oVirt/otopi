@@ -81,7 +81,7 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc AUTHORS
 %license COPYING
 %license LICENSE
-%doc README
+%doc README.md
 %doc README.API
 %doc README.config-query
 %doc README.debug-plugins

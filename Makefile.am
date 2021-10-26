@@ -35,6 +35,7 @@ SUBDIRS = \
 
 dist_noinst_DATA = \
 	MAINTAINERS \
+	README.md \
 	README.API \
 	README.config-query \
 	README.debug-plugins \
