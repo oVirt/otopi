@@ -138,7 +138,7 @@ if ! rpm -q testpackage1 2>&1 | grep 'testpackage1-1.0.1'; then
 	exit 1
 fi
 
-coverage combine --rcfile="${PWD}/automation/coverage.rc"
-coverage html -d exported-artifacts/coverage_html_report --rcfile="${PWD}/automation/coverage.rc"
+coverage-3 combine --rcfile="${PWD}/automation/coverage.rc"
+coverage-3 html -d exported-artifacts/coverage_html_report --rcfile="${PWD}/automation/coverage.rc"
 cp automation/index.html exported-artifacts/
 
