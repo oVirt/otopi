@@ -6,6 +6,7 @@
 """Minimalist dnf API interaction."""
 
 
+from distutils.version import LooseVersion
 import gettext
 import logging
 import os
@@ -507,8 +508,11 @@ class MiniDNF():
         if not packager.ok_to_use_dnf():
             raise RuntimeError('minidnf is disabled')
 
-        if int(dnf.__version__.split('.')[0]) not in (2, 3, 4):
-            raise RuntimeError(_('Incompatible DNF'))
+        if LooseVersion(dnf.__version__) < LooseVersion('4.7'):
+            # Recent changes are incompatible with older dnf 4.
+            # See e.g. recent reports on the list about a missing
+            # _get_key_for_package function in dnf 4.2.23.
+            raise RuntimeError(_('Incompatible DNF, use 4.7 or later'))
 
         self._sink = sink if sink else self._VoidSink()
         self._disabledPlugins = disabledPlugins if disabledPlugins else []
