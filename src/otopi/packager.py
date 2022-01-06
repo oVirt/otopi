@@ -39,6 +39,7 @@ def ok_to_use_dnf():
                 'redhat',
                 'centos',
                 'ibm_powerkvm',
+                'rhel',
             ) and
             version >= '8'
         )
