@@ -58,6 +58,7 @@ class Plugin(plugin.PluginBase):
             'fedora',
             'centos',
             'ibm_powerkvm',
+            'rhel',
         ):
             self.logger.warning(
                 _('Unsupported distribution for iptables plugin')
