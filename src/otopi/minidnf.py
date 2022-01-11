@@ -938,7 +938,7 @@ class MiniDNF():
                 upgradeAvailable = True
 
                 for p in self.queryTransaction():
-                    plist.append((p['display_name'], p['operation']))
+                    plist.append(p.copy())
 
                 # Verify all installed packages available in repos
                 for package in self.queryTransaction():
