@@ -297,11 +297,11 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             ).format(
                 description=description,
             )
-        self.dialog.note(
-            text=note,
+        value = self.dialog.queryString(
+            name=f'DIALOG_CONFIRM/{name}',
+            note=note,
             prompt=prompt,
         )
-        value = self._readline()
         ret = value in ('yes', 'y', 'Y')
         return ret
 
