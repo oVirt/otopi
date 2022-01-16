@@ -27,6 +27,37 @@ mkdir -p "${LOGS}"
 
 group_end
 
+prepare_rpm_signing() {
+	group_start prepare_rpm_signing
+	export GNUPGHOME="${PWD}"/gpghome
+	export GPGUSER="GPG User1"
+	export GPGPUBKEY="${PWD}/RPM-GPG-key1"
+	mkdir -p "${GNUPGHOME}"
+	cat << __EOF__ > gpg-batch1
+%no-protection
+Key-Type: default
+Subkey-Type: default
+Name-Real: ${GPGUSER}
+Name-Email: rn@example.com
+Expire-Date: 0
+__EOF__
+	gpg --batch --gen-key gpg-batch1
+	gpg --export -a "${GPGUSER}" > "${GPGPUBKEY}"
+	export MY_RPM_HOME="${PWD}"
+	cat << __EOF__ > "${MY_RPM_HOME}/.rpmmacros"
+%_signature gpg
+%_gpg_path ${GNUPGHOME}
+%_gpg_name ${GPGUSER}
+%_gpgbin /usr/bin/gpg
+__EOF__
+}
+
+sign_rpms() {
+	local repodir="$1"
+	find "${repodir}" -name "*.rpm" -print0 | \
+		HOME="${MY_RPM_HOME}" xargs -0 rpm --addsign
+}
+
 prepare_test_repo() {
 	group_start prepare_test_repo
 	pushd automation/testRPMs
@@ -35,6 +66,7 @@ prepare_test_repo() {
 		tar czf "${p}.tar.gz" "${p}"
 		rpmbuild -D "_topdir $PWD/repos" -ta "${p}.tar.gz"
 	done
+	sign_rpms "$PWD/repos"
 	createrepo_c repos
 	for yumdnfconf in /etc/yum.conf /etc/dnf/dnf.conf; do
 		if [ -f "${yumdnfconf}" ]; then
@@ -42,8 +74,9 @@ prepare_test_repo() {
 [testpackages]
 name=packages for testing otopi
 baseurl=file://${PWD}/repos
-gpgcheck=0
+gpgcheck=1
 enabled=1
+gpgkey=file://${GPGPUBKEY}
 __EOF__
 		fi
 	done
@@ -59,6 +92,7 @@ prepare_test_updates_repo() {
 		tar czf "${p}.tar.gz" "${p}"
 		rpmbuild -D "_topdir $PWD/repos_updates" -ta "${p}.tar.gz"
 	done
+	sign_rpms "$PWD/repos_updates"
 	createrepo_c repos_updates
 	for yumdnfconf in /etc/yum.conf /etc/dnf/dnf.conf; do
 		if [ -f "${yumdnfconf}" ]; then
@@ -66,8 +100,9 @@ prepare_test_updates_repo() {
 [testpackagesupdates]
 name=packages for testing otopi - updates
 baseurl=file://${PWD}/repos_updates
-gpgcheck=0
+gpgcheck=1
 enabled=1
+gpgkey=file://${GPGPUBKEY}
 __EOF__
 		fi
 	done
@@ -108,7 +143,18 @@ test_otopi() {
 	group_end
 }
 
+prepare_rpm_signing
 prepare_test_repo
+# Verify rpm signing verification.
+# Try to install without importing the key
+# We do not have in otopi a "run unattended" option,
+# to make sure it will fail when prompting for a confirmation.
+# "Simulate" this by running without an stdin.
+:|test_otopi 1 packager-install-testpackage1-no-gpgkey-import ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage1
+# Try again, but confirm
+test_otopi 0 packager-install-testpackage1-gpgkey-import QUESTION/1/DIALOG_CONFIRM/GPG_KEY=str:yes ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage1
+# All later installations will be verified.
+# TODO: Is there value in removing the key and seeing that an installation fails?
 test_otopi 0 packager-install-testpackage2 ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage2
 test_otopi 0 packager-query-testpackages ODEBUG/packagesAction=str:queryPackages ODEBUG/packages=str:testpackage\*
 test_otopi 0 packager-checksafeupdate ODEBUG/packagesAction=str:checkForSafeUpdate ODEBUG/packages=str:testpackage1,testpackage2
