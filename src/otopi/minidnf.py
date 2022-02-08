@@ -411,6 +411,7 @@ class MiniDNF():
 
     def _destroyBase(self, base):
         if base is not None:
+            self._sink.verbose(_('Calling _plugins._unload'))
             base._plugins._unload()
             base.close()
 
