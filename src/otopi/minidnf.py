@@ -222,6 +222,7 @@ class MiniDNF():
                 'Reinstalling'
             ),
             dnf.callback.PKG_UPGRADE: _('Upgrading'),
+            dnf.callback.PKG_UPGRADED: _('Upgraded'),
             dnf.callback.TRANS_POST: _(
                 'Post transaction'
             ),
@@ -229,14 +230,16 @@ class MiniDNF():
 
         _FILEACTION_TRANSLATION = {
             dnf.callback.PKG_CLEANUP: _('Cleanup'),
-            dnf.callback.PKG_DOWNGRADE: _('Downgraded'),
+            dnf.callback.PKG_DOWNGRADE: _('Downgrade'),
+            dnf.callback.PKG_DOWNGRADED: _('Downgraded'),
             dnf.callback.PKG_REMOVE: _('Removed'),
             dnf.callback.PKG_INSTALL: _('Installed'),
             dnf.callback.PKG_OBSOLETE: _('Obsoleted'),
             dnf.callback.PKG_REINSTALL: _(
                 'Reinstalled'
             ),
-            dnf.callback.PKG_UPGRADE:  _('Upgraded'),
+            dnf.callback.PKG_UPGRADE:  _('Upgrade'),
+            dnf.callback.PKG_UPGRADED:  _('Upgraded'),
             dnf.callback.TRANS_POST: _(
                 'Post transaction'
             ),
@@ -281,6 +284,11 @@ class MiniDNF():
                             package=package,
                         )
                     )
+                    if action not in self._ACTION_TRANSLATION:
+                        self._sink.verbose(
+                            f'event: Unknown action {action}, '
+                            f'package {package}'
+                        )
                 else:
                     self._sink.info(
                         _('{action}').format(
@@ -290,6 +298,10 @@ class MiniDNF():
                             ),
                         )
                     )
+                    if action not in self._ACTION_TRANSLATION:
+                        self._sink.verbose(
+                            f'event: Unknown action {action}'
+                        )
 
         def scriptout(self, msgs):
             super(MiniDNF._MyTransactionDisplay, self).scriptout(
@@ -316,6 +328,10 @@ class MiniDNF():
                     package=package,
                 )
             )
+            if action not in self._FILEACTION_TRANSLATION:
+                self._sink.verbose(
+                    f'filelog: Unknown action {action}, package {package}'
+                )
 
         def verify_tsi_package(self, pkg, count, total):
             super(MiniDNF._MyTransactionDisplay, self).verify_tsi_package(
