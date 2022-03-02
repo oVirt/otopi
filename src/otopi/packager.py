@@ -28,22 +28,8 @@ def ok_to_use_dnf():
     if os.environ.get(constants.SystemEnvironment.DNF_ENABLE):
         return True
 
-    plat_dist = distro.linux_distribution(full_distribution_name=0)
-    distribution = plat_dist[0]
-    version = plat_dist[1]
-    return (
-        distribution in (
-            'fedora',
-        ) or (
-            distribution in (
-                'redhat',
-                'centos',
-                'ibm_powerkvm',
-                'rhel',
-            ) and
-            version >= '8'
-        )
-    )
+    id_and_like = [distro.id()] + distro.like().split(' ')
+    return any(dist in id_and_like for dist in ('rhel', 'fedora'))
 
 
 @util.export
