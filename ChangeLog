@@ -1,5 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+????-??-?? - Version 1.10.1
+
 2022-03-03 - Version 1.10.0
  * packager: Support any rhel- or fedora-like distribution
  * minidnf: Clean up displayed texts
