@@ -8,7 +8,7 @@
 Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
 Name:		@PACKAGE_NAME@
 Version:	@PACKAGE_RPM_VERSION@
-Release:	@PACKAGE_RPM_RELEASE@%{?dist}
+Release:	@PACKAGE_RPM_RELEASE@%{?release_suffix}%{?dist}
 License:	LGPLv2+
 URL:		http://www.ovirt.org
 Source0:	http://resources.ovirt.org/pub/src/%{name}/%{name}-%{package_version}.tar.gz
