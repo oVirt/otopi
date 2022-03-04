@@ -1,8 +1,41 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-????-??-?? - Version 1.10.0
+2022-03-03 - Version 1.10.0
+ * packager: Support any rhel- or fedora-like distribution
+ * minidnf: Clean up displayed texts
+ * minidnf: Log calls to _plugins._unload()
+ * automation: check-patch: Verify dnf gpg keys handling
+ * dialog: human: Allow confirmation via answer file
+ * minidnf: checkForSafeUpdate: Return all data
+ * distro: Fix for rhel
+ * minidnf: Require dnf >= 4.7
+ * Update .github/workflows/check-patch.yml
+ * automation/run-checks.sh: Group output for github
+ * automation: Use coverage-3
+ * automation: Split run-checks.sh out of check-patch.sh
+ * github: codeql: Remove cpp (#5)
+ * Create check-patch.yml
+ * Create codeql-analysis.yml
+ * copr: fix missing suffix in built rpms
+ * copr: enable copr builds
+ * README: move to markdown
+ * automation: Refactor check-patch.sh
+ * packager: Add checkForSafeUpdate
+ * debug plugins: queryPackages: Pass listAll=True
+ * automation: Test packager rollback
+ * minidnf: fix rollback
+ * automation: Improve testing logging
+ * core: Make OTOPI_DEBUG write to stderr
+ * packaging: fix missing obsoletes
+ * build: post ovirt-4.4 branching
+ * automation: fix build-artifacts
+ * automation: post ovirt-4.4 branching, enabling c9s
+ * el9s: adjust scripts for compatibiltiy
+ * use distro module instead of platform
+ * pep8: fix E741 reported by pycodestyle
+ * automation: add 4.4 pipeline
  * packaging: support CentOS Stream 9
- * packaging: obsolete dropepd packages
+ * packaging: obsolete dropped packages
 
 2021-08-03 - Version 1.9.5
  * drop java bindings and python2
