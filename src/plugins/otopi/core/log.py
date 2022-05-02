@@ -192,7 +192,10 @@ class Plugin(plugin.PluginBase):
                     self.environment[constants.CoreEnv.LOG_FILTER]._list +
                     [
                         self.environment.get(k, None) for k in
-                        self.environment[constants.CoreEnv.LOG_FILTER_KEYS]
+                        self.environment[constants.CoreEnv.LOG_FILTER_KEYS] +
+                        list(self.environment[
+                            constants.CoreEnv.LOG_FILTER_QUESTIONS_KEYS
+                        ])
                     ]
                 ),
                 regexps=self.environment[constants.CoreEnv.LOG_FILTER_RE],
@@ -203,12 +206,33 @@ class Plugin(plugin.PluginBase):
         self._handler = None
         self._logerror = None
         self.environment[constants.CoreEnv.LOG_FILTER_KEYS] = []
+        self.environment[constants.CoreEnv.LOG_FILTER_RE] = []
+        self.environment[constants.CoreEnv.LOG_FILTER_QUESTIONS] = []
+        self.environment[constants.CoreEnv.LOG_FILTER_QUESTIONS_KEYS] = set([
+            k for k in self.environment.keys()
+            if k.startswith(constants.CoreEnv.QUESTION_PREFIX) and
+            # E.g. QUESTION/2/OVESETUP_CONFIG_ADMIN_SETUP
+            k.split('/')[-1] in self.environment[
+                constants.CoreEnv.LOG_FILTER_QUESTIONS
+            ]
+        ])
         self._filtered_keys_at_setup = []
 
     def _setupLogging(self):
         self.environment[constants.CoreEnv.LOG_FILE_HANDLE] = None
         self.environment[constants.CoreEnv.LOG_FILTER] = self._MyLoggerFilter()
-        self.environment[constants.CoreEnv.LOG_FILTER_RE] = []
+        for k in self.environment.keys():
+            if (
+                k.startswith(constants.CoreEnv.QUESTION_PREFIX) and
+                # E.g. QUESTION/2/OVESETUP_CONFIG_ADMIN_SETUP
+                k.split('/')[-1] in self.environment[
+                    constants.CoreEnv.LOG_FILTER_QUESTIONS
+                ]
+            ):
+                self.environment[
+                    constants.CoreEnv.LOG_FILTER_QUESTIONS_KEYS
+                ].add(k)
+
         self.environment[
             constants.CoreEnv.LOG_FILTER_RE
         ].append(
