@@ -65,6 +65,20 @@ class Plugin(plugin.PluginBase):
                     self.environment[name] = value
                 else:
                     self.environment.setdefault(name, value)
+                if name not in self.environment[
+                    constants.CoreEnv.LOG_FILTER_QUESTIONS_KEYS
+                ]:
+                    if (
+                        name.startswith(
+                            constants.CoreEnv.QUESTION_PREFIX
+                        ) and
+                        name.split('/')[-1] in self.environment[
+                            constants.CoreEnv.LOG_FILTER_QUESTIONS
+                        ]
+                    ):
+                        self.environment[
+                            constants.CoreEnv.LOG_FILTER_QUESTIONS_KEYS
+                        ].add(name)
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
