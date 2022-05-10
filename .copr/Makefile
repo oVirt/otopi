@@ -1,9 +1,15 @@
-.PHONY: installdeps srpm
+.PHONY: installdeps srpm git_config_pre
 
 installdeps:
 	dnf -y install git autoconf automake make gettext-devel gcc
 
-srpm: installdeps
+git_config_pre:
+	# From git 2.35.2 we need to mark temporary directory, where the project is cloned to, as safe, otherwise
+	# git commands won't work
+	$(eval REPO_DIR=$(shell pwd))
+	git config --global --add safe.directory ${REPO_DIR}
+
+srpm: installdeps git_config_pre
 	mkdir -p tmp.repos
 	autopoint
 	autoreconf -ivf
