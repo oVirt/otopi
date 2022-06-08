@@ -8,6 +8,7 @@
 
 import gettext
 import logging
+import textwrap
 
 
 from otopi import common
@@ -139,7 +140,21 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             text = '\n'
         text = common.toStr(text)
 
-        lines = text.splitlines()
+        width = self._output_terminal_width() - 16
+
+        lines = []
+        for non_wrapped_line in text.splitlines():
+            if non_wrapped_line == '':
+                lines.append('')
+            else:
+                for line in textwrap.wrap(
+                    text=non_wrapped_line,
+                    width=width,
+                    break_long_words=False,
+                    break_on_hyphens=False,
+                ):
+                    lines.append(line)
+
         if len(lines) > 0:
             for line in lines[:-1]:
                 printline(line)
