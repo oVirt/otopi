@@ -11,5 +11,6 @@ SUBDIRS = \
 	force_fail \
 	packages \
 	test_command \
+	test_note \
 	wait_on_error \
 	$(NULL)
