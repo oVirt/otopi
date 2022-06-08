@@ -197,6 +197,7 @@ class DebugEnv(object):
     WAIT_ON_ERROR = 'ODEBUG/WaitOnError'
     PACKAGES_ACTION = 'ODEBUG/packagesAction'
     PACKAGES = 'ODEBUG/packages'
+    NOTE = 'ODEBUG/note'
 
 
 # vim: expandtab tabstop=4 shiftwidth=4

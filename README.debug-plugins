@@ -30,6 +30,10 @@ Activated by setting in the system environment OTOPI_TEST_COMMAND=1.
 Activates some code to test the 'command' module. The log will have
 some results of the tests, around lines containing 'test_command'.
 
+test_note
+---------
+Activated by setting ODEBUG/note to some text to be output with dialog.note.
+
 packages
 --------
 Activated by passing in otopi's environment:

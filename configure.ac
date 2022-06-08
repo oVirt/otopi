@@ -86,6 +86,7 @@ AC_CONFIG_FILES([
 	src/plugins/otopi/debug/debug_failure/Makefile
 	src/plugins/otopi/debug/force_fail/Makefile
 	src/plugins/otopi/debug/test_command/Makefile
+	src/plugins/otopi/debug/test_note/Makefile
 	src/plugins/otopi/debug/wait_on_error/Makefile
 	src/plugins/otopi/debug/packages/Makefile
 	automation/config.sh

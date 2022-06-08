@@ -117,10 +117,10 @@ test_otopi() {
 	shift 2
 	info "Testing otopi: name [${NAME}] expected rc [${EXPECTED_RC}]"
 
-	local -r LOG_DIR="${LOGS}/otopi-$(date +"%Y%m%d-%H%M%S")-${NAME}"
+	LOG_DIR="${LOGS}/otopi-$(date +"%Y%m%d-%H%M%S")-${NAME}"
 	mkdir -p "${LOG_DIR}"
 
-	local -r OUTPUTFILE="${LOG_DIR}/otopi-output-${NAME}.log"
+	OUTPUTFILE="${LOG_DIR}/otopi-output-${NAME}.log"
 
 	local rc=0
 	OTOPI_DEBUG=1 \
@@ -208,6 +208,27 @@ test_otopi 101 packager-checksafeupdate-with-update ODEBUG/packagesAction=str:ch
 test_otopi 0 packager-install-update-testpackage1-do ODEBUG/packagesAction=str:install ODEBUG/packages=str:testpackage1
 if ! rpm -q testpackage1 2>&1 | grep 'testpackage1-1.0.1'; then
 	err "testpackage1-1.0.1 not found, update failed"
+	exit 1
+fi
+
+line="Some long text with many many words."
+longline=$(for i in $(seq 10); do printf "%s " "${line}"; done; printf "%s" "${line}")
+long_text_with_several_lines="$(for i in $(seq 5); do printf '%s\n' "$longline"; done; printf '\n')
+"
+long_url_that_should_not_be_split="https://some.very.very.very.long.domain.name/with/a/very/very/very/very/long/url/or/at/least/longer/than/80/chars/which/is/the/default/which/is/what/is/used/in/CI/because/there/is/no/connected/terminal/also-with-hyphens/"
+tested_text="${long_text_with_several_lines}
+Some long URL:
+${long_url_that_should_not_be_split}
+"
+# otopi uses shlex on argv, so surround the text with quotes
+test_otopi 0 note ODEBUG/note=str:'"'"$tested_text"'"'
+echo "test_note output:"
+# Skip the early-debug  stuff
+sed -n '/Stage: Initializing/,$p' "${OUTPUTFILE}"
+# This also works, but EOF is undocumented.
+# awk '/Stage: Initializing/,EOF' "${OUTPUTFILE}"
+if ! grep -w "${long_url_that_should_not_be_split}" "${OUTPUTFILE}"; then
+	err "Can not find long url in output file"
 	exit 1
 fi
 
