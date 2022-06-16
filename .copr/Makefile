@@ -14,7 +14,7 @@ srpm: installdeps git_config_pre
 	autopoint
 	autoreconf -ivf
 	./configure
-	$(eval SUFFIX=$(shell sh -c " . automation/config.sh; [ -n "$${RELEASE_SUFFIX}" ] && echo '.$$(date -u +%Y%m%d%H%M%S).git$$(git rev-parse --short HEAD)'"))
+	$(eval SUFFIX=$(shell sh -c " . automation/config.sh; [ -n "$${RELEASE_SUFFIX}" ] && echo '.$$(build/get-suffix.sh)'"))
 	# changing the spec file as passing -D won't preserve the suffix when rebuilding in mock
 	sed "s:%{?release_suffix}:${SUFFIX}:" -i otopi.spec.in
 	make dist

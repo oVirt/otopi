@@ -13,7 +13,7 @@ autoreconf -ivf
 
 SUFFIX=
 . automation/config.sh
-[ -n "${RELEASE_SUFFIX}" ] && SUFFIX=".$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)"
+[ -n "${RELEASE_SUFFIX}" ] && SUFFIX=".$(build/get-suffix.sh)"
 
 make dist
 
