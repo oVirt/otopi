@@ -36,6 +36,9 @@ jobs:
     - name: Show git HEAD~
       run: git show --format=raw HEAD~
 
+    - name: Show some GITHUB env vars
+      run: echo "GITHUB_HEAD_REF=$GITHUB_HEAD_REF GITHUB_REF=$GITHUB_REF GITHUB_SHA=$GITHUB_SHA"
+
     - name: autopoint
       run: autopoint
 
