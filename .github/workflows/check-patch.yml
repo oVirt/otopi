@@ -46,7 +46,7 @@ jobs:
       run: mkdir -p tmp.repos
 
     - name: rpmbuild
-      run: rpmbuild -D "_topdir $PWD/tmp.repos" -D "release_suffix .$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)" -ta otopi-*.tar.gz
+      run: rpmbuild -D "_topdir $PWD/tmp.repos" -D "release_suffix .$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short ${{ github.event.pull_request.head.sha }})" -ta otopi-*.tar.gz
 
     - name: Collect artifacts
       run: |
