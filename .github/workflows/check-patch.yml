@@ -36,8 +36,8 @@ jobs:
     - name: Show git HEAD~
       run: git show --format=raw HEAD~
 
-    - name: Show some GITHUB env vars
-      run: echo "GITHUB_HEAD_REF=$GITHUB_HEAD_REF GITHUB_REF=$GITHUB_REF GITHUB_SHA=$GITHUB_SHA"
+    - name: Show GITHUB env vars
+      run: env | grep ^GITHUB
 
     - name: autopoint
       run: autopoint
