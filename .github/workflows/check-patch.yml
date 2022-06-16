@@ -27,6 +27,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Show git log
+      run: git log --format=oneline HEAD~10..HEAD
+
     - name: autopoint
       run: autopoint
 
