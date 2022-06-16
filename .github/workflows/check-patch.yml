@@ -30,6 +30,12 @@ jobs:
     - name: Show git log
       run: git log --format=oneline HEAD~10..HEAD
 
+    - name: Show git HEAD
+      run: git show --format=raw HEAD
+
+    - name: Show git HEAD~
+      run: git show --format=raw HEAD~
+
     - name: autopoint
       run: autopoint
 
