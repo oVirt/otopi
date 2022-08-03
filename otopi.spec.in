@@ -112,6 +112,9 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.debug-plugins
 
 %changelog
+* Wed Aug 03 2022 - Yedidyah Bar David <didi@redhat.com> - 1.10.2-1
+- Release.
+
 * Thu Mar 03 2022 - Yedidyah Bar David <didi@redhat.com> - 1.10.0-1
 - Release.
 
