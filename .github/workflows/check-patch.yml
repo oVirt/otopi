@@ -23,10 +23,7 @@ jobs:
     - name: Install dependencies
       run: dnf install -y --setopt=tsflags=nodocs autoconf automake createrepo_c dnf dnf-plugins-core dnf-plugin-versionlock dnf-utils gettext-devel git make python3-coverage python3-distro python3-libselinux python3-pycodestyle python3-pyflakes rpm-build gettext python3-devel gcc python3-coverage rpm-sign
 
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: ovirt/checkout-action@main
 
     - name: autopoint
       run: autopoint
