@@ -266,10 +266,17 @@ class DialogBaseImpl(DialogBase):
                 self.__flush(self.__output)
 
     def _output_terminal_width(self):
+        res = 80
         try:
-            return os.get_terminal_size(self.__output.fileno()).columns
+            res = os.get_terminal_size(self.__output.fileno()).columns
         except OSError:
-            return 80
+            pass
+        if res == 0:
+            try:
+                res = int(os.environ.get('COLUMNS', res))
+            except Exception:
+                pass
+        return res
 
     def _queryStringNote(
         self,
