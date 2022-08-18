@@ -140,7 +140,7 @@ class Plugin(plugin.PluginBase, dialog.DialogBaseImpl):
             text = '\n'
         text = common.toStr(text)
 
-        width = self._output_terminal_width() - 16
+        width = max(self._output_terminal_width() - 16, 1)
 
         lines = []
         for non_wrapped_line in text.splitlines():
