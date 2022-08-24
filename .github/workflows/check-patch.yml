@@ -7,21 +7,24 @@ on:
     branches: [master]
 
 jobs:
-  build-el8:
-
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: centos-stream-8
+            shortcut: cs8
+            container-name: el8stream
+          - name: centos-stream-9
+            shortcut: cs9
+            container-name: el9stream
+    name: ${{ matrix.name }}
     container:
-      image: quay.io/centos/centos:stream8
-
+      image: quay.io/ovirt/buildcontainer:${{ matrix.container-name }}
     steps:
-    - name: Import ovirt-master-snapshot key
-      run: rpm --import https://download.copr.fedorainfracloud.org/results/ovirt/ovirt-master-snapshot/pubkey.gpg
-
-    - name: Install ovirt-release-master
-      run: dnf --repofrompath=ovirt-master-snapshot,https://download.copr.fedorainfracloud.org/results/ovirt/ovirt-master-snapshot/centos-stream-8-x86_64/ install -y ovirt-release-master
-
     - name: Install dependencies
-      run: dnf install -y --setopt=tsflags=nodocs autoconf automake createrepo_c dnf dnf-plugins-core dnf-plugin-versionlock dnf-utils gettext-devel git make python3-coverage python3-distro python3-libselinux python3-pycodestyle python3-pyflakes rpm-build gettext python3-devel gcc python3-coverage rpm-sign
+      run: dnf install -y --setopt=tsflags=nodocs rpm-sign dnf-plugin-versionlock dnf-utils python3-coverage python3-pycodestyle python3-pyflakes python3-devel python3-coverage
 
     - uses: ovirt/checkout-action@main
 
