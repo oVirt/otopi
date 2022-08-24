@@ -427,8 +427,15 @@ class MiniDNF():
 
     def _destroyBase(self, base):
         if base is not None:
-            self._sink.verbose(_('Calling _plugins._unload'))
-            base._plugins._unload()
+            if hasattr(base, 'unload_plugins'):
+                # Added in https://bugzilla.redhat.com/2047251
+                self._sink.verbose(_('Calling base.unload_plugins'))
+                base.unload_plugins()
+            else:
+                # TODO: Consider removing this part once we do not want
+                # to support older dnf versions.
+                self._sink.verbose(_('Calling _plugins._unload'))
+                base._plugins._unload()
             base.close()
 
     def _queuePackages(
