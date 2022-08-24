@@ -46,21 +46,19 @@ jobs:
     - name: rpmbuild
       run: rpmbuild -D "_topdir $PWD/tmp.repos" -D "release_suffix .$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)" -ta otopi-*.tar.gz
 
+    env:
+      ARTIFACTS_DIR: exported-artifacts
+
     - name: Collect artifacts
       run: |
-          mkdir -p exported-artifacts
-          find tmp.repos -iname \*rpm -exec mv "{}" exported-artifacts/ \;
-          mv ./*tar.gz exported-artifacts/
+          mkdir -p ${ARTIFACTS_DIR}
+          find tmp.repos -iname \*rpm -exec mv "{}" ${ARTIFACTS_DIR} \;
+          mv ./*tar.gz ${ARTIFACTS_DIR}
 
     - name: Run checks
       run: automation/run-checks.sh
 
-    - name: archive artifacts
-      # https://github.com/actions/upload-artifact#too-many-uploads-resulting-in-429-responses
-      run: tar czf exported-artifacts.tar.gz exported-artifacts
-
     - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+      uses: ovirt/upload-rpms-action@v2
       with:
-        name: artifacts
-        path: exported-artifacts.tar.gz
+        directory: ${{ env.ARTIFACTS_DIR }}
