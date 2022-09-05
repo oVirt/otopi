@@ -18,7 +18,7 @@ prepare: installdeps git_config_pre
 	./configure
 
 srpm: installdeps git_config_pre prepare
-	$(eval SUFFIX=$(shell sh -c " . automation/config.sh; [ -n "$${RELEASE_SUFFIX}" ] && echo '.$$(date -u +%Y%m%d%H%M%S).git$$(git rev-parse --short HEAD)'"))
+	$(eval SUFFIX=$(shell sh -c ' . automation/config.sh; [ -n "$${RELEASE_SUFFIX}" ] && echo ".$$(date -u +%Y%m%d%H%M%S).git$$(git rev-parse --short HEAD)"'))
 	mkdir -p tmp.repos
 	# changing the spec file as passing -D won't preserve the suffix when rebuilding in mock
 	sed "s:%{?release_suffix}:${SUFFIX}:" -i otopi.spec.in
