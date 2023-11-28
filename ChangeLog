@@ -1,5 +1,8 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
+2???-??-?? - Version 1.10.5
+ *
+
 2023-11-28 - Version 1.10.4
  * minidnf: Use base.unload_plugins if available
 
