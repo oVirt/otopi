@@ -1,6 +1,7 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-2????-??-?? - Version 1.10.4
+2023-11-28 - Version 1.10.4
+ * minidnf: Use base.unload_plugins if available
 
 2022-09-05 - Version 1.10.3
  * copr: Fix setting SUFFIX

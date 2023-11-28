@@ -9,7 +9,7 @@ Summary:	oVirt Task Oriented Pluggable Installer/Implementation (%{name})
 Name:		@PACKAGE_NAME@
 Version:	@PACKAGE_RPM_VERSION@
 Release:	@PACKAGE_RPM_RELEASE@%{?release_suffix}%{?dist}
-License:	LGPLv2+
+License:	LGPL-2.0-or-later
 URL:		http://www.ovirt.org
 Source0:	http://resources.ovirt.org/pub/src/%{name}/%{name}-%{package_version}.tar.gz
 Group:		Development/Libraries
@@ -112,6 +112,10 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.debug-plugins
 
 %changelog
+* Tue Nov 28 2023 Sandro Bonazzola <sbonazzo@redhat.com> - 1.10.4-1
+- Migrated to SPDX license.
+- Release.
+
 * Mon Sep 05 2022 - Yedidyah Bar David <didi@redhat.com> - 1.10.3-1
 - Release.
 
