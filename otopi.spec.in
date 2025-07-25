@@ -16,7 +16,7 @@ Group:		Development/Libraries
 
 BuildArch:	noarch
 
-BuildRequires:	gettext >= 0.18.2
+BuildRequires:	gettext-devel
 BuildRequires:	python%{python3_pkgversion}-devel
 BuildRequires:	gcc
 
