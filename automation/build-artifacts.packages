@@ -2,6 +2,7 @@ autoconf
 automake
 dnf
 dnf-utils
+gcc
 gettext-devel
 git
 make
