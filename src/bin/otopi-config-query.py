@@ -3,7 +3,6 @@
 # otopi -- plugable installer
 #
 
-from __future__ import print_function
 
 import glob
 import os
@@ -15,10 +14,7 @@ if os.path.isdir(os.path.join(os.path.dirname(current_dir), 'otopi')):
     sys.path.insert(0, os.path.dirname(current_dir))
 
 
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import configparser
 
 from otopi import common, constants
 

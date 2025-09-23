@@ -9,12 +9,7 @@
 import gettext
 import sys
 import os
-_use_importlib = False
-try:
-    from importlib import util as importlibutil
-    _use_importlib = True
-except ImportError:
-    import imp
+from importlib import util as importlibutil
 
 __all__ = ['export']
 
@@ -99,31 +94,15 @@ def loadModule(path, name):
     Loaded module.
 
     """
-    if _use_importlib:
-        module_name = name.split('.')[-1]
-        spec = importlibutil.spec_from_file_location(
-            name,
-            os.path.join(path, module_name, '__init__.py')
-        )
-        module = importlibutil.module_from_spec(spec)
-        sys.modules[spec.name] = module
-        spec.loader.exec_module(module)
-        return module
-    else:
-        mod_fobj, mod_absp, mod_desc = imp.find_module(
-            name.split('.')[-1],
-            [path]
-        )
-        try:
-            return imp.load_module(
-                name,
-                mod_fobj,
-                mod_absp,
-                mod_desc
-            )
-        finally:
-            if mod_fobj is not None:
-                mod_fobj.close()
+    module_name = name.split('.')[-1]
+    spec = importlibutil.spec_from_file_location(
+        name,
+        os.path.join(path, module_name, '__init__.py')
+    )
+    module = importlibutil.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 # vim: expandtab tabstop=4 shiftwidth=4
