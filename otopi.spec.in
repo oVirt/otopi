@@ -32,6 +32,7 @@ Summary:	%{summary}
 Requires:	python%{python3_pkgversion} >= 3.6.0
 Requires:	python%{python3_pkgversion}-dateutil
 Requires:	python%{python3_pkgversion}-distro
+Requires:	python%{python3_pkgversion}-packaging
 Requires:	%{name}-common = %{version}-%{release}
 Provides:	%{name} = %{version}-%{release}
 Obsoletes:	python%{python3_pkgversion}-%{name}-devtools
