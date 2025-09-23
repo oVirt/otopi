@@ -381,10 +381,7 @@ class PluginBase(base.Base):
                     callback(state=popens)
 
         def _isString(s):
-            return (
-                isinstance(s, str) or
-                isinstance(s, builtins.unicode)
-            )
+            return isinstance(s, str)
 
         _callCallback.next = datetime.datetime.now()
 
@@ -401,8 +398,7 @@ class PluginBase(base.Base):
             if (
                 stdin is None or
                 isinstance(stdin, bytes) or
-                isinstance(stdin, str) or
-                isinstance(stdin, builtins.unicode)
+                isinstance(stdin, str)
             ):
                 stdindata = stdin
                 stdin = None
@@ -715,8 +711,7 @@ class PluginBase(base.Base):
             if s is not None:
                 if (
                     not isinstance(s, bytes) and
-                    not isinstance(s, str) and
-                    not isinstance(s, builtins.unicode)
+                    not isinstance(s, str)
                 ):
                     s = s.read()
                 if isinstance(s, bytes):
@@ -793,10 +788,7 @@ class PluginBase(base.Base):
         """
 
         def _isString(s):
-            return (
-                isinstance(s, str) or
-                isinstance(s, builtins.unicode)
-            )
+            return isinstance(s, str)
 
         try:
             if envAppend is not None:

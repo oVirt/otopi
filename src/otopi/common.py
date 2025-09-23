@@ -6,7 +6,6 @@
 """Common misc functions."""
 
 
-import builtins
 import gettext
 
 
@@ -54,7 +53,7 @@ def typeName(value):
         ret = constants.Types.BOOLEAN
     elif isinstance(value, int):
         ret = constants.Types.INTEGER
-    elif isinstance(value, str) or isinstance(value, builtins.unicode):
+    elif isinstance(value, str):
         ret = constants.Types.STRING
     elif isinstance(value, list) or isinstance(value, tuple):
         ret = constants.Types.MULTI_STRING
@@ -67,12 +66,6 @@ def typeName(value):
 def toStr(o):
     if isinstance(o, str):
         return o
-
-    if isinstance(o, builtins.unicode):
-        try:
-            return o.encode('utf-8')
-        except Exception:
-            pass
 
     if hasattr(o, '__unicode__'):
         try:
@@ -98,9 +91,6 @@ def toStr(o):
 @util.export
 def toUStr(o):
     if isinstance(o, str):
-        return o
-
-    if isinstance(o, builtins.unicode):
         return o
 
     if hasattr(o, '__unicode__'):
