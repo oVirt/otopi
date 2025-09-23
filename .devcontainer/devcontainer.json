@@ -1,0 +1,4 @@
+{
+   "name": "otopi container",
+   "image": "quay.io/ovirt/buildcontainer:el10stream"
+}
