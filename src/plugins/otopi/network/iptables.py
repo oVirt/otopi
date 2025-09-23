@@ -33,9 +33,7 @@ class Plugin(plugin.PluginBase):
 
     def __init__(self, context):
         super(Plugin, self).__init__(context=context)
-        self._distribution = distro.linux_distribution(
-            full_distribution_name=0
-        )[0]
+        self._distribution = distro.id()
         self._enabled = False
 
     @plugin.event(
