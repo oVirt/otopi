@@ -37,18 +37,6 @@ get_otopi_python() {
 		return
 	fi
 
-	# Use "python" on EL7
-	local anypython=$(find_util python3)
-	[ -z "${anypython}" ] && anypython=$(find_util python2)
-	[ -z "${anypython}" ] && anypython=$(find_util python)
-	[ -z "${anypython}" ] && die "get_otopi_python: Cannot find any python"
-	local distribution_name="$(${anypython} -c "import distro; print(distro.linux_distribution(full_distribution_name=0)[0])")"
-	local distribution_version="$(${anypython} -c "import distro; print(distro.linux_distribution(full_distribution_name=0)[1].split('.')[0])")"
-	if [ \( "${distribution_name}" == "redhat" -o "${distribution_name}" == "centos" \) -a "${distribution_version}" -le "7" ]; then
-		echo "python"
-		return
-	fi
-
 	# Use whatever that has otopi in site-packages, prefer python3
 	for p in "python3" "python"
 	do
