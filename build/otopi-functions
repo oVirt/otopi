@@ -26,7 +26,7 @@ find_util() {
 find_otopi() {
 	local pybin=$(find_util "$1")
 	if [ -n "${pybin}" ]; then
-		${pybin} -c "import pkgutil; print('${pybin}' if pkgutil.find_loader('otopi') else '')"
+		${pybin} -c "import importlib.util; print('${pybin}' if importlib.util.find_spec('otopi') else '')"
 	fi
 }
 
