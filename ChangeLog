@@ -1,7 +1,15 @@
 otopi -- oVirt Task Oriented Pluggable Installer/Implementation
 
-2???-??-?? - Version 1.10.5
- *
+2025-10-20 - Version 1.10.5
+ * ci: build for centos10
+ * copr: fix copr dependencies
+ * dev: add minimal devcontainer
+ * spec: add python packaging requirement
+ * core: remove python2 compatibility
+ * core: modernize Version comparison
+ * core: remove usage of linux_distribution
+ * core: remove detection of python 2 for EL7
+ * build: remove deprecated pkgutil
 
 2023-11-28 - Version 1.10.4
  * minidnf: Use base.unload_plugins if available

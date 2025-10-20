@@ -113,6 +113,9 @@ install -d -m 755 "%{buildroot}%{_sysconfdir}/%{name}.conf.d"
 %doc README.debug-plugins
 
 %changelog
+* Mon Oct 20 2025 Jean-Louis Dupond <jean-louis@dupond.be> - 1.10.5-1
+- Release.
+
 * Tue Nov 28 2023 Sandro Bonazzola <sbonazzo@redhat.com> - 1.10.4-1
 - Migrated to SPDX license.
 - Release.
