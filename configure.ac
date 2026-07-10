@@ -8,15 +8,17 @@ define([VERSION_MAJOR], [1])
 define([VERSION_MINOR], [10])
 define([VERSION_FIX], [6])
 define([VERSION_NUMBER], VERSION_MAJOR[.]VERSION_MINOR[.]VERSION_FIX)
-define([VERSION_SUFFIX], [_master])
 
-AC_INIT([otopi], VERSION_NUMBER[]VERSION_SUFFIX)
+AC_INIT([otopi], VERSION_NUMBER)
 PACKAGE_RPM_VERSION="VERSION_NUMBER"
-PACKAGE_RPM_RELEASE="0.0.$(echo VERSION_SUFFIX | sed 's/^_//')"
-RELEASE_SUFFIX="VERSION_SUFFIX"
+
+AC_ARG_VAR([PACKAGE_RPM_RELEASE],
+    [RPM release field (default: 0.master for development, release number for release builds)])
+AS_IF([test -z "$PACKAGE_RPM_RELEASE"],
+    [PACKAGE_RPM_RELEASE="0.master"])
+
 AC_SUBST([PACKAGE_RPM_VERSION])
 AC_SUBST([PACKAGE_RPM_RELEASE])
-AC_SUBST([RELEASE_SUFFIX])
 
 AC_CONFIG_AUX_DIR([.])
 AC_CONFIG_SRCDIR([src/otopi/__init__.py])
@@ -89,7 +91,6 @@ AC_CONFIG_FILES([
 	src/plugins/otopi/debug/test_note/Makefile
 	src/plugins/otopi/debug/wait_on_error/Makefile
 	src/plugins/otopi/debug/packages/Makefile
-	automation/config.sh
 	automation/testRPMs/testpackage1/testpackage1.spec
 	automation/testRPMs/testpackage2/testpackage2.spec
 	automation/testRPMsUpdates/testpackage1/testpackage1.spec
